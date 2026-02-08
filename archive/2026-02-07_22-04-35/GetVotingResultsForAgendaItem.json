@@ -1,0 +1,17 @@
+{
+  "method": "GetVotingResultsForAgendaItem",
+  "samples": [
+    {
+      "request": {
+        "methodName": "GetVotingResultsForAgendaItem",
+        "VotingDefinitionId": "80025712-a092-4e4d-8983-e146896368ae",
+        "AgendaItemId": "ccaf7830-3164-46f6-95a3-60816538344d",
+        "LanguageId": 1
+      },
+      "response": {
+        "_error": "HTTP 500",
+        "_body": "<!-- <!DOCTYPE html> -->\r\n\r\n<!-- <html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\"> -->\r\n<!-- <head> -->\r\n    <!-- <meta charset=\"utf-8\" /> -->\r\n    <!-- <meta name=\"viewport\" content=\"width=device-width\" /> -->\r\n    <!-- <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /> -->\r\n    <!-- <title>Error</title> -->\r\n    <!-- <style> -->\r\n        <!-- body, html { -->\r\n            <!-- height: 100%; -->\r\n            <!-- font-family: Verdana; -->\r\n            <!-- margin: 0px; -->\r\n           "
+      }
+    }
+  ]
+}

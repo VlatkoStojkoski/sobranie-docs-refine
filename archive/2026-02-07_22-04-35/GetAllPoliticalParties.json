@@ -1,0 +1,77 @@
+{
+  "method": "GetAllPoliticalParties",
+  "samples": [
+    {
+      "request": {
+        "methodName": "GetAllPoliticalParties",
+        "languageId": 1,
+        "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+      },
+      "response": [
+        {
+          "Id": "e693cd9f-5893-49ab-9ede-0abd6e820664",
+          "Name": "Левица",
+          "NumberOfDeputies": 6,
+          "Image": ""
+        },
+        {
+          "Id": "81baa692-1d6f-4f4c-8ca8-27861f2bdea4",
+          "Name": "Социјалдемократски сојуз на Македонија",
+          "NumberOfDeputies": 15,
+          "Image": ""
+        },
+        {
+          "Id": "25f0b10f-5d59-4ce8-bcce-2e6ce0e3bff8",
+          "Name": "Демократска партија на Албанците",
+          "NumberOfDeputies": 1,
+          "Image": ""
+        },
+        {
+          "Id": "04ab910c-c6ac-4714-9c3b-40cfd611bcc1",
+          "Name": "Либерално-демократска партија",
+          "NumberOfDeputies": 1,
+          "Image": ""
+        },
+        {
+          "Id": "ca14deba-d788-4486-a589-51710f79e295",
+          "Name": "Социјалистичка партија на Македонија",
+          "NumberOfDeputies": 2,
+          "Image": ""
+        },
+        {
+          "Id": "34c7708f-ce79-47cf-b367-6e43d84e68c8",
+          "Name": "Демократска унија за интеграција",
+          "NumberOfDeputies": 10,
+          "Image": ""
+        },
+        {
+          "Id": "ed06354a-b8f4-430b-8d0c-70e4a258e1da",
+          "Name": "Движење „Попули“",
+          "NumberOfDeputies": 1,
+          "Image": ""
+        },
+        {
+          "Id": "7f317109-a458-4e93-a779-745af5f4e552",
+          "Name": "Демократска партија на Србите",
+          "NumberOfDeputies": 1,
+          "Image": ""
+        },
+        {
+          "Id": "da76fc51-626c-421f-95a4-840ac333ee76",
+          "Name": "Алијанса за Албанците",
+          "NumberOfDeputies": 6,
+          "Image": ""
+        },
+        {
+          "Id": "5f39ea95-3494-4895-9666-9f06d7b3e873",
+          "Name": "Независни пратеници",
+          "NumberOfDeputies": 2,
+          "Image": ""
+        },
+        {
+          "_truncated": 6
+        }
+      ]
+    }
+  ]
+}

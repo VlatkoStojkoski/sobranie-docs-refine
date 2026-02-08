@@ -1,0 +1,484 @@
+{
+  "method": "GetAllMaterialsForPublicPortal",
+  "samples": [
+    {
+      "request": {
+        "MethodName": "GetAllMaterialsForPublicPortal",
+        "LanguageId": 1,
+        "ItemsPerPage": 5,
+        "CurrentPage": 1,
+        "SearchText": "",
+        "AuthorText": "",
+        "ActNumber": "",
+        "StatusGroupId": null,
+        "MaterialTypeId": 1,
+        "ResponsibleCommitteeId": null,
+        "CoReportingCommittees": null,
+        "OpinionCommittees": null,
+        "RegistrationNumber": null,
+        "EUCompatible": null,
+        "DateFrom": null,
+        "DateTo": null,
+        "ProcedureTypeId": null,
+        "InitiatorTypeId": null,
+        "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+      },
+      "response": {
+        "TotalItems": 525,
+        "Items": [
+          {
+            "Id": "759ba4db-41e1-4fdd-9176-21cb7c260522",
+            "Title": "Предлог на закон за органско земјоделско производство (*)",
+            "TypeTitle": "Предлог закон",
+            "Status": null,
+            "StatusGroupTitle": "Прво читање",
+            "RegistrationNumber": "08-676/1",
+            "RegistrationDate": "/Date(1769693654000)/",
+            "ResponsibleAuthor": "Цветан Трипуновски, министер за земјоделство, шумарство и водостопанство",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "Цветан Трипуновски, министер за земјоделство, шумарство и водостопанство",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Влада на Република Северна Македонија",
+            "ResponsibleCommittee": "Комисија за земјоделство, шумарство и водостопанство",
+            "EUCompatible": true,
+            "TotalItems": null
+          },
+          {
+            "Id": "7b876eb2-2eef-4584-8953-8ab1f9fb2dce",
+            "Title": "Предлог на закон за дополнување на Законот за здравствената заштита, по скратена постапка",
+            "TypeTitle": "Предлог закон",
+            "Status": null,
+            "StatusGroupTitle": "Второ читање",
+            "RegistrationNumber": "08-674/1",
+            "RegistrationDate": "/Date(1769691810000)/",
+            "ResponsibleAuthor": "Димитар Апасиев",
+            "Authors": [
+              {
+                "Id": "4eeadcc4-4b7b-4708-ae9b-1ebf1c0a25f9",
+                "FirstName": "Димитар",
+                "LastName": "Апасиев"
+              },
+              {
+                "Id": "b0688e81-82f8-4d41-bcfd-23ed8d9a27d9",
+                "FirstName": "Амар",
+                "LastName": "Мециновиќ"
+              },
+              {
+                "Id": "4d879247-f523-4402-a10a-e6308ed80ab5",
+                "FirstName": "Борислав",
+                "LastName": "Крмов"
+              },
+              {
+                "Id": "aeba14a8-f9e5-4b09-b7f4-c7869804ec2c",
+                "FirstName": "Јована",
+                "LastName": "Мојсоска"
+              },
+              {
+                "Id": "512d3441-3be8-4d3f-946b-8d51296141ab",
+                "FirstName": "Реџеп",
+                "LastName": "Исмаил"
+              },
+              {
+                "Id": "b4df441b-158c-46cd-9a58-c5a45ac456ed",
+                "FirstName": "Сашко",
+                "LastName": "Јанчев"
+              }
+            ],
+            "ProposerTypeTitle": "Пратеник",
+            "ResponsibleCommittee": "Комисија за здравство",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "7a72c543-cfcb-4b99-8fd9-449a38987d08",
+            "Title": "Предлог на закон за изменување и дополнување на Законот за работните односи, по скратена постапка",
+            "TypeTitle": "Предлог закон",
+            "Status": null,
+            "StatusGroupTitle": "Второ читање",
+            "RegistrationNumber": "08-626/1",
+            "RegistrationDate": "/Date(1769607001000)/",
+            "ResponsibleAuthor": "Димитар Апасиев",
+            "Authors": [
+              {
+                "Id": "4eeadcc4-4b7b-4708-ae9b-1ebf1c0a25f9",
+                "FirstName": "Димитар",
+                "LastName": "Апасиев"
+              },
+              {
+                "Id": "b0688e81-82f8-4d41-bcfd-23ed8d9a27d9",
+                "FirstName": "Амар",
+                "LastName": "Мециновиќ"
+              },
+              {
+                "Id": "4d879247-f523-4402-a10a-e6308ed80ab5",
+                "FirstName": "Борислав",
+                "LastName": "Крмов"
+              },
+              {
+                "Id": "aeba14a8-f9e5-4b09-b7f4-c7869804ec2c",
+                "FirstName": "Јована",
+                "LastName": "Мојсоска"
+              },
+              {
+                "Id": "512d3441-3be8-4d3f-946b-8d51296141ab",
+                "FirstName": "Реџеп",
+                "LastName": "Исмаил"
+              },
+              {
+                "Id": "b4df441b-158c-46cd-9a58-c5a45ac456ed",
+                "FirstName": "Сашко",
+                "LastName": "Јанчев"
+              }
+            ],
+            "ProposerTypeTitle": "Пратеник",
+            "ResponsibleCommittee": "Комисија за економски прашања, труд и енергетска политика",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "bdb21a81-7419-42df-acb9-0cc91305d382",
+            "Title": "Предлог на закон за изменување и дополнување на Законот за административни службеници, по скратена постапка",
+            "TypeTitle": "Предлог закон",
+            "Status": null,
+            "StatusGroupTitle": "Второ читање",
+            "RegistrationNumber": "08-624/1",
+            "RegistrationDate": "/Date(1769596048000)/",
+            "ResponsibleAuthor": "Оливер Спасовски",
+            "Authors": [
+              {
+                "Id": "0513e93e-867e-4799-b32a-9c7fb299350b",
+                "FirstName": "Оливер",
+                "LastName": "Спасовски"
+              },
+              {
+                "Id": "1aafbd8a-3c38-4a89-887d-65779a63c827",
+                "FirstName": "Даниела",
+                "LastName": "Николова"
+              },
+              {
+                "Id": "a3a2e982-fff7-435e-a22e-3a7827427fa2",
+                "FirstName": "Димитар",
+                "LastName": "Ковачевски"
+              },
+              {
+                "Id": "2751e637-1d69-47a0-ac88-33d7db5ff407",
+                "FirstName": "Миле",
+                "LastName": "Талевски"
+              },
+              {
+                "Id": "83823c9b-d0d8-4daf-bba2-53f1968d6c00",
+                "FirstName": "Митко",
+                "LastName": "Трајчулески"
+              },
+              {
+                "Id": "c631da70-88de-459f-b178-011a436c55a0",
+                "FirstName": "Сања",
+                "LastName": "Лукаревска"
+              },
+              {
+                "Id": "f5d781c7-03a2-48ec-8022-27aeffe7a783",
+                "FirstName": "Соња",
+                "LastName": "Мираковска"
+              }
+            ],
+            "ProposerTypeTitle": "Пратеник",
+            "ResponsibleCommittee": "Комисија за политички систем и односи меѓу заедниците",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "ccaf7830-3164-46f6-95a3-60816538344d",
+            "Title": "Предлог на закон за задолжување на Република Северна Македонија со заем кај Кредитната банка за обнова–КфВ по Договорот за заем за финансирање на проектот за енергетски ефикасна рехабилитација на студентските домови и објекти за ученици/студенти со попречености во Северна Македонија, фаза 2, по скратена постапка",
+            "TypeTitle": "Предлог закон",
+            "Status": null,
+            "StatusGroupTitle": "Затворен",
+            "RegistrationNumber": "08-506/1",
+            "RegistrationDate": "/Date(1769169644000)/",
+            "ResponsibleAuthor": "м-р Гордана Димитриеска - Кочоска, министер за финансии",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "м-р Гордана Димитриеска - Кочоска, министер за финансии",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Влада на Република Северна Македонија",
+            "ResponsibleCommittee": "Комисија за финансирање и буџет",
+            "EUCompatible": false,
+            "TotalItems": null
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "MethodName": "GetAllMaterialsForPublicPortal",
+        "LanguageId": 1,
+        "ItemsPerPage": 5,
+        "CurrentPage": 1,
+        "SearchText": "",
+        "AuthorText": "",
+        "ActNumber": "",
+        "StatusGroupId": 6,
+        "MaterialTypeId": null,
+        "ResponsibleCommitteeId": null,
+        "CoReportingCommittees": null,
+        "OpinionCommittees": null,
+        "RegistrationNumber": null,
+        "EUCompatible": null,
+        "DateFrom": null,
+        "DateTo": null,
+        "ProcedureTypeId": null,
+        "InitiatorTypeId": null,
+        "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+      },
+      "response": {
+        "TotalItems": 96,
+        "Items": [
+          {
+            "Id": "c09a44ca-f2bb-4298-8672-0bbe3b62322f",
+            "Title": "Предлог за именување на (непрофесионално ангажиран) член на Советот на експерти на Агенцијата за супервизија на осигурување",
+            "TypeTitle": "Избори, именување и разрешување на јавни и други функции",
+            "Status": null,
+            "StatusGroupTitle": "Доставен до пратеници",
+            "RegistrationNumber": "08-750/1",
+            "RegistrationDate": "/Date(1770024442000)/",
+            "ResponsibleAuthor": "д-р Христијан Мицкоски",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "д-р Христијан Мицкоски",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Влада на Република Северна Македонија",
+            "ResponsibleCommittee": "",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "0781874f-8911-468b-95ad-4c80c2ec464b",
+            "Title": "Оставка на Лулзим Алиу од функцијата заменик на  министерот кој раководи со Министерството за образование и наука",
+            "TypeTitle": "Оставка на носител на јавна и друга функција",
+            "Status": null,
+            "StatusGroupTitle": "Доставен до пратеници",
+            "RegistrationNumber": "08-722/1",
+            "RegistrationDate": "/Date(1769765629000)/",
+            "ResponsibleAuthor": "д-р Христијан Мицкоски",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "д-р Христијан Мицкоски",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Влада на Република Северна Македонија",
+            "ResponsibleCommittee": "",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "1b2114f3-72ff-43b5-887e-17316e501592",
+            "Title": "Извештај за работата на Регулаторна комисија за домување од 01.07.2025  до 31.12.2025 година",
+            "TypeTitle": "Анализи, извештаи, информации и друг материјал",
+            "Status": null,
+            "StatusGroupTitle": "Доставен до пратеници",
+            "RegistrationNumber": "08-535/1",
+            "RegistrationDate": "/Date(1769161701000)/",
+            "ResponsibleAuthor": "Регулаторна комисија за домување",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "Регулаторна комисија за домување",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Друга институција",
+            "ResponsibleCommittee": "Комисија за транспорт, дигитална трансформација, животна средина и просторно планирање",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "0aff671e-b143-42b1-b0c8-2cfb40677e11",
+            "Title": "Годишна програма за работата на Државниот завод за ревизија за 2026 година",
+            "TypeTitle": "Анализи, извештаи, информации и друг материјал",
+            "Status": null,
+            "StatusGroupTitle": "Доставен до пратеници",
+            "RegistrationNumber": "08-7401/1",
+            "RegistrationDate": "/Date(1767006468000)/",
+            "ResponsibleAuthor": "Државен завод за ревизија",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "Државен завод за ревизија",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Друга институција",
+            "ResponsibleCommittee": "Комисија за финансирање и буџет",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "3f1f3239-dd74-4acb-9c99-d14c0423350e",
+            "Title": "Програма за работа  на Фискалниот совет на Република Северна Македонија за 2026 година",
+            "TypeTitle": "Анализи, извештаи, информации и друг материјал",
+            "Status": null,
+            "StatusGroupTitle": "Доставен до пратеници",
+            "RegistrationNumber": "08-7402/1",
+            "RegistrationDate": "/Date(1767005876000)/",
+            "ResponsibleAuthor": "Фискален совет на Република Северна Македонија",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "Фискален совет на Република Северна Македонија",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Друга институција",
+            "ResponsibleCommittee": "Комисија за финансирање и буџет",
+            "EUCompatible": false,
+            "TotalItems": null
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "MethodName": "GetAllMaterialsForPublicPortal",
+        "LanguageId": 1,
+        "ItemsPerPage": 5,
+        "CurrentPage": 1,
+        "SearchText": "",
+        "AuthorText": "",
+        "ActNumber": "",
+        "StatusGroupId": null,
+        "MaterialTypeId": 28,
+        "ResponsibleCommitteeId": null,
+        "CoReportingCommittees": null,
+        "OpinionCommittees": null,
+        "RegistrationNumber": null,
+        "EUCompatible": null,
+        "DateFrom": null,
+        "DateTo": null,
+        "ProcedureTypeId": null,
+        "InitiatorTypeId": null,
+        "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+      },
+      "response": {
+        "TotalItems": 154,
+        "Items": [
+          {
+            "Id": "1b2114f3-72ff-43b5-887e-17316e501592",
+            "Title": "Извештај за работата на Регулаторна комисија за домување од 01.07.2025  до 31.12.2025 година",
+            "TypeTitle": "Анализи, извештаи, информации и друг материјал",
+            "Status": null,
+            "StatusGroupTitle": "Доставен до пратеници",
+            "RegistrationNumber": "08-535/1",
+            "RegistrationDate": "/Date(1769161701000)/",
+            "ResponsibleAuthor": "Регулаторна комисија за домување",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "Регулаторна комисија за домување",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Друга институција",
+            "ResponsibleCommittee": "Комисија за транспорт, дигитална трансформација, животна средина и просторно планирање",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "866904ed-b99c-4cc0-859e-3bf287c87520",
+            "Title": "Извештај на Државната изборна комисија за преземените работи согласно член 153  од Изборниот законик, за прифаќање на остаток на мандат за пратеник во Собранието на Република Северна Македонија",
+            "TypeTitle": "Анализи, извештаи, информации и друг материјал",
+            "Status": null,
+            "StatusGroupTitle": "Затворен",
+            "RegistrationNumber": "08-7372/1",
+            "RegistrationDate": "/Date(1767012836000)/",
+            "ResponsibleAuthor": "Државна изборна комисија",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "Државна изборна комисија",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Друга институција",
+            "ResponsibleCommittee": "Комисија за деловнички и мандатно-имунитетни прашања",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "0aff671e-b143-42b1-b0c8-2cfb40677e11",
+            "Title": "Годишна програма за работата на Државниот завод за ревизија за 2026 година",
+            "TypeTitle": "Анализи, извештаи, информации и друг материјал",
+            "Status": null,
+            "StatusGroupTitle": "Доставен до пратеници",
+            "RegistrationNumber": "08-7401/1",
+            "RegistrationDate": "/Date(1767006468000)/",
+            "ResponsibleAuthor": "Државен завод за ревизија",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "Државен завод за ревизија",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Друга институција",
+            "ResponsibleCommittee": "Комисија за финансирање и буџет",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "3f1f3239-dd74-4acb-9c99-d14c0423350e",
+            "Title": "Програма за работа  на Фискалниот совет на Република Северна Македонија за 2026 година",
+            "TypeTitle": "Анализи, извештаи, информации и друг материјал",
+            "Status": null,
+            "StatusGroupTitle": "Доставен до пратеници",
+            "RegistrationNumber": "08-7402/1",
+            "RegistrationDate": "/Date(1767005876000)/",
+            "ResponsibleAuthor": "Фискален совет на Република Северна Македонија",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "Фискален совет на Република Северна Македонија",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Друга институција",
+            "ResponsibleCommittee": "Комисија за финансирање и буџет",
+            "EUCompatible": false,
+            "TotalItems": null
+          },
+          {
+            "Id": "aaff977b-d460-4267-942c-3305d80d50e2",
+            "Title": "Предлог за огласување именување на Јавен обвинител на Република Северна Македонија",
+            "TypeTitle": "Анализи, извештаи, информации и друг материјал",
+            "Status": null,
+            "StatusGroupTitle": "Затворен",
+            "RegistrationNumber": "08-7329/1",
+            "RegistrationDate": "/Date(1766757631000)/",
+            "ResponsibleAuthor": "Љупчо Димовски",
+            "Authors": [
+              {
+                "Id": "00000000-0000-0000-0000-000000000000",
+                "FirstName": "Љупчо Димовски",
+                "LastName": ""
+              }
+            ],
+            "ProposerTypeTitle": "Влада на Република Северна Македонија",
+            "ResponsibleCommittee": "",
+            "EUCompatible": false,
+            "TotalItems": null
+          }
+        ]
+      }
+    }
+  ]
+}

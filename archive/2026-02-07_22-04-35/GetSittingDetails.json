@@ -1,0 +1,2055 @@
+{
+  "method": "GetSittingDetails",
+  "samples": [
+    {
+      "request": {
+        "MethodName": "GetSittingDetails",
+        "SittingId": "f06b995b-c5c7-42cd-8605-ec2d9ab7aac1",
+        "LanguageId": 1
+      },
+      "response": {
+        "StatusId": 3,
+        "StatusTitle": "Завршена",
+        "Location": "Сала „Македонија“",
+        "Number": 83,
+        "SittingDate": "/Date(1769691924000)/",
+        "TypeTitle": "Пленарна седница",
+        "TypeId": 1,
+        "CommitteeId": null,
+        "CommitteeTitle": null,
+        "MediaLinks": [],
+        "Documents": [
+          {
+            "Id": "f4ff57cb-122c-4722-9196-279e0994e4b0",
+            "Title": "Решение за свикување седницa",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639046405020635618/Documents/639047763442432511.doc",
+            "FileName": null,
+            "DocumentTypeId": 19,
+            "DocumentTypeTitle": "Решение за свикување седницa",
+            "IsExported": true
+          },
+          {
+            "Id": "4f21045e-0509-48b9-8c05-9873fa6e62aa",
+            "Title": "Известување за дополнување на дневен ред",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639046405020635618/Documents/639051090528408614.doc",
+            "FileName": null,
+            "DocumentTypeId": 43,
+            "DocumentTypeTitle": "Известување за дополнување на дневен ред",
+            "IsExported": true
+          },
+          {
+            "Id": "3e80d49e-e254-480a-bcfe-dbef5d3b6864",
+            "Title": "Известување за дополнување на дневен ред",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639046405020635618/Documents/639051886476044105.doc",
+            "FileName": null,
+            "DocumentTypeId": 43,
+            "DocumentTypeTitle": "Известување за дополнување на дневен ред",
+            "IsExported": true
+          },
+          {
+            "Id": "c3aba56e-b12a-494b-8a1e-3e672572357c",
+            "Title": "Стенографски белешки од   83-та седница на Собрание на РСМ 28.01.2026 година",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639046405020635618/Documents/639052834083816146.doc",
+            "FileName": null,
+            "DocumentTypeId": 57,
+            "DocumentTypeTitle": "Стенограм",
+            "IsExported": true
+          },
+          {
+            "Id": "af63426b-6639-4b16-8563-2fe1ed48de04",
+            "Title": "Известување за продолжување на седница",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639046405020635618/Documents/639052866810206657.doc",
+            "FileName": null,
+            "DocumentTypeId": 42,
+            "DocumentTypeTitle": "Известување за продолжување на седница",
+            "IsExported": true
+          },
+          {
+            "Id": "b7b3adf6-5930-4652-b42f-b2a44ae598ec",
+            "Title": "Стенографски белешки од   Првото продолжение на 83-та седница на Собрание на РСМ 29.01.2026 годинагодина",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639046405020635618/Documents/639057224770610389.doc",
+            "FileName": null,
+            "DocumentTypeId": 57,
+            "DocumentTypeTitle": "Стенограм",
+            "IsExported": true
+          }
+        ],
+        "Agenda": {
+          "id": "9893E4B2-DDEB-446F-8B4B-4A2A70BACF0E",
+          "beforeText": null,
+          "afterText": null,
+          "text": "Дневен ред на седница бр. 83",
+          "type": "ROOT",
+          "treeItemTypeId": null,
+          "agendaItemType": null,
+          "status": 0,
+          "statusTitle": null,
+          "isActive": false,
+          "order": 1,
+          "euCompatible": false,
+          "data": null,
+          "children": [
+            {
+              "id": "124D96BF-CC32-4D42-8E98-7692E057719E",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на одлука за избор на претседател, потпретседател и членови на Државната изборна комисија - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 1,
+              "euCompatible": false,
+              "data": "<div>[Избори, именување и разрешување на јавни и други функции] - </div>",
+              "children": [],
+              "objectId": "ad382883-db6c-4293-b31f-7e98546063e2",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 22,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "076a2ea4-5477-467f-8217-4c3b8b6b5e92",
+                  "Title": "Точка 1 Предлог на одлука за избор на претседател, потпретседател и членови на Државната изборна комисија",
+                  "Description": "Точка 1 Предлог на одлука за избор на претседател, потпретседател и членови на Државната изборна комисија",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "98BBFA75-F432-4BBB-9A10-202EFE7E2569",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на одлука за избор на членови на Комисијата за спречување и заштита од дискриминација - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 2,
+              "euCompatible": false,
+              "data": "<div>[Декларација, резолуција, одлука и препорака] - </div>",
+              "children": [],
+              "objectId": "fc039df6-373e-4669-8c6f-4d48eb50ae95",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 8,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "9d80de02-11fb-4f79-80ee-181c0f92629d",
+                  "Title": "Точка 2 Предлог на одлука за избор на членови на Комисијата за спречување и заштита од дискриминација",
+                  "Description": "Точка 2 Предлог на одлука за избор на членови на Комисијата за спречување и заштита од дискриминација",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "E29B204D-B666-42F8-A7ED-1649A1477B9F",
+              "beforeText": null,
+              "afterText": "<MK>второ читање</><AL>Leximi i dytë</><EN>Second Reading</><FR>Deuxième lecture</>",
+              "text": "Дополнет предлог на Закон за изменување и дополнување на Кривичниот законик - второ читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 3,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] -  - Бојан Стојаноски</div>",
+              "children": [],
+              "objectId": "8c1e018b-f1d0-4173-bc16-cc5e8b8cba47",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "721d47fd-6799-4e6d-817b-ac7771ebcf0b",
+                  "Title": "Точка 3 Дополнет предлог на Закон за изменување и дополнување на Кривичниот законик",
+                  "Description": "Точка 3 Дополнет предлог на Закон за изменување и дополнување на Кривичниот законик",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "2F23C831-6373-40D1-A65F-1C22D9889C17",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на закон за задолжување на Република Северна Македонија со заем кај Кредитната банка за обнова–КфВ по Договорот за заем за финансирање на проектот за енергетски ефикасна рехабилитација на студентските домови и објекти за ученици/студенти со попречености во Северна Македонија, фаза 2, по скратена постапка - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 4,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - м-р Гордана Димитриеска - Кочоска, министер за финансии</div>",
+              "children": [],
+              "objectId": "ccaf7830-3164-46f6-95a3-60816538344d",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "80025712-a092-4e4d-8983-e146896368ae",
+                  "Title": "Точка 4 Предлог на закон за задолжување на Република Северна Македонија со заем кај Кредитната банка за обнова–КфВ по Договорот за заем за финансирање на проектот за енергетски ефикасна рехабилитација на студентските домови и објекти за ученици/студенти со попречености во Северна Македонија, фаза 2, по скратена постапка",
+                  "Description": "Точка 4 Предлог на закон за задолжување на Република Северна Македонија со заем кај Кредитната банка за обнова–КфВ по Договорот за заем за финансирање на проектот за енергетски ефикасна рехабилитација на студентските домови и објекти за ученици/студенти со попречености во Северна Македонија, фаза 2, по скратена постапка",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            }
+          ],
+          "objectId": null,
+          "objectTypeId": 0,
+          "objectTypeTitle": null,
+          "objectStatusId": 0,
+          "objectSubTypeId": 0,
+          "manyAmendments": false,
+          "mediaItems": [],
+          "VotingDefinitions": [],
+          "Documents": []
+        },
+        "Continuations": [
+          {
+            "Id": "dd766d30-d7dd-411a-9ae3-db454e8a6192",
+            "Number": 0,
+            "StatusId": null,
+            "StatusTitle": "Завршена",
+            "SittingDate": "/Date(1769594400000)/",
+            "Location": "Сала „Македонија“"
+          }
+        ],
+        "SittingDuration": null,
+        "Absents": [
+          {
+            "Id": "85048fa9-e61b-4eb1-be26-8d537cb1d7c4",
+            "Fullname": "Аднан Азизи",
+            "PoliticalParty": "Движење БЕСА"
+          },
+          {
+            "Id": "941c5a06-34cb-4cb1-955a-25344a8f3a48",
+            "Fullname": "Али Ахмети",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "844cc6b4-6299-4f8e-bc99-daa48cb23a23",
+            "Fullname": "Африм Гаши",
+            "PoliticalParty": "Алтернатива"
+          },
+          {
+            "Id": "fbaa186c-c6c8-4cd9-b6eb-adf825eb618e",
+            "Fullname": "Бејџан Иљас",
+            "PoliticalParty": "Независни пратеници"
+          },
+          {
+            "Id": "ce01e0aa-fc1c-417a-9a34-e27390e35531",
+            "Fullname": "Беким Ќоку",
+            "PoliticalParty": "Движење БЕСА"
+          },
+          {
+            "Id": "1ae22217-01be-4d96-8611-bd1bea96cf62",
+            "Fullname": "Бети Стаменкоска Трајкоска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "89420888-9c73-4b73-afe5-9ac6cf05bdc7",
+            "Fullname": "Бисера Костадиновска Стојчевска",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "e9ad8fc1-b0d6-40d8-8278-807e25604e74",
+            "Fullname": "Благој Бочварски",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "324c4112-4c7d-4a40-97ad-d307cc72b0dc",
+            "Fullname": "Блерим Беџети",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "4d879247-f523-4402-a10a-e6308ed80ab5",
+            "Fullname": "Борислав Крмов",
+            "PoliticalParty": "Левица"
+          },
+          {
+            "_truncated": 25
+          }
+        ],
+        "Attendances": [
+          {
+            "Id": "914bff80-4c19-4675-ace4-cb0c7a08f688",
+            "Fullname": "Александар Велјановски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "874ed2b3-028b-4853-9d67-09eb6b72edd3",
+            "Fullname": "Александар Јамалов",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "8f8e1f43-656d-48e5-90fe-0a65fa9e1d68",
+            "Fullname": "Александра Николовска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b0688e81-82f8-4d41-bcfd-23ed8d9a27d9",
+            "Fullname": "Амар Мециновиќ",
+            "PoliticalParty": "Левица"
+          },
+          {
+            "Id": "211dda83-2d72-4c54-9a40-75b9f8ab0155",
+            "Fullname": "Ангелинка Петкова",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "f66f1d74-95ad-4df7-8586-17bfdb169228",
+            "Fullname": "Антонијо Милошоски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b4fe592a-b83e-492b-b791-08876efd46da",
+            "Fullname": "Арбана Пашоли",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "0770b2f6-913f-45c6-843b-b0dec266c595",
+            "Fullname": "Биљана Кузманоска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "0707e76d-dc5c-40c9-859c-54031e5f4236",
+            "Fullname": "Бисерка Златеска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "798d31b8-3bee-43e2-9826-f2d6cc3934db",
+            "Fullname": "Благица Ласовска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "_truncated": 80
+          }
+        ],
+        "DescriptionTypeTitle": null,
+        "DescriptionTypeId": null,
+        "Votings": [
+          {
+            "Id": "18ba866e-e347-4e5a-8d8d-4d246402874b",
+            "Title": "Предлог на закон за задолжување на Република Северна Македонија со заем кај Кредитната банка за обнова–КфВ по Договорот за заем за финансирање на проектот за енергетски ефикасна рехабилитација на студентските домови и објекти за ученици/студенти со попречености во Северна Македонија, фаза 2, по скратена постапка",
+            "Description": "Предлог на закон за задолжување на Република Северна Македонија со заем кај Кредитната банка за обнова–КфВ по Договорот за заем за финансирање на проектот за енергетски ефикасна рехабилитација на студентските домови и објекти за ученици/студенти со попречености во Северна Македонија, фаза 2, по скратена постапка",
+            "VotingType": "Јавно",
+            "OverallResult": "Усвоен"
+          },
+          {
+            "Id": "16b30bd5-e8dd-44b8-b614-5c679bdff52d",
+            "Title": "Предлог од Димитар Апасиев и др. на Законот за изменување на закон за енергетика, по скратена постапка",
+            "Description": "Предлог од Димитар Апасиев и др. на Законот за изменување на Законот за енергетика, по скратена постапка",
+            "VotingType": "Јавно",
+            "OverallResult": "Одбиен"
+          },
+          {
+            "Id": "e1fa01c1-f2ad-40ac-88a1-e8cbfda3fe18",
+            "Title": "Дневен ред 83 седница",
+            "Description": "Дневен ред 83 седница",
+            "VotingType": "Јавно",
+            "OverallResult": "Усвоен"
+          }
+        ],
+        "Structure": "2024-2028"
+      }
+    },
+    {
+      "request": {
+        "MethodName": "GetSittingDetails",
+        "SittingId": "d026cd07-0525-494f-a179-7785005e06b7",
+        "LanguageId": 1
+      },
+      "response": {
+        "StatusId": 3,
+        "StatusTitle": "Завршена",
+        "Location": "Сала „Македонија“",
+        "Number": 82,
+        "SittingDate": "/Date(1769680800000)/",
+        "TypeTitle": "Пленарна седница",
+        "TypeId": 1,
+        "CommitteeId": null,
+        "CommitteeTitle": null,
+        "MediaLinks": [],
+        "Documents": [
+          {
+            "Id": "037c89fb-bceb-4fde-96b9-2df6c9fc0d80",
+            "Title": "Решение за свикување седницa",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639042948888362992/Documents/639045116050352934.doc",
+            "FileName": null,
+            "DocumentTypeId": 19,
+            "DocumentTypeTitle": "Решение за свикување седницa",
+            "IsExported": true
+          },
+          {
+            "Id": "a3664443-5a4a-4f81-b435-9594883d22ce",
+            "Title": "Писмо до пратениците за поставување на пратенички прашања",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639042948888362992/Documents/639045116695978936.doc",
+            "FileName": null,
+            "DocumentTypeId": 72,
+            "DocumentTypeTitle": "Документ",
+            "IsExported": true
+          },
+          {
+            "Id": "92509fc8-e52c-4fe2-b618-76c76a82b3d7",
+            "Title": "Стенографски белешки од   82-та седница на Собрание на РСМ 29.01.2026 година",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639042948888362992/Documents/639057208713228454.doc",
+            "FileName": null,
+            "DocumentTypeId": 57,
+            "DocumentTypeTitle": "Стенограм",
+            "IsExported": true
+          }
+        ],
+        "Agenda": {
+          "id": "D1372171-AA73-49ED-9F04-EC13E1ACC7B9",
+          "beforeText": null,
+          "afterText": null,
+          "text": "Дневен ред на седница бр. 82",
+          "type": "ROOT",
+          "treeItemTypeId": null,
+          "agendaItemType": null,
+          "status": 0,
+          "statusTitle": null,
+          "isActive": false,
+          "order": 1,
+          "euCompatible": false,
+          "data": null,
+          "children": [
+            {
+              "id": "4A9762BD-6DDD-46A3-9F7A-CC13B58D1A12",
+              "beforeText": null,
+              "afterText": "<MK></><AL></><EN></><FR></>",
+              "text": "Поставување на пратенички прашања - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 4,
+              "status": 69,
+              "statusTitle": "Нова",
+              "isActive": false,
+              "order": 1,
+              "euCompatible": false,
+              "data": null,
+              "children": [],
+              "objectId": null,
+              "objectTypeId": 0,
+              "objectTypeTitle": null,
+              "objectStatusId": 0,
+              "objectSubTypeId": 0,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [],
+              "Documents": []
+            }
+          ],
+          "objectId": null,
+          "objectTypeId": 0,
+          "objectTypeTitle": null,
+          "objectStatusId": 0,
+          "objectSubTypeId": 0,
+          "manyAmendments": false,
+          "mediaItems": [],
+          "VotingDefinitions": [],
+          "Documents": []
+        },
+        "Continuations": [],
+        "SittingDuration": null,
+        "Absents": [
+          {
+            "Id": "85048fa9-e61b-4eb1-be26-8d537cb1d7c4",
+            "Fullname": "Аднан Азизи",
+            "PoliticalParty": "Движење БЕСА"
+          },
+          {
+            "Id": "941c5a06-34cb-4cb1-955a-25344a8f3a48",
+            "Fullname": "Али Ахмети",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "fbaa186c-c6c8-4cd9-b6eb-adf825eb618e",
+            "Fullname": "Бејџан Иљас",
+            "PoliticalParty": "Независни пратеници"
+          },
+          {
+            "Id": "ce01e0aa-fc1c-417a-9a34-e27390e35531",
+            "Fullname": "Беким Ќоку",
+            "PoliticalParty": "Движење БЕСА"
+          },
+          {
+            "Id": "1ae22217-01be-4d96-8611-bd1bea96cf62",
+            "Fullname": "Бети Стаменкоска Трајкоска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "89420888-9c73-4b73-afe5-9ac6cf05bdc7",
+            "Fullname": "Бисера Костадиновска Стојчевска",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "e9ad8fc1-b0d6-40d8-8278-807e25604e74",
+            "Fullname": "Благој Бочварски",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "324c4112-4c7d-4a40-97ad-d307cc72b0dc",
+            "Fullname": "Блерим Беџети",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "4d879247-f523-4402-a10a-e6308ed80ab5",
+            "Fullname": "Борислав Крмов",
+            "PoliticalParty": "Левица"
+          },
+          {
+            "Id": "67f0c0fd-90f4-44cd-82e4-e664577520b8",
+            "Fullname": "Даниел Стојчевски",
+            "PoliticalParty": "Движење ЗНАМ"
+          },
+          {
+            "_truncated": 21
+          }
+        ],
+        "Attendances": [
+          {
+            "Id": "914bff80-4c19-4675-ace4-cb0c7a08f688",
+            "Fullname": "Александар Велјановски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "874ed2b3-028b-4853-9d67-09eb6b72edd3",
+            "Fullname": "Александар Јамалов",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "8f8e1f43-656d-48e5-90fe-0a65fa9e1d68",
+            "Fullname": "Александра Николовска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b0688e81-82f8-4d41-bcfd-23ed8d9a27d9",
+            "Fullname": "Амар Мециновиќ",
+            "PoliticalParty": "Левица"
+          },
+          {
+            "Id": "211dda83-2d72-4c54-9a40-75b9f8ab0155",
+            "Fullname": "Ангелинка Петкова",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "f66f1d74-95ad-4df7-8586-17bfdb169228",
+            "Fullname": "Антонијо Милошоски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b4fe592a-b83e-492b-b791-08876efd46da",
+            "Fullname": "Арбана Пашоли",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "844cc6b4-6299-4f8e-bc99-daa48cb23a23",
+            "Fullname": "Африм Гаши",
+            "PoliticalParty": "Алтернатива"
+          },
+          {
+            "Id": "0770b2f6-913f-45c6-843b-b0dec266c595",
+            "Fullname": "Биљана Кузманоска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "0707e76d-dc5c-40c9-859c-54031e5f4236",
+            "Fullname": "Бисерка Златеска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "_truncated": 84
+          }
+        ],
+        "DescriptionTypeTitle": null,
+        "DescriptionTypeId": null,
+        "Votings": [],
+        "Structure": "2024-2028"
+      }
+    },
+    {
+      "request": {
+        "MethodName": "GetSittingDetails",
+        "SittingId": "540c6a94-c690-48ab-a69b-8796f5b1c960",
+        "LanguageId": 1
+      },
+      "response": {
+        "StatusId": 3,
+        "StatusTitle": "Завршена",
+        "Location": "Сала „Македонија“",
+        "Number": 65,
+        "SittingDate": "/Date(1769172925000)/",
+        "TypeTitle": "Пленарна седница",
+        "TypeId": 1,
+        "CommitteeId": null,
+        "CommitteeTitle": null,
+        "MediaLinks": [],
+        "Documents": [
+          {
+            "Id": "3a724a55-08fe-4be5-91d4-eab6908214e6",
+            "Title": "Решение за свикување седницa",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/638894340901487260/Documents/638895662457421241.doc",
+            "FileName": null,
+            "DocumentTypeId": 19,
+            "DocumentTypeTitle": "Решение за свикување седницa",
+            "IsExported": true
+          },
+          {
+            "Id": "7fde2438-afa8-4068-8a63-5f37777e443c",
+            "Title": "Стенографски белешки од 065 седница на Собранието на РСМ на 31.07.2025",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/638894340901487260/Documents/638899085651693688.doc",
+            "FileName": null,
+            "DocumentTypeId": 57,
+            "DocumentTypeTitle": "Стенограм",
+            "IsExported": true
+          },
+          {
+            "Id": "6a4ee72b-c8ed-4606-a541-bf4f18c35df0",
+            "Title": "Известување за продолжување на седница",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/638894340901487260/Documents/639047725372364077.doc",
+            "FileName": null,
+            "DocumentTypeId": 42,
+            "DocumentTypeTitle": "Известување за продолжување на седница",
+            "IsExported": true
+          },
+          {
+            "Id": "1abdf1c5-dac7-4274-9afb-8617e9b384d0",
+            "Title": "Стенографски белешки од 01 продолжение о65 седница на Собранието на РСМ на 23.01.2026",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/638894340901487260/Documents/639050207943581583.doc",
+            "FileName": null,
+            "DocumentTypeId": 57,
+            "DocumentTypeTitle": "Стенограм",
+            "IsExported": true
+          }
+        ],
+        "Agenda": {
+          "id": "13176684-681A-4F18-B151-01C93A5728F7",
+          "beforeText": null,
+          "afterText": null,
+          "text": "Дневен ред на седница бр. 65",
+          "type": "ROOT",
+          "treeItemTypeId": null,
+          "agendaItemType": null,
+          "status": 0,
+          "statusTitle": null,
+          "isActive": false,
+          "order": 1,
+          "euCompatible": false,
+          "data": null,
+          "children": [
+            {
+              "id": "D7DCE8AB-1EB1-43EF-BD8C-2F0DD8F598D6",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на одлука за изменување на Одлуката за разрешување и именување на претседател и членови на Одборот за доделување на Државната награда ,,23 Октомври\" - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 1,
+              "euCompatible": false,
+              "data": "<div>[Декларација, резолуција, одлука и препорака] - </div>",
+              "children": [],
+              "objectId": "f5cf441f-ef39-45d2-a87b-43fe68ff54df",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 8,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [],
+              "Documents": []
+            },
+            {
+              "id": "A4274F5D-3826-41CB-A549-A0195DCBBB1B",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на одлука за изменување на Одлуката за разрешување и именување на претседател и членови на Одборот за доделување на Државната награда ,,11 Октомври\" - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 2,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - </div>",
+              "children": [],
+              "objectId": "e1cf9653-999c-4e8f-b728-bfc216d406b3",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [],
+              "Documents": []
+            },
+            {
+              "id": "DFE6C805-E4CB-419F-9B50-C2F6BA5FD735",
+              "beforeText": null,
+              "afterText": "<MK>Второ читање</><AL>Leximi i dytë</><EN>Second Reading</><FR>Deuxième lecture</>",
+              "text": "Предлог на одлука за објавување на јавен оглас за избор на претседател  на Државната комисија за спречување на корупцијата - Второ читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 3,
+              "euCompatible": false,
+              "data": "<div>[Декларација, резолуција, одлука и препорака] -  - Ѓорѓија Сајкоски</div>",
+              "children": [],
+              "objectId": "835e5541-e88c-4c45-a508-700322757ed0",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 8,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [],
+              "Documents": []
+            },
+            {
+              "id": "8D1F593D-4C60-4BEE-8430-7EBDF61FCF33",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог  на  одлука за избор на Народен правобранител - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 4,
+              "euCompatible": false,
+              "data": "<div>[Избори, именување и разрешување на јавни и други функции] - </div>",
+              "children": [],
+              "objectId": "59837777-f27b-4281-a974-ef44b8efb07e",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 22,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [],
+              "Documents": []
+            }
+          ],
+          "objectId": null,
+          "objectTypeId": 0,
+          "objectTypeTitle": null,
+          "objectStatusId": 0,
+          "objectSubTypeId": 0,
+          "manyAmendments": false,
+          "mediaItems": [],
+          "VotingDefinitions": [],
+          "Documents": []
+        },
+        "Continuations": [
+          {
+            "Id": "6f24608e-1a59-4f2d-9678-55e6c9acaa7c",
+            "Number": 0,
+            "StatusId": null,
+            "StatusTitle": "Завршена",
+            "SittingDate": "/Date(1753963200000)/",
+            "Location": "Сала „Македонија“"
+          }
+        ],
+        "SittingDuration": null,
+        "Absents": [
+          {
+            "Id": "941c5a06-34cb-4cb1-955a-25344a8f3a48",
+            "Fullname": "Али Ахмети",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "1ae22217-01be-4d96-8611-bd1bea96cf62",
+            "Fullname": "Бети Стаменкоска Трајкоска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "89420888-9c73-4b73-afe5-9ac6cf05bdc7",
+            "Fullname": "Бисера Костадиновска Стојчевска",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "a47a3a15-9f13-4ba6-afd0-53db79fc2f02",
+            "Fullname": "Венко Филипче",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "1aafbd8a-3c38-4a89-887d-65779a63c827",
+            "Fullname": "Даниела Николова",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "0b06ea7b-8f51-4256-bc72-2631f9c27c83",
+            "Fullname": "Дејан Проданоски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b214f1ed-f45b-4198-a4df-bcb5b7b343f6",
+            "Fullname": "Елми Азири",
+            "PoliticalParty": "Алијанса за Албанците"
+          },
+          {
+            "Id": "3b48a972-2591-48a9-a9b7-bf3fb4b92b18",
+            "Fullname": "Зиадин Села",
+            "PoliticalParty": "Алијанса за Албанците"
+          },
+          {
+            "Id": "16330bfc-7fcd-42ec-a344-21f46f413b00",
+            "Fullname": "Исмаил Јахоски",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "a73fdfb9-1c3f-432f-a574-b503b415bf65",
+            "Fullname": "Јане Мицевски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "_truncated": 12
+          }
+        ],
+        "Attendances": [
+          {
+            "Id": "85048fa9-e61b-4eb1-be26-8d537cb1d7c4",
+            "Fullname": "Аднан Азизи",
+            "PoliticalParty": "Движење БЕСА"
+          },
+          {
+            "Id": "914bff80-4c19-4675-ace4-cb0c7a08f688",
+            "Fullname": "Александар Велјановски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "874ed2b3-028b-4853-9d67-09eb6b72edd3",
+            "Fullname": "Александар Јамалов",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "8f8e1f43-656d-48e5-90fe-0a65fa9e1d68",
+            "Fullname": "Александра Николовска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b0688e81-82f8-4d41-bcfd-23ed8d9a27d9",
+            "Fullname": "Амар Мециновиќ",
+            "PoliticalParty": "Левица"
+          },
+          {
+            "Id": "211dda83-2d72-4c54-9a40-75b9f8ab0155",
+            "Fullname": "Ангелинка Петкова",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "f66f1d74-95ad-4df7-8586-17bfdb169228",
+            "Fullname": "Антонијо Милошоски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b4fe592a-b83e-492b-b791-08876efd46da",
+            "Fullname": "Арбана Пашоли",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "844cc6b4-6299-4f8e-bc99-daa48cb23a23",
+            "Fullname": "Африм Гаши",
+            "PoliticalParty": "Алтернатива"
+          },
+          {
+            "Id": "fbaa186c-c6c8-4cd9-b6eb-adf825eb618e",
+            "Fullname": "Бејџан Иљас",
+            "PoliticalParty": "Независни пратеници"
+          },
+          {
+            "_truncated": 93
+          }
+        ],
+        "DescriptionTypeTitle": null,
+        "DescriptionTypeId": null,
+        "Votings": [],
+        "Structure": "2024-2028"
+      }
+    },
+    {
+      "request": {
+        "MethodName": "GetSittingDetails",
+        "SittingId": "4f40084f-c6db-4162-a90a-8f7cf7577975",
+        "LanguageId": 1
+      },
+      "response": {
+        "StatusId": 3,
+        "StatusTitle": "Завршена",
+        "Location": "Сала „Македонија“",
+        "Number": 20,
+        "SittingDate": "/Date(1769170823000)/",
+        "TypeTitle": "Пленарна седница",
+        "TypeId": 1,
+        "CommitteeId": null,
+        "CommitteeTitle": null,
+        "MediaLinks": [],
+        "Documents": [
+          {
+            "Id": "43ee4f90-e8b4-453a-90ec-9b3d5c33707f",
+            "Title": "Решение за свикување седницa",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/638663652704703661/Documents/638665954210616656.doc",
+            "FileName": null,
+            "DocumentTypeId": 19,
+            "DocumentTypeTitle": "Решение за свикување седницa",
+            "IsExported": true
+          },
+          {
+            "Id": "767a03cc-1f6e-47dc-9c4e-5aaa0b9dd2ef",
+            "Title": "Известување за дополнување на дневен ред",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/638663652704703661/Documents/638677170028706728.doc",
+            "FileName": null,
+            "DocumentTypeId": 43,
+            "DocumentTypeTitle": "Известување за дополнување на дневен ред",
+            "IsExported": true
+          },
+          {
+            "Id": "c54ec658-8d3c-4535-a9ab-85dfaf6a4864",
+            "Title": "Стенографски белешки од 00 продолжение 020 седница на Собранието на РСМ на 21.11.2024",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/638663652704703661/Documents/638681302143088909.doc",
+            "FileName": null,
+            "DocumentTypeId": 57,
+            "DocumentTypeTitle": "Стенограм",
+            "IsExported": true
+          },
+          {
+            "Id": "a96741ec-b0d9-48fc-b137-8543887fc255",
+            "Title": "Известување за продолжување на седница",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/638663652704703661/Documents/639046751392715805.doc",
+            "FileName": null,
+            "DocumentTypeId": 42,
+            "DocumentTypeTitle": "Известување за продолжување на седница",
+            "IsExported": true
+          },
+          {
+            "Id": "71d7f4da-b298-43c9-bb54-71d0942c7be1",
+            "Title": "Стенографски белешки од 01 продолжение 020 седница на Собранието на РСМ на 23.01.2026",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/638663652704703661/Documents/639050205672175830.doc",
+            "FileName": null,
+            "DocumentTypeId": 57,
+            "DocumentTypeTitle": "Стенограм",
+            "IsExported": true
+          }
+        ],
+        "Agenda": {
+          "id": "F76FB218-BF89-4391-BDB5-C8A77E23262C",
+          "beforeText": null,
+          "afterText": null,
+          "text": "Дневен ред на седница бр. 20",
+          "type": "ROOT",
+          "treeItemTypeId": null,
+          "agendaItemType": null,
+          "status": 0,
+          "statusTitle": null,
+          "isActive": false,
+          "order": 1,
+          "euCompatible": false,
+          "data": null,
+          "children": [
+            {
+              "id": "9138CC68-CF2A-468E-B12A-D0F3E2882002",
+              "beforeText": null,
+              "afterText": "<MK>Прво читање</><AL>Leximi i parë</><EN>First reading</><FR>Première lecture</>",
+              "text": "Предлог на закон за изменување и дополнување на Законот за акцизите - Прво читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 1,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - м-р Гордана Димитриеска Кочоска, министер за финансии</div>",
+              "children": [],
+              "objectId": "1f68d97c-7015-4a57-91d8-65e5127bf719",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "31ca2c78-d227-4abf-87a7-1f4be3ce046d",
+                  "Title": "Точка 1 Предлог на закон за изменување и дополнување на Законот за акцизите",
+                  "Description": "Предлог на закон за изменување и дополнување на Законот за акцизите",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "23EEA721-8C09-4411-B395-5A4A557EF301",
+              "beforeText": null,
+              "afterText": "<MK>Прво читање</><AL>Leximi i parë</><EN>First reading</><FR>Première lecture</>",
+              "text": "Предлог на закон за изменување и дополнување на Законот за културата - Прво читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 2,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - Зоран Љутков, министер за култура и туризам</div>",
+              "children": [],
+              "objectId": "63d380a1-e9c7-4724-a22c-3bbf7ff7fc86",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "4cb3d933-5e23-4546-92b3-14a29752a417",
+                  "Title": "Точка 2 Предлог на закон за изменување и дополнување на Законот за културата",
+                  "Description": "Предлог на закон за изменување и дополнување на Законот за културата",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "FCD1496B-6009-4681-9049-D1325BBE679E",
+              "beforeText": null,
+              "afterText": "<MK>Прво читање</><AL>Leximi i parë</><EN>First reading</><FR>Première lecture</>",
+              "text": "Предлог на закон за изменување и дополнување на Законот за матичната евиденција - Прво читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 3,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - м-р Стефан Андоновски</div>",
+              "children": [],
+              "objectId": "7ec7622f-eec3-4be5-8f22-4c41cb49a63c",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "a603ba1b-2a2d-4092-a02e-5fe2b24074db",
+                  "Title": "Точка 3 Предлог на закон за изменување и дополнување на Законот за матичната евиденција",
+                  "Description": "Предлог на закон за изменување и дополнување на Законот за матичната евиденција",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "3D30262F-1538-42AC-B8EA-89F44E6DF61B",
+              "beforeText": null,
+              "afterText": "<MK>Прво читање</><AL>Leximi i parë</><EN>First reading</><FR>Première lecture</>",
+              "text": "Предлог на закон за изменување и дополнување на Законот за јавна чистота - Прво читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 4,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - Александар Николоски, заменик на претседателот на Владата на Република Северна Македонија и министер за транспорт</div>",
+              "children": [],
+              "objectId": "7e313165-0bd3-4381-9f01-911c33076d92",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "9507789e-7d44-40ec-a67f-5322357b8679",
+                  "Title": "Точка 4 Предлог на закон за изменување и дополнување на Законот за јавна чистота",
+                  "Description": "Предлог на закон за изменување и дополнување на Законот за јавна чистота",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "EB54EEEE-3996-4F08-B44C-0D5F921B9AB1",
+              "beforeText": null,
+              "afterText": "<MK>Прво читање</><AL>Leximi i parë</><EN>First reading</><FR>Première lecture</>",
+              "text": "Предлог на закон за изменување и дополнување на Законот за гробишта и погребални услуги - Прво читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 5,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - Александар Николоски, заменик на претседателот на Владата на Република Северна Македонија и министер за транспорт</div>",
+              "children": [],
+              "objectId": "a5b48a52-17e3-44a7-a661-2b7b9c722358",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "7c29ab69-103b-4878-9c02-24719b6caf64",
+                  "Title": "Точка 5 Предлог на закон за изменување и дополнување на Законот за гробишта и погребални услуги",
+                  "Description": "Предлог на закон за изменување и дополнување на Законот за гробишта и погребални услуги",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "38EB44C2-59D9-48F8-9595-2A0FC3B6A8FC",
+              "beforeText": null,
+              "afterText": "<MK>Прво читање</><AL>Leximi i parë</><EN>First reading</><FR>Première lecture</>",
+              "text": "Предлог на закон за изменување и дополнување на Законот за комуналните дејности - Прво читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 6,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - Александар Николоски, заменик на претседателот на Владата на Република Северна Македонија и министер за транспорт</div>",
+              "children": [],
+              "objectId": "cedb2f0e-7348-46b6-b6d8-a9a136c343c4",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "78c63bba-fd4e-43a6-b3bd-e4cd43c0fe52",
+                  "Title": "Точка 6 Предлог на закон за изменување и дополнување на Законот за комуналните дејности",
+                  "Description": "Предлог на закон за изменување и дополнување на Законот за комуналните дејности",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "2E1572AA-E268-4124-8368-B43CABE497D0",
+              "beforeText": null,
+              "afterText": "<MK>Прво читање</><AL>Leximi i parë</><EN>First reading</><FR>Première lecture</>",
+              "text": "Предлог на закон за изменување и дополнување на Законот за  Посебен регистар за лица осудени со правосилна пресуда за кривични дела за сексуална злоупотреба на малолетни лица и педофилија - Прво читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 7,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - Фатмир Лимани, министер за социјална политика, демографија и млади</div>",
+              "children": [],
+              "objectId": "db1a8193-c4fb-4609-9035-7219a1ce621b",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 10,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "e6ae6d69-8122-40a8-b8e3-b7eacf47962c",
+                  "Title": "Точка 7 Предлог на закон за изменување и дополнување на Законот за  Посебен регистар за лица осудени со правосилна пресуда за кривични дела за сексуална злоупотреба на малолетни лица и педофилија",
+                  "Description": "Предлог на закон за изменување и дополнување на Законот за  Посебен регистар за лица осудени со правосилна пресуда за кривични дела за сексуална злоупотреба на малолетни лица и педофилија",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "D6C3C082-123F-4A65-86FD-B8DF0757D78F",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Годишен извештај за работата на Државниот совет за превенција на детско престапништво и за состојбите во областа на правата на детето и детското престапништво за 2023 година - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 8,
+              "euCompatible": false,
+              "data": "<div>[Анализи, извештаи, информации и друг материјал] - Државен совет за превенција на детско престапништво</div>",
+              "children": [],
+              "objectId": "67e6eee0-6e01-4cc4-9592-ed6f562b2711",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 28,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [],
+              "Documents": []
+            },
+            {
+              "id": "4D160C17-2BBF-4B43-8FC7-D21E573EFE39",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на одлука за одобрување на Финансиски план   на Јавно радиодифузно претпријатие Македонска радио телевизија за 2025 година - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 9,
+              "euCompatible": false,
+              "data": "<div>[Анализи, извештаи, информации и друг материјал] - Јавно радиодифузно претпријатие Македонска радио телевизија</div>",
+              "children": [],
+              "objectId": "71e4f259-3c9b-435a-897c-bc185723215a",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 28,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "822db46d-ab89-403f-a22b-288d78835d7a",
+                  "Title": "Точка 9 Предлог на одлука за одобрување на Финансиски план   на Јавно радиодифузно претпријатие Македонска радио телевизија за 2025 година",
+                  "Description": "Предлог на одлука за одобрување на Финансиски план   на Јавно радиодифузно претпријатие Македонска радио телевизија за 2025 година",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "174BD1AC-6D62-43DC-9BCD-453C26D98F2F",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на закон за изменување и дополнување на Законот за рамномерен регионален развој, по скратена постапка - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 10,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - м-р Златко Перински, министер за локална самоуправа</div>",
+              "children": [],
+              "objectId": "00491bd3-2c67-4428-9f7a-bc30cb259dc8",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "312769e5-4aff-4c0d-9434-bdbd49f7f030",
+                  "Title": "Точка 10 Предлог на закон за изменување и дополнување на Законот за рамномерен регионален развој, по скратена постапка",
+                  "Description": "Предлог на закон за изменување и дополнување на Законот за рамномерен регионален развој, по скратена постапка",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "_truncated": 2
+            }
+          ],
+          "objectId": null,
+          "objectTypeId": 0,
+          "objectTypeTitle": null,
+          "objectStatusId": 0,
+          "objectSubTypeId": 0,
+          "manyAmendments": false,
+          "mediaItems": [],
+          "VotingDefinitions": [],
+          "Documents": []
+        },
+        "Continuations": [
+          {
+            "Id": "77296bf1-eef2-42d7-85a1-42438bd7eddc",
+            "Number": 0,
+            "StatusId": null,
+            "StatusTitle": "Завршена",
+            "SittingDate": "/Date(1732183200000)/",
+            "Location": "Сала „Македонија“"
+          }
+        ],
+        "SittingDuration": null,
+        "Absents": [
+          {
+            "Id": "941c5a06-34cb-4cb1-955a-25344a8f3a48",
+            "Fullname": "Али Ахмети",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "1ae22217-01be-4d96-8611-bd1bea96cf62",
+            "Fullname": "Бети Стаменкоска Трајкоска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "89420888-9c73-4b73-afe5-9ac6cf05bdc7",
+            "Fullname": "Бисера Костадиновска Стојчевска",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "a47a3a15-9f13-4ba6-afd0-53db79fc2f02",
+            "Fullname": "Венко Филипче",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "1aafbd8a-3c38-4a89-887d-65779a63c827",
+            "Fullname": "Даниела Николова",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "0b06ea7b-8f51-4256-bc72-2631f9c27c83",
+            "Fullname": "Дејан Проданоски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b214f1ed-f45b-4198-a4df-bcb5b7b343f6",
+            "Fullname": "Елми Азири",
+            "PoliticalParty": "Алијанса за Албанците"
+          },
+          {
+            "Id": "3b48a972-2591-48a9-a9b7-bf3fb4b92b18",
+            "Fullname": "Зиадин Села",
+            "PoliticalParty": "Алијанса за Албанците"
+          },
+          {
+            "Id": "16330bfc-7fcd-42ec-a344-21f46f413b00",
+            "Fullname": "Исмаил Јахоски",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "a73fdfb9-1c3f-432f-a574-b503b415bf65",
+            "Fullname": "Јане Мицевски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "_truncated": 13
+          }
+        ],
+        "Attendances": [
+          {
+            "Id": "85048fa9-e61b-4eb1-be26-8d537cb1d7c4",
+            "Fullname": "Аднан Азизи",
+            "PoliticalParty": "Движење БЕСА"
+          },
+          {
+            "Id": "914bff80-4c19-4675-ace4-cb0c7a08f688",
+            "Fullname": "Александар Велјановски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "874ed2b3-028b-4853-9d67-09eb6b72edd3",
+            "Fullname": "Александар Јамалов",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "8f8e1f43-656d-48e5-90fe-0a65fa9e1d68",
+            "Fullname": "Александра Николовска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b0688e81-82f8-4d41-bcfd-23ed8d9a27d9",
+            "Fullname": "Амар Мециновиќ",
+            "PoliticalParty": "Левица"
+          },
+          {
+            "Id": "211dda83-2d72-4c54-9a40-75b9f8ab0155",
+            "Fullname": "Ангелинка Петкова",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "f66f1d74-95ad-4df7-8586-17bfdb169228",
+            "Fullname": "Антонијо Милошоски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b4fe592a-b83e-492b-b791-08876efd46da",
+            "Fullname": "Арбана Пашоли",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "844cc6b4-6299-4f8e-bc99-daa48cb23a23",
+            "Fullname": "Африм Гаши",
+            "PoliticalParty": "Алтернатива"
+          },
+          {
+            "Id": "fbaa186c-c6c8-4cd9-b6eb-adf825eb618e",
+            "Fullname": "Бејџан Иљас",
+            "PoliticalParty": "Независни пратеници"
+          },
+          {
+            "_truncated": 92
+          }
+        ],
+        "DescriptionTypeTitle": null,
+        "DescriptionTypeId": null,
+        "Votings": [
+          {
+            "Id": "1015d37e-9c77-4b1c-953a-114fd3d99878",
+            "Title": "Предлог на закон за изменување и дополнување на Законот за данокот на додадена вредност, по скратена постапка",
+            "Description": "Предлог на закон за изменување и дополнување на Законот за данокот на додадена вредност, по скратена постапка",
+            "VotingType": "Јавно",
+            "OverallResult": "Одбиен"
+          },
+          {
+            "Id": "6adf06c1-1062-4180-bd04-791ad6026809",
+            "Title": "Предлог на закон за изменување и дополнување на Законот за минимална плата во Република Северна Македонија, по скратена постапка",
+            "Description": "Предлог на закон за изменување и дополнување на Законот за минимална плата во Република Северна Македонија, по скратена постапка",
+            "VotingType": "Јавно",
+            "OverallResult": "Одбиен"
+          },
+          {
+            "Id": "f421c1fa-6c58-4ce5-9fb1-b06eafdf484d",
+            "Title": "Усвојување на дневен ред",
+            "Description": "Усвојување на дневен ред",
+            "VotingType": "Јавно",
+            "OverallResult": "Усвоен"
+          },
+          {
+            "Id": "7bd13b7c-e2a1-4e02-b80d-d260ef35a948",
+            "Title": "Предлог на закон за изменување и дополнување на Законот за рамномерен регионален развој, по скратена постапка",
+            "Description": "Предлог на закон за изменување и дополнување на Законот за рамномерен регионален развој, по скратена постапка",
+            "VotingType": "Јавно",
+            "OverallResult": "Усвоен"
+          }
+        ],
+        "Structure": "2024-2028"
+      }
+    },
+    {
+      "request": {
+        "MethodName": "GetSittingDetails",
+        "SittingId": "4b456a04-f6f8-45ee-a543-4dfd42e83035",
+        "LanguageId": 1
+      },
+      "response": {
+        "StatusId": 3,
+        "StatusTitle": "Завршена",
+        "Location": "Сала „Македонија“",
+        "Number": 81,
+        "SittingDate": "/Date(1769170538000)/",
+        "TypeTitle": "Пленарна седница",
+        "TypeId": 1,
+        "CommitteeId": null,
+        "CommitteeTitle": null,
+        "MediaLinks": [],
+        "Documents": [
+          {
+            "Id": "b3a43e74-d821-466a-895c-bc349cf88b75",
+            "Title": "Решение за свикување седницa",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639032580777355735/Documents/639034748236770273.doc",
+            "FileName": null,
+            "DocumentTypeId": 19,
+            "DocumentTypeTitle": "Решение за свикување седницa",
+            "IsExported": true
+          },
+          {
+            "Id": "4b7c1bf8-c700-4f10-a099-b23a8fef705b",
+            "Title": "Известување за дополнување на дневен ред",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639032580777355735/Documents/639045102971865448.doc",
+            "FileName": null,
+            "DocumentTypeId": 43,
+            "DocumentTypeTitle": "Известување за дополнување на дневен ред",
+            "IsExported": true
+          },
+          {
+            "Id": "845e5a8b-7f60-460e-84bf-5bbb9ecb8683",
+            "Title": "Известување за продолжување на седница",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639032580777355735/Documents/639046082643985907.doc",
+            "FileName": null,
+            "DocumentTypeId": 42,
+            "DocumentTypeTitle": "Известување за продолжување на седница",
+            "IsExported": true
+          },
+          {
+            "Id": "fd1dd27d-670f-4ce5-912c-41463aab779a",
+            "Title": "Стенографски белешки од   81-та седница на Собрание на РСМ 21.01.2026 година",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639032580777355735/Documents/639046895796777390.doc",
+            "FileName": null,
+            "DocumentTypeId": 57,
+            "DocumentTypeTitle": "Стенограм",
+            "IsExported": true
+          },
+          {
+            "Id": "75dfac85-8de5-4a1b-9692-437ac9663be1",
+            "Title": "Стенографски белешки од 01 продолжение 081 седница на Собранието на РСМ на 23.01.2026",
+            "Url": "https://sp.sobranie.mk/sites/2023/sittings/639032580777355735/Documents/639050208443137107.doc",
+            "FileName": null,
+            "DocumentTypeId": 57,
+            "DocumentTypeTitle": "Стенограм",
+            "IsExported": true
+          }
+        ],
+        "Agenda": {
+          "id": "EEFB5CD1-2212-4ACF-ABB6-6F772F1AC140",
+          "beforeText": null,
+          "afterText": null,
+          "text": "Дневен ред на седница бр. 81",
+          "type": "ROOT",
+          "treeItemTypeId": null,
+          "agendaItemType": null,
+          "status": 0,
+          "statusTitle": null,
+          "isActive": false,
+          "order": 1,
+          "euCompatible": false,
+          "data": null,
+          "children": [
+            {
+              "id": "2513EBB1-891E-45F5-A1A8-006185D71D04",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на одлука за изменување на Одлуката за одобрување на продолжување на рокот за постоење на кризна состојба на дел од територијата на Република Северна Македонија - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 1,
+              "euCompatible": false,
+              "data": "<div>[Декларација, резолуција, одлука и препорака] - Панче Тошковски, министер за внатрешни работи</div>",
+              "children": [],
+              "objectId": "3faf11ff-66ff-436b-be3c-8766553676a7",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 8,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "fc4a8811-8741-42c9-820b-521e9abacb9f",
+                  "Title": "Точка 1 Предлог на одлука за изменување на Одлуката за одобрување на продолжување на рокот за постоење на кризна состојба на дел од територијата на Република Северна Македонија",
+                  "Description": "Точка 1 Предлог на одлука за изменување на Одлуката за одобрување на продолжување на рокот за постоење на кризна состојба на дел од територијата на Република Северна Македонија",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "45C907BC-D483-424A-9505-6103844BF0CA",
+              "beforeText": null,
+              "afterText": "<MK>Второ читање</><AL>Leximi i dytë</><EN>Second Reading</><FR>Deuxième lecture</>",
+              "text": "Предлог на закон за престанување на важењето на Законот за вонсудско спогодување - Второ читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 2,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - м-р Бесар Дурмиши, министер за економија и труд</div>",
+              "children": [],
+              "objectId": "f5398455-61fa-4bf0-a696-c33b05850fbe",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "e3830ca1-5d1b-46ba-86b8-7e6e062328af",
+                  "Title": "Точка 2 Предлог на закон за престанување на важењето на Законот за вонсудско спогодување",
+                  "Description": "Точка 2 Предлог на закон за престанување на важењето на Законот за вонсудско спогодување",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "1B68D372-503F-4FA6-B4E7-BE5663D0D990",
+              "beforeText": null,
+              "afterText": "<MK>Второ читање</><AL>Leximi i dytë</><EN>Second Reading</><FR>Deuxième lecture</>",
+              "text": "Предлог на закон за изменување и дополнување на Законот за регистар на задолжително социјално осигурување - Второ читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 3,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - Фатмир Лимани, министер за социјална политика, демографија и млади</div>",
+              "children": [],
+              "objectId": "3aff694f-43bb-41f2-9c77-e5a735af05ff",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "9e9c0844-4c77-45ad-bff1-fd845b40bba6",
+                  "Title": "Точка 3 Предлог на закон за изменување и дополнување на Законот за регистар на задолжително социјално осигурување",
+                  "Description": "Точка 3 Предлог на закон за изменување и дополнување на Законот за регистар на задолжително социјално осигурување",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "5CAFCD9B-3402-462C-838A-256DB00B1556",
+              "beforeText": null,
+              "afterText": "<MK>Второ читање</><AL>Leximi i dytë</><EN>Second Reading</><FR>Deuxième lecture</>",
+              "text": "Предлог на закон за изменување и дополнување на Законот за системот за проценка на лица со попреченост - Второ читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 4,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - Фатмир Лимани, министер за социјална политика, демографија и млади</div>",
+              "children": [],
+              "objectId": "302077a6-68c3-4453-966d-f6412b851963",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "a093acbc-9d70-41ea-8cb8-2b3887f18215",
+                  "Title": "Точка 4 Предлог на закон за изменување и дополнување на Законот за системот за проценка на лица со попреченост",
+                  "Description": "Точка 4 Предлог на закон за изменување и дополнување на Законот за системот за проценка на лица со попреченост",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "162AD06C-E438-4357-A3DF-4BE10D4F9E0B",
+              "beforeText": null,
+              "afterText": "<MK>Второ читање</><AL>Leximi i dytë</><EN>Second Reading</><FR>Deuxième lecture</>",
+              "text": "Предлог на закон за задолжување на Република Северна Македонија со заем кај Банката за развој при Советот на Европа по Рамковниот договор за заем за дополнително финансирање на Проектот за изградба на фискултурни сали - Второ читање",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 5,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] - м-р Гордана Димитриеска Кочоска, министер за финансии</div>",
+              "children": [],
+              "objectId": "959e907a-9d65-4535-925e-dfad98275fda",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "67c2d0d6-de48-44db-ad6f-9db675343c76",
+                  "Title": "Точка 5 Предлог на закон за задолжување на Република Северна Македонија со заем кај Банката за развој при Советот на Европа по Рамковниот договор за заем за дополнително финансирање на Проектот за изградба на фискултурни сали",
+                  "Description": "Точка 5 Предлог на закон за задолжување на Република Северна Македонија со заем кај Банката за развој при Советот на Европа по Рамковниот договор за заем за дополнително финансирање на Проектот за изградба на фискултурни сали",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "204C59FE-E57D-478F-B6A6-B0E23C31DE85",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на закон за изменување и дополнување на Законот за внатрешни работи, по скратена постапка - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 6,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] -  - Бране Петрушевски</div>",
+              "children": [],
+              "objectId": "b13e9b71-a772-45b1-a3c3-f5aee3a94381",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "9f6672cf-a7d1-433e-8539-0e8c2357c250",
+                  "Title": "Точка 6 Предлог на закон за изменување и дополнување на Законот за внатрешни работи, по скратена постапка",
+                  "Description": "Точка 6 Предлог на закон за изменување и дополнување на Законот за внатрешни работи, по скратена постапка",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "1A2A50B9-31CB-4C0A-91B0-C32695494F99",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на закон за изменување и дополнување на Законот за полиција, по скратена постапка - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 7,
+              "euCompatible": false,
+              "data": "<div>[Предлог закон] -  - Бране Петрушевски</div>",
+              "children": [],
+              "objectId": "bbe827c1-8ed2-4b70-9d7c-997db0408f40",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 1,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "73b0bfd4-23e2-47e0-8326-a4ca3bda5973",
+                  "Title": "Точка 7 Предлог на закон за изменување и дополнување на Законот за полиција, по скратена постапка",
+                  "Description": "Точка 7 Предлог на закон за изменување и дополнување на Законот за полиција, по скратена постапка",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "A3A6861A-21B6-430D-BC36-E36B590C03EA",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Финансиски план на Агенцијата за супервизија на осигурување за 2026 година - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 8,
+              "euCompatible": false,
+              "data": "<div>[Анализи, извештаи, информации и друг материјал] - Агенција за супервизија на осигурување</div>",
+              "children": [],
+              "objectId": "c20af134-39f7-4248-bc37-47a357120259",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 28,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "a6954880-1f9c-4cf0-96ba-e3549402941c",
+                  "Title": "Точка 8 Финансиски план на Агенцијата за супервизија на осигурување за 2026 година",
+                  "Description": "Точка 8 Финансиски план на Агенцијата за супервизија на осигурување за 2026 година",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "3D766E22-4B1C-41D5-81D1-41C833B9FE80",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на одлука за давање согласност на Предлогот на Годишната програма за работа и развој на Агенцијата за цивилно воздухопловство за 2026 година - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 9,
+              "euCompatible": false,
+              "data": "<div>[Декларација, резолуција, одлука и препорака] - Агенција за цивилно воздухопловство</div>",
+              "children": [],
+              "objectId": "f6a8782f-d1cc-4799-9654-ef8d27081d06",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 8,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "8cb20cc7-e6a8-494f-8d16-5e50c2e029c1",
+                  "Title": "Точка 9 Предлог на одлука за давање согласност на Предлогот на Годишната програма за работа и развој на Агенцијата за цивилно воздухопловство за 2026 година",
+                  "Description": "Точка 9 Предлог на одлука за давање согласност на Предлогот на Годишната програма за работа и развој на Агенцијата за цивилно воздухопловство за 2026 година",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            },
+            {
+              "id": "176EA50C-AE10-40FC-975B-F0C8CAADEA26",
+              "beforeText": null,
+              "afterText": "",
+              "text": "Предлог на одлука за давање на согласност на Предлогот на Годишниот финансиски план на Агенцијата за цивилно воздухопловство за 2026 година - ",
+              "type": "LEAF",
+              "treeItemTypeId": null,
+              "agendaItemType": 1,
+              "status": 50,
+              "statusTitle": "Разгледана",
+              "isActive": false,
+              "order": 10,
+              "euCompatible": false,
+              "data": "<div>[Декларација, резолуција, одлука и препорака] - Агенција за цивилно воздухопловство</div>",
+              "children": [],
+              "objectId": "1e8d2fb4-588e-4920-8125-6090e306ada9",
+              "objectTypeId": 1,
+              "objectTypeTitle": "Материјал",
+              "objectStatusId": 12,
+              "objectSubTypeId": 8,
+              "manyAmendments": false,
+              "mediaItems": [],
+              "VotingDefinitions": [
+                {
+                  "Id": "01d5cea3-f304-44ec-8591-1376db5c12d0",
+                  "Title": "Точка 10 Предлог на одлука за давање на согласност на Предлогот на Годишниот финансиски план на Агенцијата за цивилно воздухопловство за 2026 година",
+                  "Description": "Точка 10 Предлог на одлука за давање на согласност на Предлогот на Годишниот финансиски план на Агенцијата за цивилно воздухопловство за 2026 година",
+                  "VotingType": "Јавно",
+                  "OverallResult": "Усвоен"
+                }
+              ],
+              "Documents": []
+            }
+          ],
+          "objectId": null,
+          "objectTypeId": 0,
+          "objectTypeTitle": null,
+          "objectStatusId": 0,
+          "objectSubTypeId": 0,
+          "manyAmendments": false,
+          "mediaItems": [],
+          "VotingDefinitions": [],
+          "Documents": []
+        },
+        "Continuations": [
+          {
+            "Id": "6b9cffb4-effe-4091-a89f-d904bf75b996",
+            "Number": 0,
+            "StatusId": null,
+            "StatusTitle": "Завршена",
+            "SittingDate": "/Date(1768989600000)/",
+            "Location": "Сала „Македонија“"
+          }
+        ],
+        "SittingDuration": null,
+        "Absents": [
+          {
+            "Id": "941c5a06-34cb-4cb1-955a-25344a8f3a48",
+            "Fullname": "Али Ахмети",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "1ae22217-01be-4d96-8611-bd1bea96cf62",
+            "Fullname": "Бети Стаменкоска Трајкоска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "89420888-9c73-4b73-afe5-9ac6cf05bdc7",
+            "Fullname": "Бисера Костадиновска Стојчевска",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "a47a3a15-9f13-4ba6-afd0-53db79fc2f02",
+            "Fullname": "Венко Филипче",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "1aafbd8a-3c38-4a89-887d-65779a63c827",
+            "Fullname": "Даниела Николова",
+            "PoliticalParty": "Социјалдемократски сојуз на Македонија"
+          },
+          {
+            "Id": "0b06ea7b-8f51-4256-bc72-2631f9c27c83",
+            "Fullname": "Дејан Проданоски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b214f1ed-f45b-4198-a4df-bcb5b7b343f6",
+            "Fullname": "Елми Азири",
+            "PoliticalParty": "Алијанса за Албанците"
+          },
+          {
+            "Id": "3b48a972-2591-48a9-a9b7-bf3fb4b92b18",
+            "Fullname": "Зиадин Села",
+            "PoliticalParty": "Алијанса за Албанците"
+          },
+          {
+            "Id": "16330bfc-7fcd-42ec-a344-21f46f413b00",
+            "Fullname": "Исмаил Јахоски",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "a73fdfb9-1c3f-432f-a574-b503b415bf65",
+            "Fullname": "Јане Мицевски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "_truncated": 12
+          }
+        ],
+        "Attendances": [
+          {
+            "Id": "85048fa9-e61b-4eb1-be26-8d537cb1d7c4",
+            "Fullname": "Аднан Азизи",
+            "PoliticalParty": "Движење БЕСА"
+          },
+          {
+            "Id": "914bff80-4c19-4675-ace4-cb0c7a08f688",
+            "Fullname": "Александар Велјановски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "874ed2b3-028b-4853-9d67-09eb6b72edd3",
+            "Fullname": "Александар Јамалов",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "8f8e1f43-656d-48e5-90fe-0a65fa9e1d68",
+            "Fullname": "Александра Николовска",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b0688e81-82f8-4d41-bcfd-23ed8d9a27d9",
+            "Fullname": "Амар Мециновиќ",
+            "PoliticalParty": "Левица"
+          },
+          {
+            "Id": "211dda83-2d72-4c54-9a40-75b9f8ab0155",
+            "Fullname": "Ангелинка Петкова",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "f66f1d74-95ad-4df7-8586-17bfdb169228",
+            "Fullname": "Антонијо Милошоски",
+            "PoliticalParty": "ВМРО-ДПМНЕ"
+          },
+          {
+            "Id": "b4fe592a-b83e-492b-b791-08876efd46da",
+            "Fullname": "Арбана Пашоли",
+            "PoliticalParty": "Демократска унија за интеграција"
+          },
+          {
+            "Id": "844cc6b4-6299-4f8e-bc99-daa48cb23a23",
+            "Fullname": "Африм Гаши",
+            "PoliticalParty": "Алтернатива"
+          },
+          {
+            "Id": "fbaa186c-c6c8-4cd9-b6eb-adf825eb618e",
+            "Fullname": "Бејџан Иљас",
+            "PoliticalParty": "Независни пратеници"
+          },
+          {
+            "_truncated": 93
+          }
+        ],
+        "DescriptionTypeTitle": null,
+        "DescriptionTypeId": null,
+        "Votings": [
+          {
+            "Id": "f5c40535-ca2a-4e37-90f3-0528aca9d583",
+            "Title": "Предлог од Оливер СпасовскиПредлог закон за полиција и Предлог закон за внатрешни работи по скратена постапка да се симнат од дневен ред ",
+            "Description": "Предлог од Оливер СпасовскиПредлог закон за полиција и Предлог закон за внатрешни работи по скратена постапка да се симнат од дневен ред ",
+            "VotingType": "Јавно",
+            "OverallResult": "Одбиен"
+          },
+          {
+            "Id": "78ee6aa5-b902-49a5-8b95-0faae088afbb",
+            "Title": "Дневен ред 81 седница",
+            "Description": "Дневен ред 81 седница",
+            "VotingType": "Јавно",
+            "OverallResult": "Усвоен"
+          },
+          {
+            "Id": "633c348f-143f-4441-a30a-56b4c5554f4e",
+            "Title": "Предлог од Бране Петрушевски и др. на закон за изменување и дополнување на Законот за полиција, по скратена постапка",
+            "Description": "Предлог од Бране Петрушевски и др. на закон за изменување и дополнување на Законот за полиција, по скратена постапка",
+            "VotingType": "Јавно",
+            "OverallResult": "Усвоен"
+          },
+          {
+            "Id": "ef2c540a-165d-4b1d-a91c-ef14352fd707",
+            "Title": "Предлог од Бране Петрушевски и др. на Закон за изменување и дополнување на Законот за внатрешни работи, по скратена постапка",
+            "Description": "Предлог од Бране Петрушевски и др. на Закон за изменување и дополнување на Законот за внатрешни работи, по скратена постапка",
+            "VotingType": "Јавно",
+            "OverallResult": "Усвоен"
+          }
+        ],
+        "Structure": "2024-2028"
+      }
+    }
+  ]
+}

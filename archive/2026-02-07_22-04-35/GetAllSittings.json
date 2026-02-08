@@ -1,0 +1,121 @@
+{
+  "method": "GetAllSittings",
+  "samples": [
+    {
+      "request": {
+        "methodName": "GetAllSittings",
+        "Page": 1,
+        "Rows": 5,
+        "LanguageId": 1,
+        "TypeId": 1,
+        "CommitteeId": null,
+        "StatusId": 3,
+        "DateFrom": null,
+        "DateTo": null,
+        "SessionId": null,
+        "Number": null,
+        "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+      },
+      "response": {
+        "TotalItems": 9,
+        "Items": [
+          {
+            "Id": "f06b995b-c5c7-42cd-8605-ec2d9ab7aac1",
+            "Number": 83,
+            "SittingDate": "/Date(1769691924000)/",
+            "TypeId": 1,
+            "TypeTitle": "Пленарна седница",
+            "StatusId": 3,
+            "StatusTitle": "Завршена",
+            "Location": "Сала „Македонија“",
+            "CommitteeTitle": null,
+            "SittingDescriptionTypeTitle": null,
+            "Continuations": [],
+            "Structure": null,
+            "TotalRows": 0
+          },
+          {
+            "Id": "d026cd07-0525-494f-a179-7785005e06b7",
+            "Number": 82,
+            "SittingDate": "/Date(1769680800000)/",
+            "TypeId": 1,
+            "TypeTitle": "Пленарна седница",
+            "StatusId": 3,
+            "StatusTitle": "Завршена",
+            "Location": "Сала „Македонија“",
+            "CommitteeTitle": null,
+            "SittingDescriptionTypeTitle": null,
+            "Continuations": [],
+            "Structure": null,
+            "TotalRows": 0
+          },
+          {
+            "Id": "540c6a94-c690-48ab-a69b-8796f5b1c960",
+            "Number": 65,
+            "SittingDate": "/Date(1769172925000)/",
+            "TypeId": 1,
+            "TypeTitle": "Пленарна седница",
+            "StatusId": 3,
+            "StatusTitle": "Завршена",
+            "Location": "Сала „Македонија“",
+            "CommitteeTitle": null,
+            "SittingDescriptionTypeTitle": null,
+            "Continuations": [],
+            "Structure": null,
+            "TotalRows": 0
+          },
+          {
+            "Id": "4f40084f-c6db-4162-a90a-8f7cf7577975",
+            "Number": 20,
+            "SittingDate": "/Date(1769170823000)/",
+            "TypeId": 1,
+            "TypeTitle": "Пленарна седница",
+            "StatusId": 3,
+            "StatusTitle": "Завршена",
+            "Location": "Сала „Македонија“",
+            "CommitteeTitle": null,
+            "SittingDescriptionTypeTitle": null,
+            "Continuations": [],
+            "Structure": null,
+            "TotalRows": 0
+          },
+          {
+            "Id": "4b456a04-f6f8-45ee-a543-4dfd42e83035",
+            "Number": 81,
+            "SittingDate": "/Date(1769170538000)/",
+            "TypeId": 1,
+            "TypeTitle": "Пленарна седница",
+            "StatusId": 3,
+            "StatusTitle": "Завршена",
+            "Location": "Сала „Македонија“",
+            "CommitteeTitle": null,
+            "SittingDescriptionTypeTitle": null,
+            "Continuations": [],
+            "Structure": null,
+            "TotalRows": 0
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "methodName": "GetAllSittings",
+        "Page": 1,
+        "Rows": 5,
+        "LanguageId": 1,
+        "TypeId": 2,
+        "CommitteeId": "b8b25861-9b5c-4d47-9717-007b83a8a339",
+        "StatusId": 1,
+        "DateFrom": null,
+        "DateTo": null,
+        "SessionId": null,
+        "Number": null,
+        "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+      },
+      "response": {
+        "TotalItems": 0,
+        "Items": null
+      }
+    }
+  ]
+}

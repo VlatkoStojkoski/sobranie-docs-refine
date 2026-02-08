@@ -1,0 +1,37 @@
+{
+  "method": "GetAllSittingStatuses",
+  "samples": [
+    {
+      "request": {
+        "methodName": "GetAllSittingStatuses",
+        "LanguageId": 1
+      },
+      "response": [
+        {
+          "Id": 1,
+          "Title": "Закажана"
+        },
+        {
+          "Id": 2,
+          "Title": "Започната"
+        },
+        {
+          "Id": 3,
+          "Title": "Завршена"
+        },
+        {
+          "Id": 4,
+          "Title": "Незавршена"
+        },
+        {
+          "Id": 5,
+          "Title": "Затворена"
+        },
+        {
+          "Id": 6,
+          "Title": "Одложена"
+        }
+      ]
+    }
+  ]
+}
