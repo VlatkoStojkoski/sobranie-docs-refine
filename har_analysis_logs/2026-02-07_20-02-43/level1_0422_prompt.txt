@@ -1,0 +1,14 @@
+You are classifying HTTP requests from a HAR capture of sobranie.mk (North Macedonian Parliament).
+
+## Request to classify
+- URL: https://www.sobranie.mk/Routing/MakePostRequest
+- Method: POST | Status: 200
+- Request body: methodName=GetCommitteeDetails | {"methodName":"GetCommitteeDetails","committeeId":"bb8e23a1-c959-4818-8e6e-ebe450847fd8","languageId
+- Response MIME: application/json
+- Response snippet: (none)
+
+## Relevance criteria
+RELEVANT (YES): sobranie.mk API (MakePostRequest, .asmx, JSON-RPC, SOAP), document/PDF/media URLs (sp.sobranie.mk), new routes, parliament data fetches.
+NOT RELEVANT (NO): static assets (JS/CSS/images/fonts), analytics, tracking, CDNs, favicons.
+
+Provide reasoning, then your answer (YES or NO).

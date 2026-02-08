@@ -1,0 +1,1 @@
+{"reasoning": "This is an HTML file under /Scripts/Moldova/parliament-groups/ which appears to be a static template or component file, not an API endpoint or data fetch. It's similar to other static assets and not returning parliament data.", "answer": "NO"}

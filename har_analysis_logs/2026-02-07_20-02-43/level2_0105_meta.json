@@ -1,0 +1,11 @@
+{
+  "level": "level2",
+  "url": "https://www.sobranie.mk/Routing/MakePostRequest",
+  "index": 328,
+  "method": "POST",
+  "status": 200,
+  "req_body_len": 192,
+  "res_body_len": 7,
+  "estimated_input_tokens": 171,
+  "timestamp": "2026-02-07T20:18:00.565643"
+}

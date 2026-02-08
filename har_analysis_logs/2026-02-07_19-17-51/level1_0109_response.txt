@@ -1,0 +1,1 @@
+{"reasoning": "This is an API call to sobranie.mk's MakePostRequest endpoint requesting parliamentary agenda data for December 2025. It matches the relevance criteria as a parliament data fetch through the API.", "answer": "YES"}

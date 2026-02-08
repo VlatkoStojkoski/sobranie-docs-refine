@@ -1,0 +1,16 @@
+One HTTP request from a HAR capture of sobranie.mk (North Macedonian Parliament site).
+
+URL: https://www.sobranie.mk/scripts/news/singleNewsInstance.min.html
+Method: GET | Status: 200
+Req: (none)
+Res mime: text/html
+Res snippet: (none)
+
+Is this RELEVANT to API discovery? We care about:
+- sobranie.mk API (MakePostRequest, .asmx, any JSON-RPC or SOAP)
+- Document/PDF/media URLs (sp.sobranie.mk, downloads)
+- New routes or methods we might document
+- Any non-static request that fetches parliament data
+
+NOT relevant: static assets (JS/CSS/images), analytics, tracking, CDNs, favicons, fonts.
+Reply with exactly: YES or NO

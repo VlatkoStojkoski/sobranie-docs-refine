@@ -1,0 +1,1 @@
+{"reasoning": "This is a static HTML calendar widget file from a third-party Moldova template, not a sobranie.mk API endpoint or parliament data resource. It's a reusable calendar component stored in Scripts directory.", "answer": "NO"}

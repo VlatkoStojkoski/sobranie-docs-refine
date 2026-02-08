@@ -1,0 +1,23 @@
+Analyze this HTTP request from a sobranie.mk HAR capture. Document everything useful for API discovery.
+
+## Request
+- URL: https://www.sobranie.mk/Scripts/Moldova/questions/details/question-details.html
+- Method: GET
+- Path: /Scripts/Moldova/questions/details/question-details.html
+- Query: (none)
+
+## Request body (sanitized)
+```
+(none)
+```
+
+## Response
+- Status: 200
+- Content-Type: text/html
+
+## Response body (sanitized)
+```
+(empty)
+```
+
+Fill each field: route_type, method_name, parameters, response_structure, documentation_notes, other. Be thorough.

@@ -1,0 +1,1 @@
+{"reasoning": "This is a POST request to the sobranie.mk API endpoint MakePostRequest with methodName=GetMaterialDetails, fetching specific material details by MaterialId. This is clearly a parliament data fetch retrieving legislative material information.", "answer": "YES"}

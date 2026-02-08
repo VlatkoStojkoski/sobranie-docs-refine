@@ -1,0 +1,28 @@
+Analyze this HTTP request from a sobranie.mk HAR capture. Document everything useful for API discovery.
+
+## Request
+- URL: https://www.sobranie.mk/Routing/MakePostRequest
+- Method: POST
+- Path: /Routing/MakePostRequest
+- Query: (none)
+
+## Request body (sanitized)
+```
+{
+  "MethodName": "GetVotingResultsForSitting",
+  "votingDefinitionId": "18ba866e-e347-4e5a-8d8d-4d246402874b",
+  "sittingId": "f06b995b-c5c7-42cd-8605-ec2d9ab7aac1",
+  "languageId": 1
+}
+```
+
+## Response
+- Status: 200
+- Content-Type: application/json
+
+## Response body (sanitized)
+```
+(empty)
+```
+
+Fill each field: route_type, method_name, parameters, response_structure, documentation_notes, other. Be thorough.

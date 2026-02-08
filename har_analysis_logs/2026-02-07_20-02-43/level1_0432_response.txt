@@ -1,0 +1,1 @@
+{"reasoning": "This is an HTML template file (likely used for dynamically rendering news articles client-side) which counts as a static asset, not a data API endpoint or document URL containing parliament information.", "answer": "NO"}

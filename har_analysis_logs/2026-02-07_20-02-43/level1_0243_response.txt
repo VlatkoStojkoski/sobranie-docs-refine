@@ -1,0 +1,1 @@
+Error: Error code: 500 - {'type': 'error', 'error': {'type': 'api_error', 'message': 'Internal server error'}, 'request_id': 'req_011CXuhr3QCKWjSS97hfM7tk'}

@@ -1,0 +1,1 @@
+{"reasoning": "This is a third-party accessibility widget API call to equally.ai, not a sobranie.mk parliamentary API or data endpoint. It's used for website accessibility features but does not fetch parliament data, documents, or represent internal sobranie.mk functionality.", "answer": "NO"}

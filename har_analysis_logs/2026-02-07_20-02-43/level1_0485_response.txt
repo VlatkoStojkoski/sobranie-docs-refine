@@ -1,0 +1,1 @@
+{"reasoning": "This is an HTML template file for question details functionality, likely used for rendering parliament questions. It represents a legitimate parliament data feature route rather than a static asset.", "answer": "YES"}

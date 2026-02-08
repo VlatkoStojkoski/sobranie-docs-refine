@@ -1,0 +1,1 @@
+{"reasoning": "This is a third-party API request to equally.ai, which appears to be an accessibility widget service. It is not related to sobranie.mk parliament data, APIs, or content.", "answer": "NO"}

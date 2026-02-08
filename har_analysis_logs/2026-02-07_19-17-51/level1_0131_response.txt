@@ -1,0 +1,1 @@
+{"reasoning": "This is a POST request to a parliament calendar service API endpoint (.asmx) requesting custom events for January 2026. It's clearly a data-fetching API call returning parliament calendar information, which matches the relevance criteria for sobranie.mk APIs.", "answer": "YES"}

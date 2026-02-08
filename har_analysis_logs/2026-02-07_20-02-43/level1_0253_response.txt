@@ -1,0 +1,1 @@
+{"reasoning": "This is a POST request to the sobranie.mk API endpoint 'MakePostRequest' with method 'GetVotingResultsForAgendaItem', which is clearly fetching voting results data for a specific agenda item from the parliament. This is core parliament data and falls under the 'parliament data fetches' category.", "answer": "YES"}
