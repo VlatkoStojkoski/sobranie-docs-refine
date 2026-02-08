@@ -2,20 +2,28 @@
 """
 Collect diverse API samples for enrichment.
 
-1. Listings: randomized filters (TypeId, StatusId, MaterialTypeId, etc.) to get varied items
+1. Listings: randomized filters (TypeId, StatusId, MaterialTypeId, etc.)
 2. Detail: use IDs from listings to fetch item details
 3. Output: collected/YYYY-MM-DD_HH-MM-SS/{operation}.json
 
-Run: python scripts/collect.py
+Uses .api_cache/ for request caching. Use --no-cache to bypass.
+
+Run: python scripts/collect.py [--no-cache]
 """
 
+import argparse
 import json
+import logging
 import random
+import sys
 import time
 from datetime import datetime
 from pathlib import Path
 
 import requests
+
+from cache import get as cache_get
+from cache import set_ as cache_set
 
 API = "https://www.sobranie.mk/Routing/MakePostRequest"
 CALENDAR = "https://www.sobranie.mk/Moldova/services/CalendarService.asmx/GetCustomEventsCalendar"
@@ -24,23 +32,59 @@ OFFICIAL_VISITS = "https://www.sobranie.mk/Moldova/services/OfficialVisits.asmx/
 STRUCTURE_ID = "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
 DELAY = 0.6
 OUTPUT = "collected"
+LOG_DIR = "logs"
 
 
-def post(url: str, payload: dict, retries: int = 2):
+def setup_logging(log_dir: Path) -> logging.Logger:
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = log_dir / "collect.log"
+    fmt = "%(asctime)s [%(levelname)s] %(message)s"
+    logging.basicConfig(level=logging.INFO, format=fmt)
+    logger = logging.getLogger("collect")
+    if logger.handlers:
+        logger.handlers.clear()
+    fh = logging.FileHandler(log_file, encoding="utf-8")
+    fh.setFormatter(logging.Formatter(fmt))
+    logger.addHandler(fh)
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setFormatter(logging.Formatter(fmt))
+    logger.addHandler(ch)
+    logger.setLevel(logging.INFO)
+    return logger
+
+
+def post(url: str, payload: dict, retries: int = 2, use_cache: bool = True, log=None):
+    if use_cache:
+        cached = cache_get(url, payload)
+        if cached is not None:
+            if log:
+                log.info("cache HIT %s", payload.get("methodName") or payload.get("MethodName") or payload.get("model") or "?")
+            return cached
+        if log:
+            log.info("cache MISS %s", payload.get("methodName") or payload.get("MethodName") or payload.get("model") or "?")
+
+    r = None
     for attempt in range(retries + 1):
         try:
             r = requests.post(url, json=payload, timeout=(5, 30))
             if r.status_code == 200:
-                return r.json()
+                data = r.json()
+                if use_cache:
+                    cache_set(url, payload, data)
+                return data
             if r.status_code == 500 and attempt < retries:
                 time.sleep(DELAY * 2)
                 continue
-        except requests.RequestException:
+        except requests.RequestException as e:
             if attempt < retries:
                 time.sleep(DELAY * 2)
                 continue
-        return {"_error": getattr(r, "status_code", "ERR"), "_body": getattr(r, "text", "")[:300]}
-    return {"_error": "timeout"}
+            return {"_error": "timeout", "_body": str(e)[:300]}
+
+    out = {"_error": getattr(r, "status_code", "ERR"), "_body": getattr(r, "text", "")[:300]}
+    if use_cache:
+        cache_set(url, payload, out)
+    return out
 
 
 def truncate(obj, max_arr=10, max_str=2000):
@@ -56,38 +100,54 @@ def truncate(obj, max_arr=10, max_str=2000):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--no-cache", action="store_true", help="Bypass cache, hit live API")
+    args = parser.parse_args()
+    use_cache = not args.no_cache
+
     root = Path(__file__).parent.parent
-    out = root / OUTPUT / datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    out = root / OUTPUT / ts
     out.mkdir(parents=True, exist_ok=True)
+    log_dir = root / LOG_DIR / "collect" / ts
+    log = setup_logging(log_dir)
+    log.info("collect start use_cache=%s out=%s", use_cache, out)
+    requests_log = log_dir / "requests_responses.jsonl"
 
     def save(name: str, samples: list):
         (out / f"{name}.json").write_text(
             json.dumps({"method": name, "samples": samples}, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
+        log.info("saved %s (%d samples)", name, len(samples))
 
-    def call(name: str, payload: dict, url=API):
-        data = post(url, payload)
+    def call(payload: dict, url=API):
+        data = post(url, payload, use_cache=use_cache, log=log)
+        status = "ok" if not (isinstance(data, dict) and data.get("_error")) else "error"
+        log.info("call %s -> %s", payload.get("methodName") or payload.get("MethodName") or payload.get("model") or "?", status)
+        with open(requests_log, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"url": url, "request": payload, "response": truncate(data), "status": status}, ensure_ascii=False) + "\n")
         time.sleep(DELAY)
         return data
 
     # --- Reference data ---
-    print("Fetching reference data...")
-    committees = call("committees", {"methodName": "GetAllCommitteesForFilter", "languageId": 1, "structureId": STRUCTURE_ID})
-    parties = call("parties", {"methodName": "GetAllPoliticalParties", "languageId": 1, "StructureId": STRUCTURE_ID})
-    councils = call("councils", {"methodName": "GetAllCouncils", "languageId": 1, "StructureId": STRUCTURE_ID})
-    groups = call("groups", {"methodName": "GetAllParliamentaryGroups", "languageId": 1, "StructureId": STRUCTURE_ID})
-    clubs = call("clubs", {"MethodName": "GetAllMPsClubsByStructure", "LanguageId": 1, "StructureId": STRUCTURE_ID})
+    log.info("Fetching reference data...")
+    committees = call({"methodName": "GetAllCommitteesForFilter", "languageId": 1, "structureId": STRUCTURE_ID})
+    parties = call({"methodName": "GetAllPoliticalParties", "languageId": 1, "StructureId": STRUCTURE_ID})
+    councils = call({"methodName": "GetAllCouncils", "languageId": 1, "StructureId": STRUCTURE_ID})
+    groups = call({"methodName": "GetAllParliamentaryGroups", "languageId": 1, "StructureId": STRUCTURE_ID})
+    clubs = call({"MethodName": "GetAllMPsClubsByStructure", "LanguageId": 1, "StructureId": STRUCTURE_ID})
 
     committee_ids = [c["Id"] for c in (committees or [])[:8]] if isinstance(committees, list) else []
     party_ids = [p["Id"] for p in (parties or [])[:5]] if isinstance(parties, list) else []
     council_ids = [c["Id"] for c in (councils or [])[:3]] if isinstance(councils, list) else []
     group_ids = [g["Id"] for g in (groups or [])[:5]] if isinstance(groups, list) else []
     club_ids = [c["Id"] for c in (clubs or [])[:3]] if isinstance(clubs, list) else []
+    log.info("refs: committees=%d parties=%d councils=%d groups=%d clubs=%d", len(committee_ids), len(party_ids), len(council_ids), len(group_ids), len(club_ids))
 
     # --- Diverse listings ---
     sitting_samples = []
-    for _ in range(5):
+    for i in range(5):
         payload = {
             "methodName": "GetAllSittings",
             "Page": random.randint(1, 3),
@@ -102,14 +162,13 @@ def main():
             "Number": None,
             "StructureId": STRUCTURE_ID,
         }
-        sitting_samples.append({"request": payload, "response": truncate(call("sittings", payload))})
-        time.sleep(DELAY)
+        sitting_samples.append({"request": payload, "response": truncate(call(payload))})
     save("GetAllSittings", sitting_samples)
 
     sitting_ids = []
     for s in sitting_samples:
         items = s["response"].get("Items", []) if isinstance(s["response"], dict) else []
-        sitting_ids.extend(x["Id"] for x in items[:3] if x.get("Id"))
+        sitting_ids.extend(x["Id"] for x in (items or [])[:3] if isinstance(x, dict) and x.get("Id"))
 
     question_samples = []
     for status in [None, 17, 19]:
@@ -129,14 +188,13 @@ def main():
             "DateTo": None,
             "StructureId": STRUCTURE_ID,
         }
-        question_samples.append({"request": payload, "response": truncate(call("questions", payload))})
-        time.sleep(DELAY)
+        question_samples.append({"request": payload, "response": truncate(call(payload))})
     save("GetAllQuestions", question_samples)
 
     question_ids = []
     for s in question_samples:
         items = s["response"].get("Items", []) if isinstance(s["response"], dict) else []
-        question_ids.extend(x["Id"] for x in items[:2] if x.get("Id"))
+        question_ids.extend(x["Id"] for x in (items or [])[:2] if isinstance(x, dict) and x.get("Id"))
 
     material_samples = []
     for status_grp, mat_type in [(None, 1), (6, None), (None, 28)]:
@@ -161,16 +219,15 @@ def main():
             "InitiatorTypeId": None,
             "StructureId": STRUCTURE_ID,
         }
-        material_samples.append({"request": payload, "response": truncate(call("materials", payload))})
-        time.sleep(DELAY)
+        material_samples.append({"request": payload, "response": truncate(call(payload))})
     save("GetAllMaterialsForPublicPortal", material_samples)
 
     material_ids = []
     for s in material_samples:
         items = s["response"].get("Items", []) if isinstance(s["response"], dict) else []
-        material_ids.extend(x["Id"] for x in items[:3] if x.get("Id"))
+        material_ids.extend(x["Id"] for x in (items or [])[:3] if isinstance(x, dict) and x.get("Id"))
 
-    # --- Catalogs (single sample each) ---
+    # --- Catalogs ---
     for name, payload in [
         ("GetAllGenders", {"methodName": "GetAllGenders", "languageId": 1}),
         ("GetAllStructuresForFilter", {"methodName": "GetAllStructuresForFilter", "languageId": 1}),
@@ -188,7 +245,7 @@ def main():
         ("GetAllParliamentaryGroups", {"methodName": "GetAllParliamentaryGroups", "languageId": 1, "StructureId": STRUCTURE_ID}),
         ("GetAllMPsClubsByStructure", {"MethodName": "GetAllMPsClubsByStructure", "LanguageId": 1, "StructureId": STRUCTURE_ID}),
     ]:
-        save(name, [{"request": payload, "response": truncate(call(name, payload))}])
+        save(name, [{"request": payload, "response": truncate(call(payload))}])
 
     # --- Listings: MPs, Agenda ---
     mp_samples = []
@@ -207,28 +264,25 @@ def main():
             "coalition": "",
             "constituency": "",
         }
-        mp_samples.append({"request": payload, "response": truncate(call("mps", payload))})
-        time.sleep(DELAY)
+        mp_samples.append({"request": payload, "response": truncate(call(payload))})
     save("GetParliamentMPsNoImage", mp_samples)
 
     mp_user_ids = []
     for s in mp_samples:
         mems = s["response"].get("MembersOfParliament", []) if isinstance(s["response"], dict) else []
-        mp_user_ids.extend(m.get("UserId") for m in mems[:2] if m.get("UserId"))
+        mp_user_ids.extend(m.get("UserId") for m in (mems or [])[:2] if isinstance(m, dict) and m.get("UserId"))
 
     agenda_samples = []
     for month, year in [(1, 2026), (6, 2025)]:
         payload = {"methodName": "GetMonthlyAgenda", "LanguageId": 1, "Month": month, "Year": year}
-        agenda_samples.append({"request": payload, "response": truncate(call("agenda", payload))})
-        time.sleep(DELAY)
+        agenda_samples.append({"request": payload, "response": truncate(call(payload))})
     save("GetMonthlyAgenda", agenda_samples)
 
     # --- Detail endpoints ---
     def detail_samples(op: str, requests: list):
         samples = []
         for req in requests:
-            samples.append({"request": req, "response": truncate(call(op, req))})
-            time.sleep(DELAY)
+            samples.append({"request": req, "response": truncate(call(req))})
         if samples:
             save(op, samples)
 
@@ -243,12 +297,15 @@ def main():
     detail_samples("GetUserDetailsByStructure", [{"methodName": "GetUserDetailsByStructure", "userId": uid, "structureId": STRUCTURE_ID, "languageId": 1} for uid in mp_user_ids[:2]])
 
     # --- Non-standard ---
-    save("GetCustomEventsCalendar", [{"request": {"model": {"Language": 1, "Month": 1, "Year": 2026}}, "response": truncate(call("calendar", {"model": {"Language": 1, "Month": 1, "Year": 2026}}, CALENDAR))])
-    save("LoadLanguage", [{"request": {}, "response": truncate(call("lang", {}, LOAD_LANG))])
-    save("GetOfficialVisitsForUser", [{"request": {"model": "914bff80-4c19-4675-ace4-cb0c7a08f688"}, "response": truncate(call("visits", {"model": "914bff80-4c19-4675-ace4-cb0c7a08f688"}, OFFICIAL_VISITS))])
+    cal_payload = {"model": {"Language": 1, "Month": 1, "Year": 2026}}
+    save("GetCustomEventsCalendar", [{"request": cal_payload, "response": truncate(call(cal_payload, CALENDAR))}])
+    save("LoadLanguage", [{"request": {}, "response": truncate(call({}, LOAD_LANG))}])
+    visits_payload = {"model": "914bff80-4c19-4675-ace4-cb0c7a08f688"}
+    save("GetOfficialVisitsForUser", [{"request": visits_payload, "response": truncate(call(visits_payload, OFFICIAL_VISITS))}])
 
-    print(f"Collected to {out}")
+    log.info("done %s", out)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

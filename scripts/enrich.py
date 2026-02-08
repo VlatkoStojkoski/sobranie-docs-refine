@@ -14,11 +14,13 @@ Env: ANTHROPIC_API_KEY required
 
 import json
 import os
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 DOCS = ROOT / "docs"
 COLLECTED = ROOT / "collected"
+LOG_DIR = ROOT / "logs" / "enrich"
 
 
 def get_latest_collected() -> Path | None:
@@ -45,6 +47,11 @@ def main():
         return 1
 
     api_docs = (DOCS / "API_DOCS.md").read_text(encoding="utf-8") if (DOCS / "API_DOCS.md").exists() else ""
+
+    ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    log_run = LOG_DIR / ts
+    log_run.mkdir(parents=True, exist_ok=True)
+    print(f"Logging prompts/responses to {log_run}")
 
     client = Anthropic()
     report_parts = []
@@ -79,6 +86,9 @@ def main():
 
 List any: (1) Fields in response not in docs, (2) Types/values that differ, (3) Schema improvements. Be concise. If nothing to add, say "OK"."""
 
+        safe_name = "".join(c if c.isalnum() or c in "-_" else "_" for c in method)
+        (log_run / f"prompt_{safe_name}.txt").write_text(prompt, encoding="utf-8")
+
         try:
             msg = client.messages.create(
                 model="claude-sonnet-4-20250514",
@@ -89,6 +99,7 @@ List any: (1) Fields in response not in docs, (2) Types/values that differ, (3) 
         except Exception as e:
             text = f"ERROR: {e}"
 
+        (log_run / f"response_{safe_name}.txt").write_text(text, encoding="utf-8")
         report_parts.append(f"## {method}\n\n{text}\n")
 
     DOCS.mkdir(parents=True, exist_ok=True)

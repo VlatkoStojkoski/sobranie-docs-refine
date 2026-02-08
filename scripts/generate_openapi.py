@@ -7,10 +7,12 @@ Env: ANTHROPIC_API_KEY required
 """
 
 import os
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 DOCS = ROOT / "docs"
+LOG_DIR = ROOT / "logs" / "generate_openapi"
 
 
 def main():
@@ -44,6 +46,12 @@ Produce a complete openapi.yaml with:
 
 Output ONLY valid YAML, no markdown fences."""
 
+    ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    log_run = LOG_DIR / ts
+    log_run.mkdir(parents=True, exist_ok=True)
+    (log_run / "prompt.txt").write_text(prompt, encoding="utf-8")
+    print(f"Logging to {log_run}")
+
     client = Anthropic()
     msg = client.messages.create(
         model="claude-sonnet-4-20250514",
@@ -51,6 +59,7 @@ Output ONLY valid YAML, no markdown fences."""
         messages=[{"role": "user", "content": prompt}],
     )
     text = msg.content[0].text if msg.content else ""
+    (log_run / "response.txt").write_text(text, encoding="utf-8")
 
     # Strip markdown if present
     if text.startswith("```"):
