@@ -197,7 +197,7 @@ def main():
         question_ids.extend(x["Id"] for x in (items or [])[:2] if isinstance(x, dict) and x.get("Id"))
 
     material_samples = []
-    for status_grp, mat_type in [(None, 1), (6, None), (None, 28)]:
+    for status_grp, mat_type in [(None, 1), (6, None), (None, 28), (10, None), (11, None), (12, None)]:
         payload = {
             "MethodName": "GetAllMaterialsForPublicPortal",
             "LanguageId": 1,
@@ -279,15 +279,50 @@ def main():
     save("GetMonthlyAgenda", agenda_samples)
 
     # --- Detail endpoints ---
-    def detail_samples(op: str, requests: list):
+    def detail_samples(op: str, requests: list, return_samples: bool = False):
         samples = []
         for req in requests:
             samples.append({"request": req, "response": truncate(call(req))})
         if samples:
             save(op, samples)
+        return samples if return_samples else None
 
-    detail_samples("GetSittingDetails", [{"MethodName": "GetSittingDetails", "SittingId": sid, "LanguageId": 1} for sid in sitting_ids[:5]])
-    detail_samples("GetMaterialDetails", [{"methodName": "GetMaterialDetails", "MaterialId": mid, "LanguageId": 1, "AmendmentsPage": 1, "AmendmentsRows": 5} for mid in material_ids[:3]])
+    sitting_detail_samples = detail_samples("GetSittingDetails", [{"MethodName": "GetSittingDetails", "SittingId": sid, "LanguageId": 1} for sid in sitting_ids[:5]], return_samples=True)
+    material_detail_samples = detail_samples("GetMaterialDetails", [{"methodName": "GetMaterialDetails", "MaterialId": mid, "LanguageId": 1, "AmendmentsPage": 1, "AmendmentsRows": 5} for mid in material_ids[:3]], return_samples=True)
+
+    # Extract IDs for dependent endpoints
+    voting_def_id, agenda_item_id = None, None
+    for s in (sitting_detail_samples or []):
+        det = s.get("response")
+        if not isinstance(det, dict) or det.get("_error"):
+            continue
+        for ch in (det.get("Agenda") or {}).get("children") or []:
+            for vd in (ch.get("VotingDefinitions") or []):
+                if isinstance(vd, dict) and vd.get("Id"):
+                    voting_def_id, agenda_item_id = vd["Id"], ch.get("Id") or ch.get("objectId")
+                    break
+            if voting_def_id:
+                break
+        if voting_def_id:
+            break
+
+    amendment_id = None
+    for s in (material_detail_samples or []):
+        mat = s.get("response")
+        if not isinstance(mat, dict) or mat.get("_error"):
+            continue
+        items = (mat.get("Amendments") or {}).get("Items") or (mat.get("FirstReadingAmendments") or []) or (mat.get("SecondReadingAmendments") or [])
+        if isinstance(items, list) and items and isinstance(items[0], dict) and items[0].get("Id"):
+            amendment_id = items[0]["Id"]
+            break
+
+    if amendment_id:
+        detail_samples("GetAmendmentDetails", [{"methodName": "GetAmendmentDetails", "amendmentId": amendment_id, "languageId": 1}])
+    if voting_def_id and sitting_ids:
+        detail_samples("GetVotingResultsForSitting", [{"methodName": "GetVotingResultsForSitting", "votingDefinitionId": voting_def_id, "sittingId": sitting_ids[0], "languageId": 1}])
+    if voting_def_id and agenda_item_id:
+        detail_samples("GetVotingResultsForAgendaItem", [{"methodName": "GetVotingResultsForAgendaItem", "VotingDefinitionId": voting_def_id, "AgendaItemId": agenda_item_id, "LanguageId": 1}])
+        detail_samples("GetVotingResultsForAgendaItemReportDocument", [{"methodName": "GetVotingResultsForAgendaItemReportDocument", "VotingDefinitionId": voting_def_id, "AgendaItemId": agenda_item_id, "LanguageId": 1}])
     detail_samples("GetQuestionDetails", [{"methodName": "GetQuestionDetails", "QuestionId": qid, "LanguageId": 1} for qid in question_ids[:3]])
     detail_samples("GetCommitteeDetails", [{"methodName": "GetCommitteeDetails", "committeeId": cid, "languageId": 1} for cid in committee_ids[:3]])
     detail_samples("GetCouncilDetails", [{"methodName": "GetCouncilDetails", "committeeId": cid, "languageId": 1} for cid in (council_ids or committee_ids[:2])])

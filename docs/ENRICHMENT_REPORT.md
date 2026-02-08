@@ -4,41 +4,35 @@ From collected samples vs docs/API_DOCS.md.
 
 Use this to prompt an assistant to update API_INDEX.md and API_DOCS.md.
 
+---
+
+**Status:** Applied. API_DOCS.md and API_INDEX.md updated per findings below.
+
 ## GetAllApplicationTypes
 
-**Comparison Result: OK**
+OK
 
-The actual response perfectly matches the documented schema for GetAllApplicationTypes:
-
-- ✅ Response is an array of objects
-- ✅ Each object has `Id` (integer) and `ApplicationTitle` (string) properties
-- ✅ All field names and types match exactly
-- ✅ No extra or missing fields
-
-The sample data shows typical application types in Macedonian, which aligns with the expected multilingual nature of the API.
+The actual response matches the documented schema perfectly:
+- All fields (`Id`, `ApplicationTitle`) are present with correct types
+- No extra fields in the response
+- Values conform to expected string/integer types
+- Array structure matches exactly
 
 ---
 
 ## GetAllCommitteesForFilter
 
-**Comparison Analysis:**
+Looking at the actual response against the documented schema for GetAllCommitteesForFilter:
 
-## Issues Found:
+**Schema comparison**: OK
 
-### 1. Fields in response not in docs:
-- None - the actual response contains only `Id` and `Name` fields as documented.
+The actual response perfectly matches the documented schema:
+- Returns an array of objects
+- Each object has `Id` (UUID string) and `Name` (string) properties
+- All UUIDs are properly formatted
+- All names are non-empty strings
 
-### 2. Types/values that differ:
-- None - both `Id` (UUID string) and `Name` (string) match the documented schema exactly.
-
-### 3. Schema improvements:
-- **Missing constraint**: The documented schema should specify `"required": ["Id", "Name"]` to indicate these fields are always present.
-- **Array constraint**: Consider adding `"minItems": 0` to clarify that empty arrays are possible.
-
-## Overall Assessment:
-The actual response **conforms perfectly** to the documented schema. The response structure, field names, and data types all match exactly. Only minor schema enhancements suggested for completeness.
-
-**Status: OK** (with minor documentation enhancement opportunities)
+The response structure is simple and consistent with the documentation. No improvements needed.
 
 ---
 
@@ -46,196 +40,265 @@ The actual response **conforms perfectly** to the documented schema. The respons
 
 OK
 
-The actual response perfectly matches the documented schema for GetAllCouncils. All fields are present with correct types:
-- `Id`: string (UUID format)
-- `Name`: string 
-- `TypeId`: integer
-- `TypeTitle`: string
-
-No discrepancies found.
+The actual response perfectly matches both the documented schema and inferred schema. All fields, types, and structure align correctly with no discrepancies.
 
 ---
 
 ## GetAllGenders
 
-The actual response matches the documented schema perfectly:
+OK.
 
-✅ **Schema compliance**: OK
-
-The response correctly returns:
-- An array of objects
-- Each object has `Id` (integer) and `Title` (string) properties
-- Types match exactly as documented
-- No extra or missing fields
+The actual response perfectly matches the documented schema. The response contains exactly two gender entries with IDs 1 and 2, and Macedonian titles "Машки" (Male) and "Женски" (Female), which aligns with the `GenderId` definition in `$defs`.
 
 ---
 
 ## GetAllInstitutionsForFilter
 
-**OK**
+## Comparison Results
 
-The actual response perfectly matches the documented schema for GetAllInstitutionsForFilter:
-- Array structure: ✓
-- Object properties: `Id` (string, UUID format) and `Title` (string): ✓  
-- Data types and formats: ✓
-- No missing or extra fields
+**Issues found:**
 
-The response shows Macedonian government ministries with proper UUID identifiers and titles, all conforming to the expected schema.
+1. **Anomalous data**: Entry with `"Title": "/"` (ID: eb0e5bfd-ee7e-40f2-8cab-322cefd440fd) appears to be invalid/placeholder data that should be filtered out or investigated.
+
+**Otherwise**: The actual response perfectly matches both the documented and inferred schemas. All UUIDs are properly formatted and titles are non-empty strings (except for the anomalous "/" entry).
+
+**Schema recommendation**: Consider adding validation to exclude entries with placeholder titles like "/" or add a note about potential data quality issues.
 
 ---
 
 ## GetAllMPsClubsByStructure
 
-**Comparison Result: OK**
+OK
 
-The actual API response perfectly matches the documented schema for `GetAllMPsClubsByStructure`:
-
-- **Structure**: Array of objects ✓
-- **Field names**: `Id` and `Name` present in all items ✓
-- **Data types**: 
-  - `Id` is string with UUID format ✓
-  - `Name` is string ✓
-- **No missing or extra fields**
-- **No type mismatches**
-
-The response contains 9 parliamentary club/group items, all conforming exactly to the expected schema.
+The actual response perfectly matches both the documented schema and inferred schema. All items contain the expected `Id` (UUID format) and `Name` (string) properties with no deviations or additional fields.
 
 ---
 
 ## GetAllMaterialStatusesForFilter
 
-OK.
+## Comparison Results
 
-The actual response perfectly matches the documented schema for GetAllMaterialStatusesForFilter. It's an array of objects with integer `Id` and string `Title` properties, exactly as specified.
+### 1. Fields in response not in docs
+None - all fields match.
+
+### 2. Types/values that differ from docs
+The actual response is missing some `MaterialStatusId` values from the `$defs`:
+- Missing: `0` (Plenary/unknown)
+- Present: `6, 9, 10, 11, 12, 24, 64` ✓
+
+### 3. Concrete schema improvements
+```json
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "Id": {
+        "$ref": "#/$defs/MaterialStatusId"
+      },
+      "Title": {
+        "type": "string"
+      }
+    },
+    "required": ["Id", "Title"]
+  }
+}
+```
+
+**Note**: The response only includes filterable material statuses (excludes status `0`), which makes sense for a filter endpoint.
 
 ---
 
 ## GetAllMaterialTypesForFilter
 
-**Comparison Result: OK**
+**Analysis of GetAllMaterialTypesForFilter**
 
-The actual response perfectly matches the documented schema for `GetAllMaterialTypesForFilter`. All items contain:
-- `Id` (integer) - matches schema
-- `Title` (string) - matches schema
+## 1. Fields in response not in docs
+None - all response fields (`Id`, `Title`) are documented.
 
-No discrepancies found in fields, types, or values.
+## 2. Types/values that differ from docs
+None - both `Id` (integer) and `Title` (string) match the documented types.
+
+## 3. Concrete schema improvements
+None needed - the documented schema accurately describes the response structure. The inferred schema matches the documented schema exactly.
+
+**OK** - The actual response perfectly conforms to the documented schema.
 
 ---
 
 ## GetAllMaterialsForPublicPortal
 
-Comparing the actual response to the documented schema for GetAllMaterialsForPublicPortal:
+## Comparison Results
 
-**1. Fields in response not in docs:**
-None - all fields in the actual response are documented.
+### 1. Fields in response not in docs
+None - all fields match the documented schema.
 
-**2. Types/values that differ:**
-- **RegistrationDate values**: The actual response contains dates in the future (year 2026: `/Date(1769693654000)/`, `/Date(1769691810000)/`, etc.) which suggests either test data or a timestamp conversion issue.
+### 2. Types/values that differ from docs
+None - all types match exactly.
 
-**3. Schema improvements:**
-- **Authors array handling**: The schema should clarify that when `ResponsibleAuthor` is a non-MP (like a minister), the `Authors` array contains one item with:
-  - `Id`: `"00000000-0000-0000-0000-000000000000"` 
-  - `FirstName`: Full title/name
-  - `LastName`: Empty string
-- **Date validation**: Consider adding validation for reasonable date ranges in the AspDate pattern.
+### 3. Concrete schema improvements
 
-Otherwise the schema accurately matches the response structure and types.
+The documented schema should use `$defs` reference for the date field:
+
+```json
+"RegistrationDate": {
+  "$ref": "#/$defs/AspDate"
+}
+```
+
+Instead of the current inline definition. The inferred schema already shows this correctly.
+
+### Additional observations
+- **Institutional authors pattern confirmed**: Multiple examples show `Id: "00000000-0000-0000-0000-000000000000"` with full institutional names in `FirstName` and empty `LastName` (government, committees, state agencies).
+- **ResponsibleCommittee behavior**: Can be empty string `""` for some material types (appointments, resignations) rather than always having a committee assignment.
+
+**Status: Schema is accurate, minor improvement suggested for date field reference.**
 
 ---
 
 ## GetAllParliamentaryGroups
 
-**Comparison Result: OK**
+**Comparison Results:**
 
-The actual API response perfectly matches the documented schema for GetAllParliamentaryGroups:
+1. **Fields in response not in docs**: None
 
-- ✅ All fields present: `Id`, `Name`, `NumberOfDeputies`, `Image`
-- ✅ Correct types: UUID strings, strings, integers, strings
-- ✅ Array structure matches
-- ✅ No extra or missing fields
+2. **Types/values that differ from docs**: None
 
-The response is fully compliant with the documented schema.
+3. **Concrete schema improvements**: 
+   - Add `required` fields specification
+   - The `Image` field appears to consistently be an empty string rather than containing actual image data/URLs
+
+**Suggested schema refinement:**
+```json
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "Id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "Name": {
+        "type": "string"
+      },
+      "NumberOfDeputies": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "Image": {
+        "type": "string"
+      }
+    },
+    "required": ["Id", "Name", "NumberOfDeputies", "Image"]
+  }
+}
+```
+
+The documented schema matches the actual response structure perfectly.
 
 ---
 
 ## GetAllPoliticalParties
 
-**Comparison Result: OK**
+**Analysis:**
 
-The actual API response perfectly matches the documented schema for GetAllPoliticalParties:
+1. **Fields in response not in docs:** None
+2. **Types/values that differ from docs:** None
+3. **Schema improvements:** None needed
 
-- ✅ All fields present and correctly typed: `Id` (UUID string), `Name` (string), `NumberOfDeputies` (integer), `Image` (string)
-- ✅ Response structure matches: array of objects
-- ✅ Field names match exactly (case-sensitive)
-- ✅ Data types align with schema definitions
-- ✅ UUID format validation would pass for all `Id` values
+The actual response perfectly matches the documented schema. All fields (`Id`, `Name`, `NumberOfDeputies`, `Image`) are present with correct types (UUID string, string, integer, string). The `Image` field appears to be consistently empty strings in this dataset, but that's valid according to the string type specification.
 
-No discrepancies found.
+**OK**
 
 ---
 
 ## GetAllProcedureTypes
 
-**Comparison Result: OK**
+OK
 
-The actual API response perfectly matches the documented schema for GetAllProcedureTypes:
-
-✅ **Structure**: Array of objects as expected  
-✅ **Fields**: Both `Id` (integer) and `Title` (string) present  
-✅ **Types**: Correct data types  
-✅ **Values**: Proper Macedonian text content  
-
-No discrepancies found.
+The actual response perfectly matches the documented schema. All fields (`Id`, `Title`) are present with correct types, and the `Id` values (1, 2, 3) align with the `ProcedureTypeId` enum in `$defs`. The response contains the expected procedure types: Regular (Редовна постапка), Shortened (Скратена постапка), and Urgent (Итна постапка).
 
 ---
 
 ## GetAllQuestionStatuses
 
-The actual response matches the documented schema perfectly. Both show:
+**Comparison Results:**
 
-- Array of objects
-- Each object has `Id` (integer) and `Title` (string) properties
-- All data types align correctly
+1. **Fields in response not in docs**: None
 
-**OK** - No discrepancies found.
+2. **Types/values that differ from docs**: None
+
+3. **Concrete schema improvements**:
+   - Use `$defs` reference for the Id field:
+   ```json
+   {
+     "type": "array",
+     "items": {
+       "type": "object",
+       "properties": {
+         "Id": {
+           "$ref": "#/$defs/QuestionStatusId"
+         },
+         "Title": {
+           "type": "string"
+         }
+       }
+     }
+   }
+   ```
+
+The actual response perfectly matches the documented schema and contains exactly the question status IDs defined in the `QuestionStatusId` enum (17, 19, 20, 21).
 
 ---
 
 ## GetAllQuestions
 
-Comparing the actual response to the documented schema for GetAllQuestions:
+## Analysis of GetAllQuestions Response vs Schema
 
-**1. Fields in response not in docs:**
-- `ToInstitution` (string) - The institution the question is directed to
-- `QuestionTypeTitle` (string) - Type of question (e.g., "Писмено прашање", "Усно прашање")
-- `TotalRows` (integer) - Always 0 in the sample
+### 1. Fields in response not in docs
+None - all fields match the documented schema.
 
-**2. Types/values that differ:**
-- `DateAsked` uses AspDate format (`/Date(1769767343000)/`) but this field is missing from the documented schema entirely
+### 2. Types/values that differ from docs
+- **DateAsked timestamps**: The actual timestamps (1769767343000, 1769699430000, etc.) represent dates far in the future (around 2026), which seems unusual but follows the correct ASP.NET Date format.
 
-**3. Schema improvements needed:**
-The documented schema appears to be incomplete - it cuts off mid-sentence at the `From` property and doesn't include the complete response structure. The actual response has 8 additional fields beyond what's documented.
+### 3. Concrete schema improvements
 
-The documented schema should be updated to include all fields present in the actual response.
+The documented schema should use the $defs reference for DateAsked:
+
+```json
+{
+  "DateAsked": {
+    "$ref": "#/$defs/AspDate"
+  }
+}
+```
+
+Instead of defining the pattern inline. The inferred schema correctly shows this pattern, but it should reference the common $defs definition for consistency.
+
+**Minor observation**: Some responses show typos in the `To` field (e.g., "Република Северна Макоеднија" instead of "Македонија"), but this is data quality rather than schema issue.
+
+Overall: **Schema is accurate** - just needs the $defs reference improvement for DateAsked.
 
 ---
 
 ## GetAllSittingStatuses
 
-**Issues found:**
+## Comparison Results
 
-1. **Missing documentation**: The `GetAllSittingStatuses` method is not documented in the provided schema documentation.
+**1. Fields in response not in docs:** None
 
-2. **Schema needed**: Based on the actual response, the schema should be:
+**2. Types/values that differ from docs:** None
 
+**3. Concrete schema improvements:**
 ```json
 {
   "type": "array",
   "items": {
-    "type": "object", 
+    "type": "object",
     "properties": {
       "Id": {
-        "type": "integer"
+        "$ref": "#/$defs/SittingStatusId"
       },
       "Title": {
         "type": "string"
@@ -245,37 +308,72 @@ The documented schema should be updated to include all fields present in the act
 }
 ```
 
-This follows the same pattern as other similar endpoints like `GetAllQuestionStatuses`, `GetAllProcedureTypes`, etc.
+The response perfectly matches the documented schema. The only improvement is using the `SittingStatusId` reference from `$defs` for the `Id` field, which validates that all expected status IDs (1-6) are present in the actual response.
 
 ---
 
 ## GetAllSittings
 
-Looking at the actual response compared to the documented schema:
+## Analysis of GetAllSittings API Response
 
-**Issues found:**
+### 1. Fields in response not in docs
+None - all fields match.
 
-1. **Missing schema**: There is no documented schema for `GetAllSittings` in the provided API docs. The docs end abruptly in the middle of the `GetAllQuestions` response schema.
+### 2. Types/values that differ from docs
+**Items field**: 
+- Documented as `"type": "array"`
+- Actual responses show `"Items": null` when `TotalItems: 0`
+- Should allow both array and null
 
-2. **Cannot validate**: Without the documented `GetAllSittings` schema, I cannot compare field presence, types, or values.
+### 3. Concrete schema improvements
 
-**Schema needed:**
-The docs should include a complete schema for `GetAllSittings` showing:
-- Request format 
-- Response structure when `TotalItems > 0` and `Items` contains data
-- The structure of individual sitting objects in the `Items` array
+```json
+{
+  "type": "object",
+  "properties": {
+    "TotalItems": {
+      "type": "integer"
+    },
+    "Items": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {"type": "string", "format": "uuid"},
+          "SittingTypeId": {"$ref": "#/$defs/AgendaItemTypeId"},
+          "StatusId": {"$ref": "#/$defs/SittingStatusId"},
+          "DateFrom": {"$ref": "#/$defs/AspDate"},
+          "DateTo": {"$ref": "#/$defs/AspDate"},
+          "CommitteeId": {"type": ["string", "null"], "format": "uuid"},
+          "CommitteeTitle": {"type": ["string", "null"]},
+          "Number": {"type": ["integer", "null"]},
+          "SessionId": {"type": ["string", "null"], "format": "uuid"}
+        }
+      }
+    }
+  },
+  "required": ["TotalItems", "Items"]
+}
+```
 
-The current response shows an empty result set, so we'd need a response with actual data to define the complete schema.
+**Key fix**: `Items` should be `["array", "null"]` since it's null when no results exist.
 
 ---
 
 ## GetAllStructuresForFilter
 
-**Issues found:**
+## Comparison Analysis
 
-1. **Missing from docs**: The `GetAllStructuresForFilter` endpoint is not documented in the provided API_DOCS.md
+### 1. Fields in response not in docs
+None - all fields match.
 
-2. **Schema needed**: Based on the response, the schema should be:
+### 2. Types/values that differ from docs
+None - all types match exactly.
+
+### 3. Concrete schema improvements
+
+The documented schema should use the `$defs` reference for date fields:
+
 ```json
 {
   "type": "array",
@@ -300,245 +398,241 @@ The current response shows an empty result set, so we'd need a response with act
 }
 ```
 
-The response follows the expected patterns (UUID strings, AspDate format) but this entire endpoint is missing from the documentation.
+The documented schema already correctly uses `$defs/AspDate` - no changes needed.
+
+**Status**: OK - documented schema is correct and complete.
 
 ---
 
 ## GetCommitteeDetails
 
-**Issues found:**
+## Comparison Results
 
-1. **Missing from docs**: The `GetCommitteeDetails` operation is completely absent from the documented schemas.
+### 1. Fields in response not in docs
+None - all response fields match the documented schema.
 
-2. **Schema needed**: Based on the response, the missing schema should be:
+### 2. Types/values that differ from docs
+- **Date fields**: Documented as `$ref: "#/$defs/AspDate"` but inferred schema shows expanded definition. Should use the reference.
+- **PhoneNumber**: Documented as `type: "null"` but should be `type: ["string", "null"]` to allow actual phone numbers.
+
+### 3. Concrete schema improvements
 
 ```json
 {
-  "type": "object", 
+  "type": "object",
   "properties": {
-    "Name": { "type": "string" },
-    "CompositionMembers": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "UserId": { "type": "string", "format": "uuid" },
-          "FullName": { "type": "string" },
-          "RoleId": { "type": "integer" },
-          "RoleTitle": { "type": "string" }
-        }
-      }
-    },
-    "SecretariatMembers": {
-      "type": "array", 
-      "items": { "$ref": "#/CompositionMembers/items" }
-    },
     "Materials": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "Id": { "type": "string", "format": "uuid" },
-          "Title": { "type": "string" },
-          "RegistrationDate": { "$ref": "#/$defs/AspDate" },
-          "RegistrationNumber": { "type": "string" },
-          "StatusId": { "type": "integer" },
-          "StatusTitle": { "type": "string" }
+          "RegistrationDate": {
+            "$ref": "#/$defs/AspDate"
+          }
         }
       }
     },
     "Meetings": {
-      "type": "array",
+      "type": "array", 
       "items": {
-        "type": "object", 
+        "type": "object",
         "properties": {
-          "Id": { "type": "string", "format": "uuid" },
-          "TypeTitle": { "type": "string" },
-          "Date": { "$ref": "#/$defs/AspDate" },
-          "Location": { "type": "string" },
-          "SittingNumber": { "type": "integer" }
+          "Date": {
+            "$ref": "#/$defs/AspDate"
+          }
         }
       }
+    },
+    "PhoneNumber": {
+      "type": ["string", "null"]
     }
   }
 }
 ```
 
-The documentation is incomplete - missing this entire endpoint.
+The documented schema is largely correct but should use `$defs` references consistently and allow for non-null phone numbers.
 
 ---
 
 ## GetCouncilDetails
 
-Looking at the actual GetCouncilDetails response compared to the documented schemas, I notice:
+## Comparison Results
 
-## Missing from Documentation
+### 1. Fields in response not in documented schema
+- None. All fields present in the response match the documented schema.
 
-The GetCouncilDetails operation is **not documented at all** in the API_DOCS.md file. The response contains these fields that need to be added to the documentation:
+### 2. Type/value differences from documented schema
+- **`Meetings[].Date`**: Documented as `{"$ref": "#/$defs/AspDate"}` but inferred schema shows `{"type": "string", "format": "asp-date", "pattern": "^/Date\\(\\d+\\)/$"}`. The actual responses confirm ASP.NET date format like `/Date(1764928800000)/`.
 
-1. **Fields in response not in docs**: All fields are missing since the entire operation is undocumented:
-   - `Name` (string)
-   - `CompositionMembers` (array of objects)
-   - `SecretariatMembers` (array of objects) 
-   - `Materials` (array)
-   - `Meetings` (array of objects)
-   - `Description` (string/null)
-   - `Email` (string)
-   - `PhoneNumber` (string/null)
-   - `StructureId` (string/UUID)
+### 3. Concrete schema improvements
 
-2. **Schema patterns observed**:
-   - Member objects have: `UserId` (UUID), `FullName` (string), `RoleId` (integer), `RoleTitle` (string)
-   - Meeting objects have: `Id` (UUID), `TypeTitle` (string), `Date` (AspDate format), `Location` (string), `SittingNumber` (integer)
-   - Follows existing UUID and AspDate patterns from other operations
+```json
+{
+  "type": "object",
+  "properties": {
+    "Name": {"type": "string"},
+    "CompositionMembers": {
+      "type": "array",
+      "items": {
+        "type": "object", 
+        "properties": {
+          "UserId": {"type": "string", "format": "uuid"},
+          "FullName": {"type": "string"},
+          "RoleId": {"type": "integer"},
+          "RoleTitle": {"type": "string"}
+        }
+      }
+    },
+    "SecretariatMembers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "UserId": {"type": "string", "format": "uuid"},
+          "FullName": {"type": "string"},
+          "RoleId": {"type": "integer"},
+          "RoleTitle": {"type": "string"}
+        }
+      }
+    },
+    "Materials": {"type": "array", "items": {}},
+    "Meetings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {"type": "string", "format": "uuid"},
+          "TypeTitle": {"type": "string"},
+          "Date": {"$ref": "#/$defs/AspDate"},
+          "Location": {"type": "string"},
+          "SittingNumber": {"type": "integer"}
+        }
+      }
+    },
+    "Description": {"type": ["string", "null"]},
+    "Email": {"type": "string"},
+    "PhoneNumber": {"type": "null"},
+    "StructureId": {"type": "string", "format": "uuid"}
+  }
+}
+```
 
-3. **Schema improvements needed**:
-   - Add complete GetCouncilDetails request/response schema
-   - Define reusable member and meeting object schemas in `$defs`
-   - Document the request parameters (likely councilId and languageId based on other patterns)
-
-The response structure is consistent with other API operations but this entire endpoint needs to be added to the documentation.
+**Key fix**: Use `{"$ref": "#/$defs/AspDate"}` for `Meetings[].Date` to maintain consistency with the common patterns.
 
 ---
 
 ## GetCustomEventsCalendar
 
-**Issues found:**
+## Comparison Results
 
-1. **Fields in response not in docs:** The API response includes fields not documented anywhere:
-   - `__type` (string with .NET type info)
-   - `Id` (UUID format)
-   - `EventDescription` (string)
-   - `EventLink` (string)  
-   - `EventLocation` (string)
-   - `EventDate` (AspDate format)
-   - `EventType` (integer)
+### 1. Fields in response not in docs
+- `__type`: Present in all actual items but not documented
 
-2. **Response wrapper differs:** Actual response is wrapped in `{"d": [...]}` but no documented schema shows this wrapper pattern.
+### 2. Types/values that differ from docs
+- All documented types match actual response values
+- `EventDate` follows the expected ASP.NET date format `/Date(\d+)/`
+- `EventType` values (all 5 in sample) are integers as expected
 
-3. **Missing schema:** `GetCustomEventsCalendar` is completely missing from the documented schemas.
-
-**Schema needed:**
+### 3. Concrete schema improvements
+The documented schema should:
+- Add `__type` field:
 ```json
-{
-  "type": "object",
-  "properties": {
-    "d": {
-      "type": "array", 
-      "items": {
-        "type": "object",
-        "properties": {
-          "__type": {"type": "string"},
-          "Id": {"type": "string", "format": "uuid"},
-          "EventDescription": {"type": "string"},
-          "EventLink": {"type": "string"},
-          "EventLocation": {"type": "string"},
-          "EventDate": {"$ref": "#/$defs/AspDate"},
-          "EventType": {"type": "integer"}
-        }
-      }
-    }
-  }
+"__type": {
+  "type": "string",
+  "const": "moldova.controls.Models.CalendarViewModel"
 }
 ```
+- Use `$ref` for EventDate:
+```json
+"EventDate": {
+  "$ref": "#/$defs/AspDate"
+}
+```
+
+The inferred schema correctly includes the ASP.NET date pattern but misses the `__type` field.
 
 ---
 
 ## GetMPsClubDetails
 
-**Issues found:**
+The actual API responses match the documented schema perfectly. All fields, types, and structures align correctly:
 
-1. **Missing from docs**: The `GetMPsClubDetails` endpoint is not documented at all in the provided schema documentation.
+- **Name**: string ✓
+- **Description**: string ✓  
+- **Members**: array of objects with Id (uuid), FirstName/LastName (strings), RoleId (integer), RoleTitle (string) ✓
+- **StructureId**: uuid string ✓
 
-2. **Response structure differs**: The actual response is a single object, not an array like other similar endpoints (e.g., `GetAllMPsClubsByStructure` which returns an array of clubs with `Id` and `Name`).
+The responses show consistent role structures:
+- RoleId 78 = "Претседател/Претседателка" (President)
+- RoleId 79 = "Заменик-претседател/Заменик-претседателка" (Vice President)  
+- RoleId 81 = "Член/Членка" (Member)
 
-**Schema needed:**
-
-```json
-{
-  "type": "object",
-  "properties": {
-    "Name": {
-      "type": "string"
-    },
-    "Description": {
-      "type": "string"
-    },
-    "Members": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "Id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "FirstName": {
-            "type": "string"
-          },
-          "LastName": {
-            "type": "string"
-          },
-          "RoleId": {
-            "type": "integer"
-          },
-          "RoleTitle": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "StructureId": {
-      "type": "string",
-      "format": "uuid"
-    }
-  }
-}
-```
+**OK** - No discrepancies found between documented schema and actual responses.
 
 ---
 
 ## GetMaterialDetails
 
-Looking at the GetMaterialDetails response compared to the documented schemas, I notice several issues:
+## Analysis of GetMaterialDetails Response vs Schema
 
-## Missing Schema
-**GetMaterialDetails is not documented at all** - this is a major gap since it appears to be a core API operation.
+### 1. Fields in response not in docs
+- None. All fields in the actual responses are present in the documented schema.
 
-## Fields in response not in any documented schema:
-- `Institution`
-- `ProposerCommittee` 
-- `ProcedureTypeTitle`
-- `ParentTitle`
-- `FirstReadingAmendments`
-- `SecondReadingAmendments`
-- `FirstReadingSittings`
+### 2. Types/values that differ from docs
 
-## New object structures not documented:
-- **Committee objects** with `IsLegislative`, `IsResponsible`, `Documents` properties
-- **Document objects** with `DocumentTypeId`, `DocumentTypeTitle`, `IsExported` properties
-- **Sitting objects** with `SittingTypeId`, `SittingTypeTitle`, `SittingDate`, `CommitteeId`, `CommitteeTitle`, `StatusGroupId`, `ObjectStatusId`, `SittingTitle`, `SittingNumber`, `VotingResults` properties
+**RegistrationDate and SittingDate**:
+- **Documented**: Uses `$ref: "#/$defs/AspDate"`
+- **Inferred**: Uses inline definition with `"type": "string", "format": "asp-date", "pattern": "^/Date\\(\\d+\\)/$"`
+- **Actual**: Contains `/Date(1769693654000)/` format matching the pattern
 
-## Schema improvements needed:
-1. **Add complete GetMaterialDetails schema** to API_DOCS.md
-2. **Define reusable object schemas** in `$defs` for:
-   - Committee (extended version)
-   - Document (with type info)
-   - Sitting
-   - VotingResult
-3. **Update existing schemas** that reference committees/documents to use the fuller object structure
+**CommitteeId in FirstReadingSittings**:
+- **Documented**: `"type": "string", "nullable": true`
+- **Actual**: Contains UUID strings like `"8811dffb-8d40-4e16-9a72-a51f4eac33e7"`
+- **Issue**: Should specify `"format": "uuid"` when not null
 
-The response suggests this API has much richer data models than currently documented.
+### 3. Concrete schema improvements
+
+```json
+{
+  "RegistrationDate": {
+    "$ref": "#/$defs/AspDate"
+  },
+  "FirstReadingSittings": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "SittingDate": {
+          "$ref": "#/$defs/AspDate"
+        },
+        "CommitteeId": {
+          "type": ["string", "null"],
+          "format": "uuid"
+        }
+      }
+    }
+  }
+}
+```
+
+**Key fix**: Use `$defs/AspDate` reference consistently instead of inline definitions, and add UUID format to CommitteeId when not null.
 
 ---
 
 ## GetMonthlyAgenda
 
-The GetMonthlyAgenda schema is **missing from the API documentation**. Based on the actual response, here's what needs to be added:
+## Comparison Results
 
-## Missing Schema: GetMonthlyAgenda
+**1. Fields in response not in docs:**
+None - all response fields match documented schema.
 
-### Response
+**2. Types/values that differ from docs:**
+- `Start` field format inconsistency: Documented schema uses `$ref` to AspDate, but inferred schema shows explicit pattern. Both are functionally equivalent.
+
+**3. Concrete schema improvements:**
+
+The documented schema should use the `$defs` reference consistently:
+
 ```json
 {
   "type": "array",
@@ -559,191 +653,177 @@ The GetMonthlyAgenda schema is **missing from the API documentation**. Based on 
         "$ref": "#/$defs/AspDate"
       },
       "Type": {
-        "type": "integer",
-        "description": "1=Assembly session, 2=Committee session"
+        "$ref": "#/$defs/AgendaItemTypeId"
       }
     }
   }
 }
 ```
 
-**Issues found:**
-1. Complete schema missing from documentation
-2. The response also includes a `"_truncated": 31` field indicating pagination, which should be documented
-3. Request schema unknown - needs to be documented
+**Key improvement:** Reference `AgendaItemTypeId` for the `Type` field since the actual values (1=Plenary, 2=Committee) match this definition perfectly.
 
 ---
 
 ## GetOfficialVisitsForUser
 
-**Issue: Missing schema documentation**
+OK
 
-The documented schema does not include `GetOfficialVisitsForUser`. The actual response shows:
-
-1. **Response structure**: `{"d": []}` - follows the standard ASP.NET web service wrapper pattern used by other endpoints
-2. **Empty array**: Indicates the endpoint returns an array of visit objects when data is present
-
-**Schema needed**:
-```json
-{
-  "type": "object", 
-  "properties": {
-    "d": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          // Visit object schema to be determined from non-empty response
-        }
-      }
-    }
-  }
-}
-```
-
-The documentation should be updated to include this endpoint's complete schema once a response with actual visit data is available.
+The actual response matches the documented schema perfectly. The response contains an empty array in the `d` property, which aligns with the documented structure. Since the array is empty, no concrete schema improvements for the items can be determined from this response.
 
 ---
 
 ## GetParliamentMPsNoImage
 
-Comparing the API response to the documented schema:
+Analyzing the actual API responses against the documented schema for GetParliamentMPsNoImage:
 
 **Issues found:**
 
-1. **Missing schema**: No documented schema exists for `GetParliamentMPsNoImage` in the provided API_DOCS.md
+1. **Format inconsistency in ExpiredMandateMembers**: In the documented schema, `ExpiredMandateMembers[].PoliticalPartyId` is typed as `string` (without format), but the inferred schema correctly shows it should be `string` with `format: "uuid"` to match `MembersOfParliament[].PoliticalPartyId`.
 
-2. **Response structure analysis** (based on sample):
-   - Root object has `MembersOfParliament` array property
-   - Each MP object contains:
-     - `UserId`: string (UUID format)
-     - `UserImg`: string (base64 encoded image data)
-     - `FullName`: string 
-     - `RoleId`: integer
-     - `PoliticalPartyTitle`: string
-     - `PoliticalPartyId`: string (UUID format)
+2. **Missing $defs references**: The schema could be improved by referencing common UUID pattern from $defs.
 
-3. **Inconsistency**: Method name suggests "NoImage" but response includes `UserImg` field with base64 image data
+**Recommended schema improvements:**
 
-**Schema needed:**
 ```json
 {
-  "type": "object", 
+  "type": "object",
   "properties": {
     "MembersOfParliament": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "UserId": {"type": "string", "format": "uuid"},
-          "UserImg": {"type": "string"},
-          "FullName": {"type": "string"},
-          "RoleId": {"type": "integer"}, 
-          "PoliticalPartyTitle": {"type": "string"},
-          "PoliticalPartyId": {"type": "string", "format": "uuid"}
+          "UserId": { "$ref": "#/$defs/UUID" },
+          "UserImg": { "type": "string" },
+          "FullName": { "type": "string" },
+          "RoleId": { "type": "integer" },
+          "PoliticalPartyTitle": { "type": "string" },
+          "PoliticalPartyId": { "$ref": "#/$defs/UUID" }
         }
+      }
+    },
+    "ExpiredMandateMembers": {
+      "type": "array", 
+      "items": {
+        "type": "object",
+        "properties": {
+          "UserId": { "$ref": "#/$defs/UUID" },
+          "UserImg": { "type": "string" },
+          "FullName": { "type": "string" },
+          "RoleId": { "type": "integer" },
+          "PoliticalPartyTitle": { "type": "string" },
+          "PoliticalPartyId": { "$ref": "#/$defs/UUID" }
+        }
+      }
+    },
+    "TotalItems": { "type": "integer" },
+    "TotalItemsExpiredMandate": { "type": "integer" },
+    "Statistics": {
+      "type": "object",
+      "properties": {
+        "TotalNumberOfMaterials": { "type": "integer" },
+        "NumberOfQuestions": { "type": "integer" },
+        "TotalNumberOfMPs": { "type": "integer" },
+        "TotalNumberOfExpiredMandateMPs": { "type": "integer" },
+        "MPsInPoliticalParties": { "type": "integer" },
+        "MPsInParliamentaryGroups": { "type": "integer" },
+        "NumberOfMaterialsInStructure": { "type": "integer" }
       }
     }
   }
 }
 ```
+
+**Additional $def needed:**
+```json
+"UUID": {
+  "type": "string",
+  "format": "uuid"
+}
+```
+
+The actual responses match the expected structure correctly.
 
 ---
 
 ## GetParliamentaryGroupDetails
 
-## Issues Found
+## Schema Comparison Analysis
 
-**1. Fields in response not documented:**
-- `Description` (string)
-- `StatusId` (integer) in Materials and Amendments arrays
-- `StatusTitle` (string) in Materials and Amendments arrays
+### 1. Fields in response not in docs
+- None. All fields match the documented schema.
 
-**2. Missing schema entirely:**
-`GetParliamentaryGroupDetails` is not documented in the provided API_DOCS.md
+### 2. Types/values that differ from docs
+- **Date fields**: Schema uses `$ref: "#/$defs/AspDate"` but inferred schema correctly shows these as `type: "string"` with `format: "asp-date"` and `pattern: "^/Date\\(\\d+\\)/$"` - this is more explicit and accurate.
 
-**3. Schema needed:**
+### 3. Concrete schema improvements
+
+The documented schema should use explicit date formatting instead of `$ref` for better clarity:
+
 ```json
 {
-  "methodName": "GetParliamentaryGroupDetails",
-  "request": {
-    "type": "object",
-    "properties": {
-      "methodName": {"type": "string"},
-      "languageId": {"$ref": "#/$defs/LanguageId"},
-      "groupId": {"type": "string", "format": "uuid"}
-    }
+  "RegistrationDate": {
+    "type": "string",
+    "format": "asp-date", 
+    "pattern": "^/Date\\(\\d+\\)/$"
   },
-  "response": {
-    "type": "object", 
-    "properties": {
-      "Name": {"type": "string"},
-      "Description": {"type": "string"},
-      "NumberOfDeputies": {"type": "integer"},
-      "Materials": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "Id": {"type": "string", "format": "uuid"},
-            "Title": {"type": "string"},
-            "RegistrationDate": {"$ref": "#/$defs/AspDate"},
-            "RegistrationNumber": {"type": "string"},
-            "StatusId": {"type": "integer"},
-            "StatusTitle": {"type": "string"}
-          }
-        }
-      },
-      "Amendments": {
-        "type": "array",
-        "items": {
-          "type": "object", 
-          "properties": {
-            "Id": {"type": "string", "format": "uuid"},
-            "Title": {"type": "string"},
-            "RegistrationDate": {"$ref": "#/$defs/AspDate"},
-            "RegistrationNumber": {"type": "string"},
-            "StatusId": {"type": "integer"},
-            "StatusTitle": {"type": "string"}
-          }
-        }
-      }
-    }
+  "DateAsked": {
+    "type": "string",
+    "format": "asp-date",
+    "pattern": "^/Date\\(\\d+\\)/$"
+  },
+  "DateAnswered": {
+    "type": "string", 
+    "format": "asp-date",
+    "pattern": "^/Date\\(\\d+\\)/$"
   }
 }
 ```
+
+**Note**: StatusId values observed (6, 10, 12) don't match any existing $defs enum. These appear to be material/amendment-specific status codes that should be documented separately from the existing MaterialStatusId enum.
+
+Otherwise, the schema accurately represents the actual API responses.
 
 ---
 
 ## GetPoliticalPartyDetails
 
-**Issues found:**
+## Comparison Results
 
-1. **Missing schema**: No `GetPoliticalPartyDetails` schema exists in the documentation - only `GetAllPoliticalParties` is documented.
+### 1. Fields in response not in docs
+None - all fields match.
 
-2. **Response structure differs**: The documented `GetAllPoliticalParties` returns an array of simple objects, but this response is a detailed single object with nested arrays.
+### 2. Types/values that differ from docs
+None - all types match correctly.
 
-3. **Additional fields not in docs**: 
-   - `Description`, `Email`, `Phone`, `StructureId`
-   - `Materials[]`, `Amendments[]`, `Questions[]`, `Members[]` arrays
-   - Material objects have `StatusId`, `StatusTitle` 
-   - Member objects have `UserId`, `RoleId`, `RoleTitle`, count fields
+### 3. Concrete schema improvements
 
-4. **Type differences**:
-   - `Image` can be empty string (not just populated string)
-   - Various count fields are `null` instead of integers
+The documented schema should use `$ref` for the AspDate pattern:
 
-**Recommendation**: Add complete `GetPoliticalPartyDetails` schema to documentation, as this appears to be a different endpoint from `GetAllPoliticalParties`.
+```json
+{
+  "RegistrationDate": {
+    "$ref": "#/$defs/AspDate"
+  }
+}
+```
+
+Instead of the current inline definition. This matches the inferred schema which correctly uses the `$defs` reference.
+
+**OK** - The response structure perfectly matches the documented schema, just needs the AspDate reference improvement.
 
 ---
 
 ## GetProposerTypes
 
-**Issues found:**
+## Comparison Results
 
-1. **Missing from docs**: The `GetProposerTypes` endpoint is not documented in the schema at all.
+**1. Fields in response not in docs:** None
 
-2. **Response structure**: Based on the actual response, the schema should be:
+**2. Types/values that differ from docs:** None
+
+**3. Concrete schema improvements:**
+
 ```json
 {
   "type": "array",
@@ -751,7 +831,7 @@ Comparing the API response to the documented schema:
     "type": "object",
     "properties": {
       "Id": {
-        "type": "integer"
+        "$ref": "#/$defs/ProposerTypeId"
       },
       "Title": {
         "type": "string"
@@ -759,203 +839,68 @@ Comparing the API response to the documented schema:
       "Order": {
         "type": "integer"
       }
-    }
+    },
+    "required": ["Id", "Title", "Order"]
   }
 }
 ```
 
-3. **Additional field**: The response includes an `Order` field that would need to be documented.
-
-**Schema improvements needed:**
-- Add complete documentation for `GetProposerTypes` endpoint
-- Include the `Order` field in the response schema
-- Add request schema (likely similar to other endpoints with `methodName` and `languageId`)
+The actual response confirms the existing `ProposerTypeId` enum values (1, 2, 4) and their meanings (MP, Government, Voter group).
 
 ---
 
 ## GetQuestionDetails
 
-Comparing the actual response to the documented schema:
+OK.
 
-**Issues found:**
+The actual responses perfectly match the documented schema. All fields, types, and values align correctly:
 
-1. **Missing schema**: There is no documented schema for `GetQuestionDetails` in the provided API_DOCS.md
+- **Date format**: Uses proper ASP.NET format `/Date(1769680800000)/`
+- **Field types**: All string, integer, boolean, null, and array types match exactly
+- **Document structure**: Consistent with documented properties and types
+- **Sittings structure**: Matches schema including proper `SittingTypeId` values and null `CommitteeTitle` for plenary sessions
 
-2. **Incomplete schema in docs**: The `GetAllQuestions` schema is cut off mid-field (`"From": { "type": "string"`) and doesn't show the complete response structure
-
-**Response structure analysis:**
-The actual response contains these fields:
-- `Title` (string)
-- `From` (string) 
-- `To` (string)
-- `ToInstitution` (string)
-- `QuestionTypeTitle` (string)
-- `StatusTitle` (string)
-- `NumberOfDeliveryLetter` (null)
-- `Documents` (array of objects with Id, Title, Url, FileName, DocumentTypeId, DocumentTypeTitle, IsExported)
-- `Sittings` (empty array)
-
-**Recommended addition to API_DOCS.md:**
-
-```json
-## GetQuestionDetails
-
-### Response
-{
-  "type": "object",
-  "properties": {
-    "Title": {"type": "string"},
-    "From": {"type": "string"},
-    "To": {"type": "string"},
-    "ToInstitution": {"type": "string"},
-    "QuestionTypeTitle": {"type": "string"},
-    "StatusTitle": {"type": "string"},
-    "NumberOfDeliveryLetter": {"type": ["string", "null"]},
-    "Documents": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "Id": {"type": "string", "format": "uuid"},
-          "Title": {"type": "string"},
-          "Url": {"type": "string"},
-          "FileName": {"type": ["string", "null"]},
-          "DocumentTypeId": {"type": "integer"},
-          "DocumentTypeTitle": {"type": "string"},
-          "IsExported": {"type": "boolean"}
-        }
-      }
-    },
-    "Sittings": {"type": "array"}
-  }
-}
-```
-
----
-
-## GetSittingDetails
-
-**Issues found:**
-
-## (1) Fields in response not in documented schema:
-The API response contains many fields not documented in the provided schema. However, **no schema for GetSittingDetails exists in the documentation** - this appears to be a missing endpoint entirely.
-
-## (2) Types/values that differ:
-Cannot compare - no GetSittingDetails schema provided.
-
-## (3) Schema needed:
-The complete GetSittingDetails response schema should be added to API_DOCS.md:
-
-```json
-## GetSittingDetails
-
-### Response
-{
-  "type": "object",
-  "properties": {
-    "StatusId": {"type": "integer"},
-    "StatusTitle": {"type": "string"},
-    "Location": {"type": "string"},
-    "Number": {"type": "integer"},
-    "SittingDate": {"$ref": "#/$defs/AspDate"},
-    "TypeTitle": {"type": "string"},
-    "TypeId": {"type": "integer"},
-    "CommitteeId": {"type": "string", "format": "uuid"},
-    "CommitteeTitle": {"type": "string"},
-    "MediaLinks": {"type": "array"},
-    "Documents": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "Id": {"type": "string", "format": "uuid"},
-          "Title": {"type": "string"},
-          "Url": {"type": "string"},
-          "FileName": {"type": ["string", "null"]},
-          "DocumentTypeId": {"type": "integer"},
-          "DocumentTypeTitle": {"type": "string"},
-          "IsExported": {"type": "boolean"}
-        }
-      }
-    },
-    "Agenda": {
-      "type": "object",
-      "properties": {
-        "id": {"type": "string", "format": "uuid"},
-        "text": {"type": "string"},
-        "type": {"type": "string"},
-        "children": {"type": "array"}
-        // ... (nested agenda structure)
-      }
-    },
-    "Absents": {
-      "type": "array", 
-      "items": {
-        "properties": {
-          "Id": {"type": "string", "format": "uuid"},
-          "Fullname": {"type": "string"},
-          "PoliticalParty": {"type": ["string", "null"]}
-        }
-      }
-    }
-    // ... (other fields)
-  }
-}
-```
+The inferred schema correctly uses the `AspDate` reference from `$defs`, which is the only minor improvement over the documented schema's inline pattern definition.
 
 ---
 
 ## GetUserDetailsByStructure
 
-**Issues found:**
+## Comparison Results
 
-1. **Missing from docs**: The `GetUserDetailsByStructure` endpoint is completely missing from the documented schemas.
+**1. Fields in response not in docs:**
+None - all response fields match the documented schema.
 
-2. **Fields in response not documented**:
-   - `FullName`, `Email`, `Image`, `MobileNumber`, `PhoneNumber`, `Biography`
-   - `RoleId`, `RoleTitle`, `ElectedFrom`, `ElectedTo`
-   - `PoliticalPartyId`, `PoliticalPartyTitle`, `Gender`, `DateOfBirth`
-   - `Constituency`, `Coalition`, `StructureDate`
-   - `CabinetMembers`, `Materials`, `Questions`, `Delegations`
-   - `FriendshipGroups`, `Amendments` (with nested objects containing `Id`, `Title`, `RegistrationDate`, `RegistrationNumber`, `StatusId`, `StatusTitle`)
+**2. Types/values that differ from docs:**
 
-3. **Schema needed**: The docs require a complete schema definition for `GetUserDetailsByStructure` showing:
-   - Request format (likely includes `methodName`, `languageId`, `structureId`, `userId`)
-   - Response object with all the fields listed above
-   - Proper typing for dates (using `AspDate` reference), UUIDs, integers, and nullable fields
+- `ElectedFrom`: Documented as `{"$ref": "#/$defs/AspDate"}` but should be consistent with inferred schema showing the pattern inline
+- `RegistrationDate` in `Amendments` and `Acts` arrays: Same issue - should use `{"$ref": "#/$defs/AspDate"}` instead of inline pattern
 
-This appears to be a user/MP profile endpoint returning detailed biographical and legislative activity data.
+**3. Schema improvements:**
 
----
-
-## LoadLanguage
-
-**Issues found:**
-
-1. **Missing from docs**: The `LoadLanguage` operation is not documented in the provided schema documentation.
-
-2. **Schema needed**: The response structure is:
 ```json
 {
-  "type": "object",
-  "properties": {
-    "Code": {
-      "type": "string",
-      "description": "Language/locale code (e.g., 'mk-MK')"
-    },
-    "Items": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "Key": {
-            "type": "string",
-            "description": "Localization key"
-          },
-          "Value": {
-            "type": "string",
-            "description": "Localized text value"
-          }
+  "ElectedFrom": {
+    "$ref": "#/$defs/AspDate"
+  },
+  "Amendments": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "RegistrationDate": {
+          "$ref": "#/$defs/AspDate"
+        }
+      }
+    }
+  },
+  "Acts": {
+    "type": "array", 
+    "items": {
+      "type": "object",
+      "properties": {
+        "RegistrationDate": {
+          "$ref": "#/$defs/AspDate"
         }
       }
     }
@@ -963,6 +908,21 @@ This appears to be a user/MP profile endpoint returning detailed biographical an
 }
 ```
 
-3. **Request schema needed**: Should document the expected request format for `LoadLanguage` (likely includes `methodName` and `languageId` parameters consistent with other operations).
+The documented schema is correct but should consistently use `$defs/AspDate` references instead of mixing with inline patterns.
 
-The API_DOCS.md should be updated to include the complete `LoadLanguage` operation documentation.
+---
+
+## LoadLanguage
+
+**Analysis of LoadLanguage response:**
+
+**1. Fields in response not in docs:** None
+
+**2. Types/values that differ from docs:** None
+
+**3. Schema improvements:** 
+- Add `required: ["Code", "Items"]` to main object
+- Add `required: ["Key", "Value"]` to items
+- Consider adding `additionalProperties: false` for stricter validation
+
+The actual response perfectly matches the documented schema. The response contains localization key-value pairs in Macedonian (`mk-MK`), which aligns with the expected structure.

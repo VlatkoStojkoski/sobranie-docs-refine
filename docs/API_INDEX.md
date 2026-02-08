@@ -48,9 +48,9 @@ Request body includes `methodName` (or `MethodName` for some operations) and ope
 | GetAllMaterialTypesForFilter | ✓ | Material type options |
 | GetAllSittingStatuses | ✓ | Sitting status (1–6) |
 | GetAllQuestionStatuses | ✓ | Question status (17,19,20,21) |
-| GetAllInstitutionsForFilter | ✓ | Institutions (ministries, etc.) |
+| GetAllInstitutionsForFilter | ✓ | Institutions (ministries, etc.). May include placeholder entries (Title: "/") |
 | GetAllProcedureTypes | ✓ | Procedure types (1,2,3) |
-| GetProposerTypes | ✓ | Proposer types |
+| GetProposerTypes | ✓ | Proposer types (Id, Title, Order) |
 | GetAllApplicationTypes | ✓ | Application types |
 
 ### Listings (paginated / filterable)
@@ -60,7 +60,7 @@ Request body includes `methodName` (or `MethodName` for some operations) and ope
 | GetAllSittings | ✓ | Sittings. Filter: TypeId, CommitteeId, StatusId, dates |
 | GetAllQuestions | ✓ | Parliamentary questions |
 | GetAllMaterialsForPublicPortal | ✓ | Materials. Uses MethodName. Many filters |
-| GetParliamentMPsNoImage | ✓ | MPs. Filter: gender, party, search |
+| GetParliamentMPsNoImage | ✓ | MPs. Filter: gender, party, search. Note: includes UserImg (base64) despite name |
 | GetMonthlyAgenda | ✓ | Agenda for month/year |
 | GetAllPoliticalParties | ✓ | Parties per structure |
 | GetAllCouncils | ✓ | Councils |
@@ -89,6 +89,6 @@ Request body includes `methodName` (or `MethodName` for some operations) and ope
 
 | Operation | URL | Format |
 |-----------|-----|--------|
-| GetCustomEventsCalendar | Moldova/services/CalendarService.asmx/GetCustomEventsCalendar | ASMX, model: {Language, Month, Year} |
-| LoadLanguage | Infrastructure/LoadLanguage | POST, empty body |
-| GetOfficialVisitsForUser | Moldova/services/OfficialVisits.asmx/GetOfficialVisitsForUser | ASMX, model: user UUID |
+| GetCustomEventsCalendar | Moldova/services/CalendarService.asmx/GetCustomEventsCalendar | ASMX, model: {Language, Month, Year}. Response: d array with __type, Id, EventDescription, EventLink, EventLocation, EventDate, EventType |
+| LoadLanguage | Infrastructure/LoadLanguage | POST, empty body. Returns Code, Items (Key/Value localization) |
+| GetOfficialVisitsForUser | Moldova/services/OfficialVisits.asmx/GetOfficialVisitsForUser | ASMX, model: user UUID. Response: {"d": []} (array of visit objects when data present) |

@@ -4,29 +4,38 @@
 
 1. **collect.py** — Diverse API samples  
    - Listings with randomized filters (TypeId, StatusId, MaterialTypeId, etc.)  
-   - Detail requests using IDs from listings  
+   - Detail requests using IDs from listings; also GetAmendmentDetails, GetVotingResultsFor* when IDs available  
    - Output: `collected/YYYY-MM-DD_HH-MM-SS/*.json`  
-   - Uses `.api_cache/` for request/response caching; use `--no-cache` to bypass  
+   - Uses `.api_cache/`; `--no-cache` to bypass  
    - Logs: `logs/collect/YYYY-MM-DD_HH-MM-SS/collect.log`, `requests_responses.jsonl`
 
-2. **enrich.py** — LLM analysis  
-   - For each operation: compare sample response to `docs/API_DOCS.md`  
-   - Output: `docs/ENRICHMENT_REPORT.md`  
-   - Logs: `logs/enrich/YYYY-MM-DD_HH-MM-SS/prompt_*.txt`, `response_*.txt`  
-   - Use the report to prompt an assistant to update docs
+2. **infer_schema.py** — Schema from collected data  
+   - Merges multiple samples per endpoint (union of shapes)  
+   - Output: `schema_inference.json`, `docs/SCHEMA_INFERENCE_REPORT.md`  
+   - Run after collect.py
 
-3. **generate_openapi.py** — OpenAPI from docs  
+3. **build_docs.py** — Build API_DOCS from inference  
+   - Uses `schema_inference.json` (or archive fallback)  
+   - Preserves $defs and Common patterns from existing API_DOCS  
+   - Output: `docs/API_DOCS.md`
+
+4. **enrich.py** — LLM analysis  
+   - Per-operation schema context (no truncation)  
+   - Multiple samples, $defs, Common patterns, schema_inference in prompt  
+   - Output: `docs/ENRICHMENT_REPORT.md`  
+   - Logs: `logs/enrich/YYYY-MM-DD_HH-MM-SS/prompt_*.txt`, `response_*.txt`
+
+5. **generate_openapi.py** — OpenAPI from docs  
    - Single LLM call: `docs/API_DOCS.md` → `docs/openapi.yaml`  
    - Logs: `logs/generate_openapi/YYYY-MM-DD_HH-MM-SS/prompt.txt`, `response.txt`
 
 ## One-time
 
-- **build_docs_from_archive.py** — Build `docs/API_DOCS.md` from `archive/schema_inference.json`
+- **build_docs_from_archive.py** — Legacy: build from archive only
 
 ## Cache
 
-- **cache.py** — File-based cache for API requests (key: SHA256 of url + payload).  
-- Used by `collect.py`; responses stored in `.api_cache/*.json`.
+- **cache.py** — File-based cache (key: SHA256 of url + payload). Used by collect.py.
 
 ## Env
 

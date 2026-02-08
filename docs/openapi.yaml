@@ -1,121 +1,16 @@
 openapi: 3.0.3
 info:
-  title: Sobranie.mk API
-  description: 'North Macedonian Parliament (Sobranie) public API. All standard endpoints
-    use a single
-
-    RPC-style POST endpoint. The `methodName` in the request body determines the operation.
-
-    Date format: `/Date(timestamp)/` (milliseconds since Unix epoch).
-
-    LanguageId: 1 = Macedonian, 2 = Albanian, 3 = Turkish.
-
-    '
+  title: North Macedonian Parliament (Sobranie) API
+  description: API for accessing North Macedonian Parliament data including sessions, materials, MPs, and other parliamentary information.
   version: 1.0.0
-  contact:
-    url: https://www.sobranie.mk
 servers:
-- url: https://www.sobranie.mk
-  description: Production
+  - url: https://www.sobranie.mk
+    description: Main Parliament API server
 paths:
-  /Moldova/services/CalendarService.asmx/GetCustomEventsCalendar:
-    post:
-      summary: Get custom events calendar (non-standard)
-      description: Different URL and request format. Returns events in `d` property.
-      operationId: getCustomEventsCalendar
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-              - model
-              properties:
-                model:
-                  type: object
-                  required:
-                  - Language
-                  - Month
-                  - Year
-                  properties:
-                    Language:
-                      type: integer
-                      description: 1=Macedonian, 2=Albanian, 3=Turkish
-                    Month:
-                      type: integer
-                      minimum: 1
-                      maximum: 12
-                    Year:
-                      type: integer
-      responses:
-        '200':
-          description: Events in d array
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                - d
-                properties:
-                  d:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        __type:
-                          type: string
-                        Id:
-                          type: string
-                          format: uuid
-                        EventDescription:
-                          type: string
-                        EventLink:
-                          type: string
-                        EventLocation:
-                          type: string
-                        EventDate:
-                          $ref: '#/components/schemas/AspDate'
-                        EventType:
-                          type: integer
-  /Infrastructure/LoadLanguage:
-    post:
-      summary: Load language (non-standard)
-      description: Sets/loads language preferences. No methodName.
-      operationId: loadLanguage
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-      responses:
-        '200':
-          description: Localization strings
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Code:
-                    type: string
-                  Items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Key: {}
-                        Value: {}
   /Routing/MakePostRequest:
     post:
-      summary: RPC-style POST request
-      description: 'Single endpoint for all API operations. The request body must
-        include `methodName` (or `MethodName`
-
-        for some endpoints) identifying the operation. Response structure varies by
-        method.
-
-        '
-      operationId: makePostRequest
+      summary: Main RPC endpoint for parliamentary operations
+      description: Method-based API endpoint that accepts different operations via methodName parameter
       requestBody:
         required: true
         content:
@@ -124,12 +19,63 @@ paths:
               $ref: '#/components/schemas/RpcRequest'
             examples:
               GetAllGenders:
-                summary: Get gender catalog
+                summary: Get gender options
                 value:
                   methodName: GetAllGenders
                   languageId: 1
+              GetAllStructuresForFilter:
+                summary: Get parliamentary terms
+                value:
+                  methodName: GetAllStructuresForFilter
+                  languageId: 1
+              GetAllCommitteesForFilter:
+                summary: Get committees
+                value:
+                  methodName: GetAllCommitteesForFilter
+                  languageId: 1
+                  structureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+              GetAllMaterialStatusesForFilter:
+                summary: Get material statuses
+                value:
+                  methodName: GetAllMaterialStatusesForFilter
+                  languageId: 1
+              GetAllMaterialTypesForFilter:
+                summary: Get material types
+                value:
+                  methodName: GetAllMaterialTypesForFilter
+                  languageId: 1
+              GetAllSittingStatuses:
+                summary: Get sitting statuses
+                value:
+                  methodName: GetAllSittingStatuses
+                  LanguageId: 1
+              GetAllQuestionStatuses:
+                summary: Get question statuses
+                value:
+                  methodName: GetAllQuestionStatuses
+                  languageId: 1
+              GetAllInstitutionsForFilter:
+                summary: Get institutions
+                value:
+                  methodName: GetAllInstitutionsForFilter
+                  languageId: 1
+              GetAllProcedureTypes:
+                summary: Get procedure types
+                value:
+                  methodName: GetAllProcedureTypes
+                  languageId: 1
+              GetProposerTypes:
+                summary: Get proposer types
+                value:
+                  methodName: GetProposerTypes
+                  languageId: 1
+              GetAllApplicationTypes:
+                summary: Get application types
+                value:
+                  methodName: GetAllApplicationTypes
+                  languageId: 1
               GetAllSittings:
-                summary: List sittings with pagination
+                summary: Get parliamentary sittings
                 value:
                   methodName: GetAllSittings
                   Page: 1
@@ -142,46 +88,36 @@ paths:
                   DateTo: null
                   SessionId: null
                   Number: null
-                  StructureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
-              GetSittingDetails:
-                summary: Get sitting details (SittingId substituted by verifier)
+                  StructureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+              GetAllQuestions:
+                summary: Get parliamentary questions
                 value:
-                  MethodName: GetSittingDetails
-                  SittingId: 00000000-0000-0000-0000-000000000000
+                  methodName: GetAllQuestions
                   LanguageId: 1
-              GetAllStructuresForFilter:
-                summary: Get parliamentary structures/terms
-                value:
-                  methodName: GetAllStructuresForFilter
-                  languageId: 1
-              GetAllCommitteesForFilter:
-                summary: Get committees for filter
-                value:
-                  methodName: GetAllCommitteesForFilter
-                  languageId: 1
-                  structureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
-              GetAllMaterialStatusesForFilter:
-                summary: Get material status catalog
-                value:
-                  methodName: GetAllMaterialStatusesForFilter
-                  languageId: 1
-              GetAllMaterialTypesForFilter:
-                summary: Get material types catalog
-                value:
-                  methodName: GetAllMaterialTypesForFilter
-                  languageId: 1
+                  CurrentPage: 1
+                  Page: 1
+                  Rows: 10
+                  SearchText: ""
+                  RegistrationNumber: ""
+                  StatusId: null
+                  From: ""
+                  To: ""
+                  CommitteeId: null
+                  DateFrom: null
+                  DateTo: null
+                  StructureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
               GetAllMaterialsForPublicPortal:
-                summary: List materials with filters
+                summary: Get parliamentary materials
                 value:
                   MethodName: GetAllMaterialsForPublicPortal
                   LanguageId: 1
-                  ItemsPerPage: 15
+                  ItemsPerPage: 9
                   CurrentPage: 1
-                  SearchText: ''
-                  AuthorText: ''
-                  ActNumber: ''
+                  SearchText: ""
+                  AuthorText: ""
+                  ActNumber: ""
                   StatusGroupId: null
-                  MaterialTypeId: null
+                  MaterialTypeId: 1
                   ResponsibleCommitteeId: null
                   CoReportingCommittees: null
                   OpinionCommittees: null
@@ -191,509 +127,231 @@ paths:
                   DateTo: null
                   ProcedureTypeId: null
                   InitiatorTypeId: null
-                  StructureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
-              GetMaterialDetails:
-                summary: Get material details (MaterialId from listing)
+                  StructureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+              GetParliamentMPsNoImage:
+                summary: Get MPs
                 value:
-                  methodName: GetMaterialDetails
-                  MaterialId: 1b2114f3-72ff-43b5-887e-17316e501592
-                  LanguageId: 1
-                  AmendmentsPage: 1
-                  AmendmentsRows: 5
+                  methodName: GetParliamentMPsNoImage
+                  languageId: 1
+                  genderId: null
+                  politicalPartyId: null
+                  searchText: ""
+                  StructureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
               GetMonthlyAgenda:
-                summary: Monthly agenda
+                summary: Get monthly agenda
                 value:
                   methodName: GetMonthlyAgenda
-                  LanguageId: 1
-                  Month: 1
-                  Year: 2026
-              GetAllSittingStatuses:
-                summary: Get sitting status catalog
-                value:
-                  methodName: GetAllSittingStatuses
-                  LanguageId: 1
+                  languageId: 1
+                  month: 1
+                  year: 2024
+                  StructureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
               GetAllPoliticalParties:
                 summary: Get political parties
                 value:
                   methodName: GetAllPoliticalParties
                   languageId: 1
-                  StructureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
-              GetAllProcedureTypes:
-                summary: Get procedure types
-                value:
-                  methodName: GetAllProcedureTypes
-                  languageId: 1
-              GetParliamentMPsNoImage:
-                summary: List MPs with pagination
-                value:
-                  methodName: GetParliamentMPsNoImage
-                  languageId: 1
-                  genderId: null
-                  ageFrom: null
-                  ageTo: null
-                  politicalPartyId: null
-                  searchText: null
-                  page: 1
-                  rows: 12
-                  StructureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
-                  coalition: ''
-                  constituency: ''
-              GetProposerTypes:
-                summary: Get proposer types
-                value:
-                  methodName: GetProposerTypes
-                  languageId: 1
-              GetAllQuestionStatuses:
-                summary: Get question status catalog
-                value:
-                  methodName: GetAllQuestionStatuses
-                  languageId: 1
-              GetAllInstitutionsForFilter:
-                summary: Get institutions for filter
-                value:
-                  methodName: GetAllInstitutionsForFilter
-                  languageId: 1
-              GetAllQuestions:
-                summary: List parliamentary questions
-                value:
-                  methodName: GetAllQuestions
-                  LanguageId: 1
-                  CurrentPage: 1
-                  Page: 1
-                  Rows: 10
-                  SearchText: ''
-                  RegistrationNumber: ''
-                  StatusId: null
-                  From: ''
-                  To: ''
-                  CommitteeId: null
-                  DateFrom: null
-                  DateTo: null
-                  StructureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
-              GetQuestionDetails:
-                summary: Get question details (QuestionId substituted by verifier)
-                value:
-                  methodName: GetQuestionDetails
-                  QuestionId: 00000000-0000-0000-0000-000000000000
-                  LanguageId: 1
-              GetAllApplicationTypes:
-                summary: Get application types
-                value:
-                  methodName: GetAllApplicationTypes
-                  languageId: 1
+                  StructureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
               GetAllCouncils:
                 summary: Get councils
                 value:
                   methodName: GetAllCouncils
                   languageId: 1
-                  StructureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
-              GetCouncilDetails:
-                summary: Get council details (committeeId substituted by verifier)
-                value:
-                  methodName: GetCouncilDetails
-                  committeeId: 00000000-0000-0000-0000-000000000000
-                  languageId: 1
+                  StructureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
               GetAllParliamentaryGroups:
                 summary: Get parliamentary groups
                 value:
                   methodName: GetAllParliamentaryGroups
                   languageId: 1
-                  StructureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
-              GetParliamentaryGroupDetails:
-                summary: Get parliamentary group details
-                value:
-                  methodName: GetParliamentaryGroupDetails
-                  parliamentaryGroupId: 6f83cbd1-af39-44e5-bfd0-0cde68932844
-                  LanguageId: 1
-              GetPoliticalPartyDetails:
-                summary: Get political party details
-                value:
-                  methodName: GetPoliticalPartyDetails
-                  politicalPartyId: e693cd9f-5893-49ab-9ede-0abd6e820664
-                  LanguageId: 1
-              GetCommitteeDetails:
-                summary: Get committee details
-                value:
-                  methodName: GetCommitteeDetails
-                  committeeId: bb8e23a1-c959-4818-8e6e-ebe450847fd8
-                  languageId: 1
+                  StructureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
               GetAllMPsClubsByStructure:
                 summary: Get MPs clubs
                 value:
                   MethodName: GetAllMPsClubsByStructure
                   LanguageId: 1
-                  StructureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
-              GetMPsClubDetails:
-                summary: Get MPs club details
+                  StructureId: "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+              GetCommitteeDetails:
+                summary: Get committee details
                 value:
-                  methodName: GetMPsClubDetails
-                  mpsClubId: 22ded665-2466-4d7e-a04b-03f8a150fc8c
-                  LanguageId: 1
-              GetVotingResultsForSitting:
-                summary: Get voting results for sitting
-                value:
-                  methodName: GetVotingResultsForSitting
-                  votingDefinitionId: 076a2ea4-5477-467f-8217-4c3b8b6b5e92
-                  sittingId: f06b995b-c5c7-42cd-8605-ec2d9ab7aac1
+                  methodName: GetCommitteeDetails
+                  committeeId: "b8b25861-9b5c-4d47-9717-007b83a8a339"
                   languageId: 1
-              GetVotingResultsForAgendaItem:
-                summary: Get voting results for agenda item
+              GetCouncilDetails:
+                summary: Get council details
                 value:
-                  methodName: GetVotingResultsForAgendaItem
-                  VotingDefinitionId: 9d80de02-11fb-4f79-80ee-181c0f92629d
-                  AgendaItemId: 98BBFA75-F432-4BBB-9A10-202EFE7E2569
-                  LanguageId: 1
-              GetAmendmentDetails:
-                summary: Get amendment details
-                value:
-                  methodName: GetAmendmentDetails
-                  amendmentId: 9a130205-3d0a-4394-a0b1-a0ac4b15a047
-                  languageId: 1
-              GetUserDetailsByStructure:
-                summary: Get user details by structure
-                value:
-                  methodName: GetUserDetailsByStructure
-                  userId: 85048fa9-e61b-4eb1-be26-8d537cb1d7c4
-                  structureId: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473
+                  methodName: GetCouncilDetails
+                  committeeId: "d596538c-f3d4-4440-8ae7-6e25ea094c6a"
                   languageId: 1
       responses:
         '200':
-          description: Success. Response structure depends on methodName.
+          description: Successful response
           content:
             application/json:
               schema:
                 oneOf:
-                - type: array
-                  items: {}
-                - type: object
-        '500':
-          description: Server error (may occur for some invalid IDs)
+                  - $ref: '#/components/schemas/GenderResponse'
+                  - $ref: '#/components/schemas/StructureResponse'
+                  - $ref: '#/components/schemas/CommitteeFilterResponse'
+                  - $ref: '#/components/schemas/MaterialStatusResponse'
+                  - $ref: '#/components/schemas/MaterialTypeResponse'
+                  - $ref: '#/components/schemas/SittingStatusResponse'
+                  - $ref: '#/components/schemas/QuestionStatusResponse'
+                  - $ref: '#/components/schemas/InstitutionResponse'
+                  - $ref: '#/components/schemas/ProcedureTypeResponse'
+                  - $ref: '#/components/schemas/ApplicationTypeResponse'
+                  - $ref: '#/components/schemas/SittingsResponse'
+                  - $ref: '#/components/schemas/QuestionsResponse'
+                  - $ref: '#/components/schemas/MaterialsResponse'
+                  - $ref: '#/components/schemas/PoliticalPartiesResponse'
+                  - $ref: '#/components/schemas/CouncilsResponse'
+                  - $ref: '#/components/schemas/ParliamentaryGroupsResponse'
+                  - $ref: '#/components/schemas/MPsClubsResponse'
+                  - $ref: '#/components/schemas/CommitteeDetailsResponse'
+                  - $ref: '#/components/schemas/CouncilDetailsResponse'
+  /Moldova/services/CalendarService.asmx/GetCustomEventsCalendar:
+    post:
+      summary: Get custom events calendar
+      description: Non-standard ASMX endpoint for calendar events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                model:
+                  type: object
+                  properties:
+                    Language:
+                      $ref: '#/components/schemas/LanguageId'
+                    Month:
+                      type: integer
+                      minimum: 1
+                      maximum: 12
+                    Year:
+                      type: integer
+                  required:
+                    - Language
+                    - Month
+                    - Year
+              required:
+                - model
+            example:
+              model:
+                Language: 1
+                Month: 1
+                Year: 2026
+      responses:
+        '200':
+          description: Calendar events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarEventsResponse'
 components:
   schemas:
+    AspDate:
+      type: string
+      pattern: '^/Date\(\d+\)/$'
+      description: ASP.NET date format with milliseconds since Unix epoch
+    LanguageId:
+      type: integer
+      enum: [1, 2, 3]
+      description: '1=Macedonian, 2=Albanian, 3=Turkish'
+    GenderId:
+      type: integer
+      enum: [1, 2]
+      description: '1=Male, 2=Female'
+    SittingStatusId:
+      type: integer
+      enum: [1, 2, 3, 4, 5, 6]
+      description: '1=Scheduled, 2=Started, 3=Completed, 4=Incomplete, 5=Closed, 6=Postponed'
+    QuestionStatusId:
+      type: integer
+      enum: [17, 19, 20, 21]
+      description: '17=Delivered, 19=Answered, 20=Secret answer, 21=Written answer'
+    MaterialStatusId:
+      type: integer
+      enum: [0, 6, 9, 10, 11, 12, 24, 64]
+      description: '0=Plenary/unknown, 6=Delivered to MPs, 9=First reading, 10=Second, 11=Third, 12=Closed, 24=Rejected, 64=Committee processing'
+    ProposerTypeId:
+      type: integer
+      enum: [1, 2, 4]
+      description: '1=MP, 2=Government, 4=Voter group'
+    ProcedureTypeId:
+      type: integer
+      enum: [1, 2, 3]
+      description: '1=Regular, 2=Shortened, 3=Urgent'
     RpcRequest:
       type: object
-      description: Base request - all operations extend this with method-specific
-        fields. Use methodName or MethodName depending on endpoint.
       properties:
         methodName:
           type: string
         MethodName:
           type: string
-      additionalProperties: true
-    AspDate:
-      type: string
-      pattern: ^/Date\(\d+\)/$
-      description: Microsoft JSON date format (milliseconds since epoch)
-    IdTitle:
-      type: object
-      required:
-      - Id
-      - Title
-      properties:
-        Id: {}
-        Title:
+        languageId:
+          $ref: '#/components/schemas/LanguageId'
+        LanguageId:
+          $ref: '#/components/schemas/LanguageId'
+        structureId:
           type: string
-    GetAllGendersResponse:
+          format: uuid
+        StructureId:
+          type: string
+          format: uuid
+        Page:
+          type: integer
+        Rows:
+          type: integer
+        CurrentPage:
+          type: integer
+        ItemsPerPage:
+          type: integer
+        TypeId:
+          type: integer
+          nullable: true
+        CommitteeId:
+          type: string
+          format: uuid
+          nullable: true
+        StatusId:
+          type: integer
+          nullable: true
+        DateFrom:
+          type: string
+          nullable: true
+        DateTo:
+          type: string
+          nullable: true
+        SearchText:
+          type: string
+        AuthorText:
+          type: string
+        RegistrationNumber:
+          type: string
+        MaterialTypeId:
+          type: integer
+          nullable: true
+        committeeId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        month:
+          type: integer
+        year:
+          type: integer
+      additionalProperties: true
+    GenderResponse:
       type: array
       items:
         type: object
         properties:
           Id:
-            type: integer
+            $ref: '#/components/schemas/GenderId'
           Title:
             type: string
-    GetAllSittingsResponse:
-      type: object
-      properties:
-        TotalItems:
-          type: integer
-        Items:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Number:
-                type: integer
-              SittingDate:
-                $ref: '#/components/schemas/AspDate'
-              TypeId:
-                type: integer
-              TypeTitle:
-                type: string
-              StatusId:
-                type: integer
-              StatusTitle:
-                type: string
-              Location:
-                type: string
-              CommitteeTitle:
-                type: string
-                nullable: true
-              SittingDescriptionTypeTitle:
-                type: string
-                nullable: true
-              Continuations:
-                type: array
-                items: {}
-              Structure:
-                type: string
-                nullable: true
-              TotalRows:
-                type: integer
-    GetSittingDetailsResponse:
-      type: object
-      properties:
-        StatusId:
-          type: integer
-        StatusTitle:
-          type: string
-        Location:
-          type: string
-        Number:
-          type: integer
-        SittingDate:
-          $ref: '#/components/schemas/AspDate'
-        TypeTitle:
-          type: string
-        TypeId:
-          type: integer
-        CommitteeId:
-          type: string
-          nullable: true
-        CommitteeTitle:
-          type: string
-          nullable: true
-        MediaLinks:
-          type: array
-          items: {}
-        Documents:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Title:
-                type: string
-              Url:
-                type: string
-              FileName:
-                type: string
-                nullable: true
-              DocumentTypeId:
-                type: integer
-              DocumentTypeTitle:
-                type: string
-              IsExported:
-                type: boolean
-        Agenda:
-          type: object
-          properties:
-            id:
-              type: string
-              format: uuid
-            beforeText:
-              type: string
-              nullable: true
-            afterText:
-              type: string
-              nullable: true
-            text:
-              type: string
-            type:
-              type: string
-            treeItemTypeId:
-              type: string
-              nullable: true
-            agendaItemType:
-              type: string
-              nullable: true
-            status:
-              type: integer
-            statusTitle:
-              type: string
-              nullable: true
-            isActive:
-              type: boolean
-            order:
-              type: integer
-            euCompatible:
-              type: boolean
-            data:
-              type: string
-              nullable: true
-            children:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  beforeText:
-                    type: string
-                    nullable: true
-                  afterText:
-                    type: string
-                  text:
-                    type: string
-                  type:
-                    type: string
-                  treeItemTypeId:
-                    type: string
-                    nullable: true
-                  agendaItemType:
-                    type: integer
-                  status:
-                    type: integer
-                  statusTitle:
-                    type: string
-                  isActive:
-                    type: boolean
-                  order:
-                    type: integer
-                  euCompatible:
-                    type: boolean
-                  data:
-                    type: string
-                    nullable: true
-                  children:
-                    type: array
-                    items: {}
-                  objectId:
-                    type: string
-                    nullable: true
-                  objectTypeId:
-                    type: integer
-                  objectTypeTitle:
-                    type: string
-                    nullable: true
-                  objectStatusId:
-                    type: integer
-                  objectSubTypeId:
-                    type: integer
-                  manyAmendments:
-                    type: boolean
-                  mediaItems:
-                    type: array
-                    items: {}
-                  VotingDefinitions:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Id:
-                          type: string
-                          format: uuid
-                        Title:
-                          type: string
-                        Description:
-                          type: string
-                        VotingType:
-                          type: string
-                        OverallResult:
-                          type: string
-                  Documents:
-                    type: array
-                    items: {}
-            objectId:
-              type: string
-              nullable: true
-            objectTypeId:
-              type: integer
-            objectTypeTitle:
-              type: string
-              nullable: true
-            objectStatusId:
-              type: integer
-            objectSubTypeId:
-              type: integer
-            manyAmendments:
-              type: boolean
-            mediaItems:
-              type: array
-              items: {}
-            VotingDefinitions:
-              type: array
-              items: {}
-            Documents:
-              type: array
-              items: {}
-        Continuations:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Number:
-                type: integer
-              StatusId:
-                type: string
-                nullable: true
-              StatusTitle:
-                type: string
-              SittingDate:
-                $ref: '#/components/schemas/AspDate'
-              Location:
-                type: string
-        SittingDuration:
-          type: string
-          nullable: true
-        Absents:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Fullname:
-                type: string
-              PoliticalParty:
-                type: string
-        Attendances:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Fullname:
-                type: string
-              PoliticalParty:
-                type: string
-        DescriptionTypeTitle:
-          type: string
-          nullable: true
-        DescriptionTypeId:
-          type: string
-          nullable: true
-        Votings:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Title:
-                type: string
-              Description:
-                type: string
-              VotingType:
-                type: string
-              OverallResult:
-                type: string
-        Structure:
-          type: string
-    GetAllStructuresForFilterResponse:
+    StructureResponse:
       type: array
       items:
         type: object
@@ -707,7 +365,7 @@ components:
             $ref: '#/components/schemas/AspDate'
           IsCurrent:
             type: boolean
-    GetAllCommitteesForFilterResponse:
+    CommitteeFilterResponse:
       type: array
       items:
         type: object
@@ -717,7 +375,16 @@ components:
             format: uuid
           Name:
             type: string
-    GetAllMaterialStatusesForFilterResponse:
+    MaterialStatusResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          Id:
+            $ref: '#/components/schemas/MaterialStatusId'
+          Title:
+            type: string
+    MaterialTypeResponse:
       type: array
       items:
         type: object
@@ -726,16 +393,53 @@ components:
             type: integer
           Title:
             type: string
-    GetAllMaterialTypesForFilterResponse:
+    SittingStatusResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          Id:
+            $ref: '#/components/schemas/SittingStatusId'
+          Title:
+            type: string
+    QuestionStatusResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          Id:
+            $ref: '#/components/schemas/QuestionStatusId'
+          Title:
+            type: string
+    InstitutionResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          Id:
+            type: string
+            format: uuid
+          Title:
+            type: string
+    ProcedureTypeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          Id:
+            $ref: '#/components/schemas/ProcedureTypeId'
+          Title:
+            type: string
+    ApplicationTypeResponse:
       type: array
       items:
         type: object
         properties:
           Id:
             type: integer
-          Title:
+          ApplicationTitle:
             type: string
-    GetAllMaterialsForPublicPortalResponse:
+    SittingsResponse:
       type: object
       properties:
         TotalItems:
@@ -748,320 +452,20 @@ components:
               Id:
                 type: string
                 format: uuid
-              Title:
-                type: string
               TypeTitle:
                 type: string
-              Status:
-                type: string
-                nullable: true
-              StatusGroupTitle:
-                type: string
-              RegistrationNumber:
-                type: string
-              RegistrationDate:
+              Date:
                 $ref: '#/components/schemas/AspDate'
-              ResponsibleAuthor:
-                type: string
-              Authors:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Id:
-                      type: string
-                      format: uuid
-                    FirstName:
-                      type: string
-                    LastName:
-                      type: string
-              ProposerTypeTitle:
-                type: string
-              ResponsibleCommittee:
-                type: string
-              EUCompatible:
-                type: boolean
-              TotalItems:
-                type: string
-                nullable: true
-    GetMaterialDetailsResponse:
-      type: object
-      properties:
-        Title:
-          type: string
-        StatusGroupTitle:
-          type: string
-        TypeTitle:
-          type: string
-        ProposerTypeTitle:
-          type: string
-        ResponsibleAuthor:
-          type: string
-        Institution:
-          type: string
-        ProposerCommittee:
-          type: string
-          nullable: true
-        ProcedureTypeTitle:
-          type: string
-        RegistrationNumber:
-          type: string
-        RegistrationDate:
-          $ref: '#/components/schemas/AspDate'
-        EUCompatible:
-          type: boolean
-        ParentTitle:
-          type: string
-        Committees:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Name:
-                type: string
-              IsLegislative:
-                type: boolean
-              IsResponsible:
-                type: boolean
-              Documents:
-                type: array
-                items: {}
-        Documents:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Title:
-                type: string
-              Url:
-                type: string
-              FileName:
-                type: string
-                nullable: true
-              DocumentTypeId:
-                type: integer
-              DocumentTypeTitle:
-                type: string
-              IsExported:
-                type: boolean
-        FirstReadingAmendments:
-          type: array
-          items: {}
-        SecondReadingAmendments:
-          type: array
-          items: {}
-        FirstReadingSittings:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              SittingTypeId:
-                type: integer
-              SittingTypeTitle:
-                type: string
-              SittingDate:
-                $ref: '#/components/schemas/AspDate'
-              CommitteeId:
-                type: string
-                nullable: true
-              CommitteeTitle:
-                type: string
-                nullable: true
-              StatusGroupId:
-                type: integer
-              ObjectStatusId:
-                type: integer
-              SittingTitle:
+              Location:
                 type: string
               SittingNumber:
                 type: integer
-              VotingResults:
-                type: array
-                items: {}
-        SecondReadingSittings:
-          type: array
-          items: {}
-        ThirdReadingSittings:
-          type: array
-          items: {}
-        Sittings:
-          type: array
-          items: {}
-        Authors:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
+              StatusTitle:
                 type: string
-                format: uuid
-              FirstName:
-                type: string
-              LastName:
-                type: string
-        IsWithdrawn:
-          type: boolean
-        TerminationStatusTitle:
-          type: string
-          nullable: true
-        TerminationNote:
-          type: string
-          nullable: true
-        TerminationDate:
-          type: string
-          nullable: true
-        AmendmentsTotalRows:
-          type: integer
-    GetMonthlyAgendaResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: string
-            format: uuid
-          Title:
-            type: string
-          Location:
-            type: string
-          Start:
-            $ref: '#/components/schemas/AspDate'
-          Type:
-            type: integer
-    GetAllSittingStatusesResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: integer
-          Title:
-            type: string
-    GetAllPoliticalPartiesResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: string
-            format: uuid
-          Name:
-            type: string
-          NumberOfDeputies:
-            type: integer
-          Image:
-            type: string
-    GetAllProcedureTypesResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: integer
-          Title:
-            type: string
-    GetParliamentMPsNoImageResponse:
-      type: object
-      properties:
-        MembersOfParliament:
-          type: array
-          items:
-            type: object
-            properties:
-              UserId:
-                type: string
-                format: uuid
-              UserImg:
-                type: string
-              FullName:
-                type: string
-              RoleId:
-                type: integer
-              PoliticalPartyTitle:
-                type: string
-              PoliticalPartyId:
-                type: string
-                format: uuid
-        ExpiredMandateMembers:
-          type: array
-          items:
-            type: object
-            properties:
-              UserId:
-                type: string
-                format: uuid
-              UserImg:
-                type: string
-              FullName:
-                type: string
-              RoleId:
-                type: integer
-              PoliticalPartyTitle:
-                type: string
-              PoliticalPartyId:
+              CommitteeTitle:
                 type: string
                 nullable: true
-        TotalItems:
-          type: integer
-        TotalItemsExpiredMandate:
-          type: integer
-        Statistics:
-          type: object
-          properties:
-            TotalNumberOfMaterials:
-              type: integer
-            NumberOfQuestions:
-              type: integer
-            TotalNumberOfMPs:
-              type: integer
-            TotalNumberOfExpiredMandateMPs:
-              type: integer
-            MPsInPoliticalParties:
-              type: integer
-            MPsInParliamentaryGroups:
-              type: integer
-            NumberOfMaterialsInStructure:
-              type: integer
-    GetProposerTypesResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: integer
-          Title:
-            type: string
-          Order:
-            type: integer
-    GetAllQuestionStatusesResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: integer
-          Title:
-            type: string
-    GetAllInstitutionsForFilterResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: string
-            format: uuid
-          Title:
-            type: string
-    GetAllQuestionsResponse:
+    QuestionsResponse:
       type: object
       properties:
         TotalItems:
@@ -1090,25 +494,12 @@ components:
                 type: string
               TotalRows:
                 type: integer
-    GetQuestionDetailsResponse:
+    MaterialsResponse:
       type: object
       properties:
-        Title:
-          type: string
-        From:
-          type: string
-        To:
-          type: string
-        ToInstitution:
-          type: string
-        QuestionTypeTitle:
-          type: string
-        StatusTitle:
-          type: string
-        NumberOfDeliveryLetter:
-          type: string
-          nullable: true
-        Documents:
+        TotalItems:
+          type: integer
+        Items:
           type: array
           items:
             type: object
@@ -1118,123 +509,39 @@ components:
                 format: uuid
               Title:
                 type: string
-              Url:
-                type: string
-              FileName:
-                type: string
-                nullable: true
-              DocumentTypeId:
-                type: integer
-              DocumentTypeTitle:
-                type: string
-              IsExported:
-                type: boolean
-        Sittings:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              SittingTypeId:
-                type: integer
-              SittingTypeTitle:
-                type: string
-              SittingDate:
-                $ref: '#/components/schemas/AspDate'
-              CommitteeTitle:
-                type: string
-                nullable: true
-              SittingNumber:
-                type: integer
-    GetAllApplicationTypesResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: integer
-          ApplicationTitle:
-            type: string
-    GetAllCouncilsResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: string
-            format: uuid
-          Name:
-            type: string
-          TypeId:
-            type: integer
-          TypeTitle:
-            type: string
-    GetCouncilDetailsResponse:
-      type: object
-      properties:
-        Name:
-          type: string
-        CompositionMembers:
-          type: array
-          items:
-            type: object
-            properties:
-              UserId:
-                type: string
-                format: uuid
-              FullName:
-                type: string
-              RoleId:
-                type: integer
-              RoleTitle:
-                type: string
-        SecretariatMembers:
-          type: array
-          items:
-            type: object
-            properties:
-              UserId:
-                type: string
-                format: uuid
-              FullName:
-                type: string
-              RoleId:
-                type: integer
-              RoleTitle:
-                type: string
-        Materials:
-          type: array
-          items: {}
-        Meetings:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
               TypeTitle:
                 type: string
-              Date:
-                $ref: '#/components/schemas/AspDate'
-              Location:
+              Status:
+                nullable: true
+              StatusGroupTitle:
                 type: string
-              SittingNumber:
-                type: integer
-        Description:
-          type: string
-          nullable: true
-        Email:
-          type: string
-        PhoneNumber:
-          type: string
-          nullable: true
-        StructureId:
-          type: string
-          format: uuid
-    GetAllParliamentaryGroupsResponse:
+              RegistrationNumber:
+                type: string
+              RegistrationDate:
+                $ref: '#/components/schemas/AspDate'
+              ResponsibleAuthor:
+                type: string
+              Authors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Id:
+                      type: string
+                      format: uuid
+                    FirstName:
+                      type: string
+                    LastName:
+                      type: string
+              ProposerTypeTitle:
+                type: string
+              ResponsibleCommittee:
+                type: string
+              EUCompatible:
+                type: boolean
+              TotalItems:
+                nullable: true
+    PoliticalPartiesResponse:
       type: array
       items:
         type: object
@@ -1248,169 +555,45 @@ components:
             type: integer
           Image:
             type: string
-    GetParliamentaryGroupDetailsResponse:
-      type: object
-      properties:
-        Name:
-          type: string
-        Description:
-          type: string
-        NumberOfDeputies:
-          type: integer
-        Materials:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Title:
-                type: string
-              RegistrationDate:
-                $ref: '#/components/schemas/AspDate'
-              RegistrationNumber:
-                type: string
-              StatusId:
-                type: integer
-              StatusTitle:
-                type: string
-        Amendments:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Title:
-                type: string
-              RegistrationDate:
-                $ref: '#/components/schemas/AspDate'
-              RegistrationNumber:
-                type: string
-              StatusId:
-                type: integer
-              StatusTitle:
-                type: string
-        Questions:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Title:
-                type: string
-              DateAsked:
-                $ref: '#/components/schemas/AspDate'
-              DateAnswered:
-                $ref: '#/components/schemas/AspDate'
-              StatusId:
-                type: integer
-              StatusTitle:
-                type: string
-        Members:
-          type: array
-          items:
-            type: object
-            properties:
-              UserId:
-                type: string
-                format: uuid
-              FullName:
-                type: string
-              RoleId:
-                type: integer
-              RoleTitle:
-                type: string
-              MaterialsCount:
-                type: integer
-              AmendmentsCount:
-                type: integer
-              QuestionsCount:
-                type: integer
-        Email:
-          type: string
-          nullable: true
-        Phone:
-          type: string
-          nullable: true
-        Image:
-          type: string
-          nullable: true
-        StructureId:
-          type: string
-          format: uuid
-    GetPoliticalPartyDetailsResponse:
-      type: object
-      properties:
-        Name:
-          type: string
-        Description:
-          type: string
-        NumberOfDeputies:
-          type: integer
-        Materials:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Title:
-                type: string
-              RegistrationDate:
-                $ref: '#/components/schemas/AspDate'
-              RegistrationNumber:
-                type: string
-              StatusId:
-                type: integer
-              StatusTitle:
-                type: string
-        Amendments:
-          type: array
-          items: {}
-        Questions:
-          type: array
-          items: {}
-        Members:
-          type: array
-          items:
-            type: object
-            properties:
-              UserId:
-                type: string
-                format: uuid
-              FullName:
-                type: string
-              RoleId:
-                type: integer
-              RoleTitle:
-                type: string
-              MaterialsCount:
-                type: string
-                nullable: true
-              AmendmentsCount:
-                type: string
-                nullable: true
-              QuestionsCount:
-                type: string
-                nullable: true
-        Email:
-          type: string
-          nullable: true
-        Phone:
-          type: string
-          nullable: true
-        Image:
-          type: string
-        StructureId:
-          type: string
-          format: uuid
-    GetCommitteeDetailsResponse:
+    CouncilsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          Id:
+            type: string
+            format: uuid
+          Name:
+            type: string
+          TypeId:
+            type: integer
+          TypeTitle:
+            type: string
+    ParliamentaryGroupsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          Id:
+            type: string
+            format: uuid
+          Name:
+            type: string
+          NumberOfDeputies:
+            type: integer
+          Image:
+            type: string
+    MPsClubsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          Id:
+            type: string
+            format: uuid
+          Name:
+            type: string
+    CommitteeDetailsResponse:
       type: object
       properties:
         Name:
@@ -1482,182 +665,47 @@ components:
         Email:
           type: string
         PhoneNumber:
-          type: string
           nullable: true
         StructureId:
           type: string
           format: uuid
-    GetAllMPsClubsByStructureResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          Id:
-            type: string
-            format: uuid
-          Name:
-            type: string
-    GetMPsClubDetailsResponse:
+    CouncilDetailsResponse:
       type: object
       properties:
         Name:
           type: string
-        Description:
-          type: string
-        Members:
+        CompositionMembers:
           type: array
           items:
             type: object
             properties:
-              Id:
+              UserId:
                 type: string
                 format: uuid
-              FirstName:
-                type: string
-              LastName:
+              FullName:
                 type: string
               RoleId:
                 type: integer
               RoleTitle:
                 type: string
-        StructureId:
-          type: string
-          format: uuid
-    GetVotingResultsForSittingResponse:
-      type: object
-      properties:
-        votingOptions:
+        SecretariatMembers:
           type: array
           items:
             type: object
             properties:
-              Id:
+              UserId:
                 type: string
                 format: uuid
-              VotingDefinitionId:
+              FullName:
                 type: string
-                format: uuid
-              Title:
-                type: string
-              Order:
+              RoleId:
                 type: integer
-        sittingItem:
-          type: object
-          properties:
-            Id:
-              type: string
-              format: uuid
-            Number:
-              type: integer
-            Continuation:
-              type: integer
-            Title:
-              type: string
-            SittingDate:
-              $ref: '#/components/schemas/AspDate'
-            AgendaItemType:
-              type: string
-        summaryResult:
-          type: object
-          properties:
-            Present:
-              type: integer
-            'Yes':
-              type: integer
-            'No':
-              type: integer
-            NotVoted:
-              type: integer
-            VotingType:
-              type: string
-            VotingOutcome:
-              type: string
-        votingResultsByUser:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
+              RoleTitle:
                 type: string
-                format: uuid
-              FirstName:
-                type: string
-              LastName:
-                type: string
-              PoliticalParty:
-                type: string
-              PoliticalPartyImage:
-                type: string
-              PoliticalPartyId:
-                type: string
-                format: uuid
-              Registered:
-                type: boolean
-              Present:
-                type: boolean
-              'Yes':
-                type: boolean
-              'No':
-                type: boolean
-              NotVoted:
-                type: boolean
-        votingResultsByFaction:
-          type: array
-          items: {}
-    GetUserDetailsByStructureResponse:
-      type: object
-      properties:
-        FullName:
-          type: string
-        Email:
-          type: string
-        Image:
-          type: string
-        MobileNumber:
-          type: string
-          nullable: true
-        PhoneNumber:
-          type: string
-          nullable: true
-        Biography:
-          type: string
-        RoleId:
-          type: integer
-        RoleTitle:
-          type: string
-        ElectedFrom:
-          $ref: '#/components/schemas/AspDate'
-        ElectedTo:
-          type: string
-          nullable: true
-        PoliticalPartyId:
-          type: string
-          format: uuid
-        PoliticalPartyTitle:
-          type: string
-        Gender:
-          type: string
-        DateOfBirth:
-          type: string
-        Constituency:
-          type: string
-        Coalition:
-          type: string
-        StructureDate:
-          type: string
-        CabinetMembers:
-          type: array
-          items: {}
         Materials:
           type: array
           items: {}
-        Questions:
-          type: array
-          items: {}
-        Delegations:
-          type: array
-          items: {}
-        FriendshipGroups:
+        Meetings:
           type: array
           items:
             type: object
@@ -1665,83 +713,28 @@ components:
               Id:
                 type: string
                 format: uuid
-              Title:
+              TypeTitle:
                 type: string
-              Description:
-                type: string
-        Amendments:
-          type: array
-          items:
-            type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Title:
-                type: string
-              RegistrationDate:
+              Date:
                 $ref: '#/components/schemas/AspDate'
-              RegistrationNumber:
+              Location:
                 type: string
-              StatusId:
+              SittingNumber:
                 type: integer
-              StatusTitle:
-                type: string
-        Acts:
+        Description:
+          type: string
+          nullable: true
+        Email:
+          type: string
+        PhoneNumber:
+          nullable: true
+        StructureId:
+          type: string
+          format: uuid
+    CalendarEventsResponse:
+      type: object
+      properties:
+        d:
           type: array
           items:
             type: object
-            properties:
-              Id:
-                type: string
-                format: uuid
-              Title:
-                type: string
-              RegistrationDate:
-                $ref: '#/components/schemas/AspDate'
-              RegistrationNumber:
-                type: string
-              StatusId:
-                type: integer
-              StatusTitle:
-                type: string
-        Committees:
-          type: array
-          items:
-            type: object
-            properties:
-              CommitteeId:
-                type: string
-                format: uuid
-              CommitteeTitle:
-                type: string
-              Roles:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Id:
-                      type: integer
-                    Title:
-                      type: string
-        CommitteeMemberships:
-          type: array
-          items: {}
-        DelegationMemberships:
-          type: array
-          items: {}
-        DepartmentMemberships:
-          type: array
-          items: {}
-        FriendshipGroupMemberships:
-          type: array
-          items: {}
-        MediaItems:
-          type: array
-          items: {}
-    GetVotingResultsForAgendaItemResponse:
-      type: object
-      properties: {}
-    GetVotingResultsForAgendaItemReportDocumentResponse:
-      type: object
-      properties: {}

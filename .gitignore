@@ -9,3 +9,4 @@ venv/
 collected/
 .api_cache/
 logs/
+schema_inference.json

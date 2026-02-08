@@ -1,80 +1,11 @@
-# API Schemas
+# Schema Inference Report
 
-Precise request and response schemas for all operations. From collected responses.
-
-## $defs
-
-```json
-{
-  "AspDate": {
-    "type": "string",
-    "pattern": "^/Date\\(\\d+\\)/$"
-  },
-  "LanguageId": {
-    "type": "integer",
-    "description": "1=Macedonian, 2=Albanian, 3=Turkish"
-  },
-  "GenderId": {
-    "type": "integer",
-    "enum": [1, 2],
-    "description": "1=Male (Машки), 2=Female (Женски)"
-  },
-  "SittingStatusId": {
-    "type": "integer",
-    "enum": [1, 2, 3, 4, 5, 6],
-    "description": "1=Scheduled, 2=Started, 3=Completed, 4=Incomplete, 5=Closed, 6=Postponed"
-  },
-  "AgendaItemTypeId": {
-    "type": "integer",
-    "enum": [1, 2],
-    "description": "1=Plenary, 2=Committee"
-  },
-  "QuestionStatusId": {
-    "type": "integer",
-    "enum": [17, 19, 20, 21],
-    "description": "17=Delivered, 19=Answered, 20=Secret answer, 21=Written answer"
-  },
-  "MaterialStatusId": {
-    "type": "integer",
-    "enum": [0, 6, 9, 10, 11, 12, 24, 64],
-    "description": "0=Plenary/unknown, 6=Delivered to MPs, 9=First reading, 10=Second, 11=Third, 12=Closed, 24=Rejected, 64=Committee processing"
-  },
-  "ProposerTypeId": {
-    "type": "integer",
-    "enum": [1, 2, 4],
-    "description": "1=MP, 2=Government, 4=Voter group"
-  },
-  "ProcedureTypeId": {
-    "type": "integer",
-    "enum": [1, 2, 3],
-    "description": "1=Regular, 2=Shortened, 3=Urgent"
-  },
-  "UUID": {
-    "type": "string",
-    "format": "uuid"
-  }
-}
-```
-
-## Common patterns
-
-- **Institutional authors**: `Authors[].Id` = `"00000000-0000-0000-0000-000000000000"` with full name/title in `FirstName`, empty `LastName`. Used for government, committees.
-- **Plenary vs committee**: `CommitteeId`/`CommitteeTitle` are `null` for plenary (`TypeId`/`SittingTypeId` 1); populated for committee (2).
-- **ResponsibleCommittee**: Can be empty string `""` for some material types (e.g. appointments, resignations).
-- **Date format**: `/Date(timestamp)/` — milliseconds since Unix epoch.
-- **Data quality**: `GetAllInstitutionsForFilter` may return placeholder entries (e.g. `Title: "/"`); filter or handle as needed.
+Run: 2026-02-08_00-06-14. Append-only merge with prior schema.
 
 ## GetAllApplicationTypes
 
-### Request
-```json
-{
-  "methodName": "GetAllApplicationTypes",
-  "languageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -94,16 +25,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllCommitteesForFilter
 
-### Request
-```json
-{
-  "methodName": "GetAllCommitteesForFilter",
-  "languageId": 1,
-  "structureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -124,16 +47,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllCouncils
 
-### Request
-```json
-{
-  "methodName": "GetAllCouncils",
-  "languageId": 1,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -160,15 +75,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllGenders
 
-### Request
-```json
-{
-  "methodName": "GetAllGenders",
-  "languageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -188,15 +96,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllInstitutionsForFilter
 
-### Request
-```json
-{
-  "methodName": "GetAllInstitutionsForFilter",
-  "languageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -217,16 +118,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllMPsClubsByStructure
 
-### Request
-```json
-{
-  "MethodName": "GetAllMPsClubsByStructure",
-  "LanguageId": 1,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -247,15 +140,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllMaterialStatusesForFilter
 
-### Request
-```json
-{
-  "methodName": "GetAllMaterialStatusesForFilter",
-  "languageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -263,28 +149,20 @@ Precise request and response schemas for all operations. From collected response
     "type": "object",
     "properties": {
       "Id": {
-        "$ref": "#/$defs/MaterialStatusId"
+        "type": "integer"
       },
       "Title": {
         "type": "string"
       }
-    },
-    "required": ["Id", "Title"]
+    }
   }
 }
 ```
 
 ## GetAllMaterialTypesForFilter
 
-### Request
-```json
-{
-  "methodName": "GetAllMaterialTypesForFilter",
-  "languageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -304,32 +182,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllMaterialsForPublicPortal
 
-### Request
-```json
-{
-  "MethodName": "GetAllMaterialsForPublicPortal",
-  "LanguageId": 1,
-  "ItemsPerPage": 9,
-  "CurrentPage": 1,
-  "SearchText": "",
-  "AuthorText": "",
-  "ActNumber": "",
-  "StatusGroupId": null,
-  "MaterialTypeId": 1,
-  "ResponsibleCommitteeId": null,
-  "CoReportingCommittees": null,
-  "OpinionCommittees": null,
-  "RegistrationNumber": null,
-  "EUCompatible": null,
-  "DateFrom": null,
-  "DateTo": null,
-  "ProcedureTypeId": null,
-  "InitiatorTypeId": null,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
+Samples: 6, OK: 6
 
-### Response
 ```json
 {
   "type": "object",
@@ -362,7 +216,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "RegistrationDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "ResponsibleAuthor": {
             "type": "string"
@@ -406,16 +262,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllParliamentaryGroups
 
-### Request
-```json
-{
-  "methodName": "GetAllParliamentaryGroups",
-  "languageId": 1,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -430,30 +278,20 @@ Precise request and response schemas for all operations. From collected response
         "type": "string"
       },
       "NumberOfDeputies": {
-        "type": "integer",
-        "minimum": 0
+        "type": "integer"
       },
       "Image": {
         "type": "string"
       }
-    },
-    "required": ["Id", "Name", "NumberOfDeputies", "Image"]
+    }
   }
 }
 ```
 
 ## GetAllPoliticalParties
 
-### Request
-```json
-{
-  "methodName": "GetAllPoliticalParties",
-  "languageId": 1,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -480,15 +318,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllProcedureTypes
 
-### Request
-```json
-{
-  "methodName": "GetAllProcedureTypes",
-  "languageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -508,15 +339,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllQuestionStatuses
 
-### Request
-```json
-{
-  "methodName": "GetAllQuestionStatuses",
-  "languageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -524,7 +348,7 @@ Precise request and response schemas for all operations. From collected response
     "type": "object",
     "properties": {
       "Id": {
-        "$ref": "#/$defs/QuestionStatusId"
+        "type": "integer"
       },
       "Title": {
         "type": "string"
@@ -536,27 +360,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllQuestions
 
-### Request
-```json
-{
-  "methodName": "GetAllQuestions",
-  "LanguageId": 1,
-  "CurrentPage": 1,
-  "Page": 1,
-  "Rows": 10,
-  "SearchText": "",
-  "RegistrationNumber": "",
-  "StatusId": null,
-  "From": "",
-  "To": "",
-  "CommitteeId": null,
-  "DateFrom": null,
-  "DateTo": null,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
+Samples: 3, OK: 3
 
-### Response
 ```json
 {
   "type": "object",
@@ -589,7 +394,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "DateAsked": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "QuestionTypeTitle": {
             "type": "string"
@@ -606,15 +413,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllSittingStatuses
 
-### Request
-```json
-{
-  "methodName": "GetAllSittingStatuses",
-  "LanguageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -622,7 +422,7 @@ Precise request and response schemas for all operations. From collected response
     "type": "object",
     "properties": {
       "Id": {
-        "$ref": "#/$defs/SittingStatusId"
+        "type": "integer"
       },
       "Title": {
         "type": "string"
@@ -634,25 +434,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetAllSittings
 
-### Request
-```json
-{
-  "methodName": "GetAllSittings",
-  "Page": 2,
-  "Rows": 7,
-  "LanguageId": 2,
-  "TypeId": 2,
-  "CommitteeId": "b8b25861-9b5c-4d47-9717-007b83a8a339",
-  "StatusId": 6,
-  "DateFrom": null,
-  "DateTo": null,
-  "SessionId": null,
-  "Number": null,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
+Samples: 5, OK: 5
 
-### Response
 ```json
 {
   "type": "object",
@@ -661,59 +444,17 @@ Precise request and response schemas for all operations. From collected response
       "type": "integer"
     },
     "Items": {
-      "type": ["array", "null"],
-      "items": {
-        "type": "object",
-        "properties": {
-          "Id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "SittingTypeId": {
-            "$ref": "#/$defs/AgendaItemTypeId"
-          },
-          "StatusId": {
-            "$ref": "#/$defs/SittingStatusId"
-          },
-          "DateFrom": {
-            "$ref": "#/$defs/AspDate"
-          },
-          "DateTo": {
-            "$ref": "#/$defs/AspDate"
-          },
-          "CommitteeId": {
-            "type": ["string", "null"],
-            "format": "uuid"
-          },
-          "CommitteeTitle": {
-            "type": ["string", "null"]
-          },
-          "Number": {
-            "type": ["integer", "null"]
-          },
-          "SessionId": {
-            "type": ["string", "null"],
-            "format": "uuid"
-          }
-        }
-      }
+      "type": "array",
+      "items": {}
     }
-  },
-  "required": ["TotalItems", "Items"]
+  }
 }
 ```
 
 ## GetAllStructuresForFilter
 
-### Request
-```json
-{
-  "methodName": "GetAllStructuresForFilter",
-  "languageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -725,10 +466,14 @@ Precise request and response schemas for all operations. From collected response
         "format": "uuid"
       },
       "DateFrom": {
-        "$ref": "#/$defs/AspDate"
+        "type": "string",
+        "format": "asp-date",
+        "pattern": "^/Date\\(\\d+\\)/$"
       },
       "DateTo": {
-        "$ref": "#/$defs/AspDate"
+        "type": "string",
+        "format": "asp-date",
+        "pattern": "^/Date\\(\\d+\\)/$"
       },
       "IsCurrent": {
         "type": "boolean"
@@ -740,16 +485,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetCommitteeDetails
 
-### Request
-```json
-{
-  "methodName": "GetCommitteeDetails",
-  "committeeId": "b8b25861-9b5c-4d47-9717-007b83a8a339",
-  "languageId": 1
-}
-```
+Samples: 3, OK: 3
 
-### Response
 ```json
 {
   "type": "object",
@@ -812,7 +549,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "RegistrationDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "RegistrationNumber": {
             "type": "string"
@@ -839,7 +578,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "Date": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "Location": {
             "type": "string"
@@ -857,7 +598,7 @@ Precise request and response schemas for all operations. From collected response
       "type": "string"
     },
     "PhoneNumber": {
-      "type": ["string", "null"]
+      "type": "null"
     },
     "StructureId": {
       "type": "string",
@@ -869,16 +610,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetCouncilDetails
 
-### Request
-```json
-{
-  "methodName": "GetCouncilDetails",
-  "committeeId": "d596538c-f3d4-4440-8ae7-6e25ea094c6a",
-  "languageId": 1
-}
-```
+Samples: 3, OK: 3
 
-### Response
 ```json
 {
   "type": "object",
@@ -945,7 +678,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "Date": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "Location": {
             "type": "string"
@@ -964,7 +699,7 @@ Precise request and response schemas for all operations. From collected response
       "type": "string"
     },
     "PhoneNumber": {
-      "type": ["string", "null"]
+      "type": "null"
     },
     "StructureId": {
       "type": "string",
@@ -976,18 +711,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetCustomEventsCalendar
 
-### Request
-```json
-{
-  "model": {
-    "Language": 1,
-    "Month": 1,
-    "Year": 2026
-  }
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "object",
@@ -997,10 +722,6 @@ Precise request and response schemas for all operations. From collected response
       "items": {
         "type": "object",
         "properties": {
-          "__type": {
-            "type": "string",
-            "description": "e.g. moldova.controls.Models.CalendarViewModel"
-          },
           "Id": {
             "type": "string",
             "format": "uuid"
@@ -1015,7 +736,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "EventDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "EventType": {
             "type": "integer"
@@ -1029,16 +752,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetMPsClubDetails
 
-### Request
-```json
-{
-  "methodName": "GetMPsClubDetails",
-  "mpsClubId": "22ded665-2466-4d7e-a04b-03f8a150fc8c",
-  "LanguageId": 1
-}
-```
+Samples: 2, OK: 2
 
-### Response
 ```json
 {
   "type": "object",
@@ -1083,18 +798,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetMaterialDetails
 
-### Request
-```json
-{
-  "methodName": "GetMaterialDetails",
-  "MaterialId": "759ba4db-41e1-4fdd-9176-21cb7c260522",
-  "LanguageId": 1,
-  "AmendmentsPage": 1,
-  "AmendmentsRows": 5
-}
-```
+Samples: 3, OK: 3
 
-### Response
 ```json
 {
   "type": "object",
@@ -1127,7 +832,9 @@ Precise request and response schemas for all operations. From collected response
       "type": "string"
     },
     "RegistrationDate": {
-      "$ref": "#/$defs/AspDate"
+      "type": "string",
+      "format": "asp-date",
+      "pattern": "^/Date\\(\\d+\\)/$"
     },
     "EUCompatible": {
       "type": "boolean"
@@ -1214,11 +921,13 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "SittingDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "CommitteeId": {
-            "type": ["string", "null"],
-            "format": "uuid"
+            "type": "string",
+            "nullable": true
           },
           "CommitteeTitle": {
             "type": "string",
@@ -1294,17 +1003,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetMonthlyAgenda
 
-### Request
-```json
-{
-  "methodName": "GetMonthlyAgenda",
-  "LanguageId": 1,
-  "Month": 1,
-  "Year": 2026
-}
-```
+Samples: 2, OK: 2
 
-### Response
 ```json
 {
   "type": "array",
@@ -1322,10 +1022,12 @@ Precise request and response schemas for all operations. From collected response
         "type": "string"
       },
       "Start": {
-        "$ref": "#/$defs/AspDate"
+        "type": "string",
+        "format": "asp-date",
+        "pattern": "^/Date\\(\\d+\\)/$"
       },
       "Type": {
-        "$ref": "#/$defs/AgendaItemTypeId"
+        "type": "integer"
       }
     }
   }
@@ -1334,14 +1036,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetOfficialVisitsForUser
 
-### Request
-```json
-{
-  "model": "914bff80-4c19-4675-ace4-cb0c7a08f688"
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "object",
@@ -1356,25 +1052,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetParliamentMPsNoImage
 
-### Request
-```json
-{
-  "methodName": "GetParliamentMPsNoImage",
-  "languageId": 1,
-  "genderId": null,
-  "ageFrom": null,
-  "ageTo": null,
-  "politicalPartyId": null,
-  "searchText": null,
-  "page": 1,
-  "rows": 8,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473",
-  "coalition": "",
-  "constituency": ""
-}
-```
+Samples: 3, OK: 3
 
-### Response
 ```json
 {
   "type": "object",
@@ -1429,8 +1108,7 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "PoliticalPartyId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           }
         }
       }
@@ -1473,16 +1151,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetParliamentaryGroupDetails
 
-### Request
-```json
-{
-  "methodName": "GetParliamentaryGroupDetails",
-  "parliamentaryGroupId": "6f83cbd1-af39-44e5-bfd0-0cde68932844",
-  "LanguageId": 1
-}
-```
+Samples: 3, OK: 3
 
-### Response
 ```json
 {
   "type": "object",
@@ -1509,7 +1179,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "RegistrationDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "RegistrationNumber": {
             "type": "string"
@@ -1536,7 +1208,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "RegistrationDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "RegistrationNumber": {
             "type": "string"
@@ -1563,10 +1237,14 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "DateAsked": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "DateAnswered": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "StatusId": {
             "type": "integer"
@@ -1626,16 +1304,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetPoliticalPartyDetails
 
-### Request
-```json
-{
-  "methodName": "GetPoliticalPartyDetails",
-  "politicalPartyId": "e693cd9f-5893-49ab-9ede-0abd6e820664",
-  "LanguageId": 1
-}
-```
+Samples: 3, OK: 3
 
-### Response
 ```json
 {
   "type": "object",
@@ -1662,7 +1332,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "RegistrationDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "RegistrationNumber": {
             "type": "string"
@@ -1733,15 +1405,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetProposerTypes
 
-### Request
-```json
-{
-  "methodName": "GetProposerTypes",
-  "languageId": 1
-}
-```
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "array",
@@ -1749,7 +1414,7 @@ Precise request and response schemas for all operations. From collected response
     "type": "object",
     "properties": {
       "Id": {
-        "$ref": "#/$defs/ProposerTypeId"
+        "type": "integer"
       },
       "Title": {
         "type": "string"
@@ -1757,24 +1422,15 @@ Precise request and response schemas for all operations. From collected response
       "Order": {
         "type": "integer"
       }
-    },
-    "required": ["Id", "Title", "Order"]
+    }
   }
 }
 ```
 
 ## GetQuestionDetails
 
-### Request
-```json
-{
-  "methodName": "GetQuestionDetails",
-  "QuestionId": "0e2039bb-7a4b-462b-9489-6bce448eeb2a",
-  "LanguageId": 1
-}
-```
+Samples: 3, OK: 3
 
-### Response
 ```json
 {
   "type": "object",
@@ -1846,7 +1502,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "SittingDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "CommitteeTitle": {
             "type": "null"
@@ -1863,7 +1521,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetSittingDetails
 
-### Response
+Samples: 4, OK: 4
+
 ```json
 {
   "type": "object",
@@ -1881,7 +1540,9 @@ Precise request and response schemas for all operations. From collected response
       "type": "integer"
     },
     "SittingDate": {
-      "$ref": "#/$defs/AspDate"
+      "type": "string",
+      "format": "asp-date",
+      "pattern": "^/Date\\(\\d+\\)/$"
     },
     "TypeTitle": {
       "type": "string"
@@ -2135,7 +1796,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "SittingDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "Location": {
             "type": "string"
@@ -2187,17 +1850,8 @@ Precise request and response schemas for all operations. From collected response
 
 ## GetUserDetailsByStructure
 
-### Request
-```json
-{
-  "methodName": "GetUserDetailsByStructure",
-  "userId": "85048fa9-e61b-4eb1-be26-8d537cb1d7c4",
-  "structureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473",
-  "languageId": 1
-}
-```
+Samples: 2, OK: 2
 
-### Response
 ```json
 {
   "type": "object",
@@ -2227,7 +1881,9 @@ Precise request and response schemas for all operations. From collected response
       "type": "string"
     },
     "ElectedFrom": {
-      "$ref": "#/$defs/AspDate"
+      "type": "string",
+      "format": "asp-date",
+      "pattern": "^/Date\\(\\d+\\)/$"
     },
     "ElectedTo": {
       "type": "null"
@@ -2301,7 +1957,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "RegistrationDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "RegistrationNumber": {
             "type": "string"
@@ -2328,7 +1986,9 @@ Precise request and response schemas for all operations. From collected response
             "type": "string"
           },
           "RegistrationDate": {
-            "$ref": "#/$defs/AspDate"
+            "type": "string",
+            "format": "asp-date",
+            "pattern": "^/Date\\(\\d+\\)/$"
           },
           "RegistrationNumber": {
             "type": "string"
@@ -2397,17 +2057,14 @@ Precise request and response schemas for all operations. From collected response
 
 ## LoadLanguage
 
-### Request
-POST to `Infrastructure/LoadLanguage`, empty body or minimal params.
+Samples: 1, OK: 1
 
-### Response
 ```json
 {
   "type": "object",
   "properties": {
     "Code": {
-      "type": "string",
-      "description": "Language/locale code (e.g. mk-MK)"
+      "type": "string"
     },
     "Items": {
       "type": "array",
@@ -2415,18 +2072,15 @@ POST to `Infrastructure/LoadLanguage`, empty body or minimal params.
         "type": "object",
         "properties": {
           "Key": {
-            "type": "string",
-            "description": "Localization key"
+            "type": "string"
           },
           "Value": {
-            "type": "string",
-            "description": "Localized text"
+            "type": "string"
           }
-        },
-        "required": ["Key", "Value"]
+        }
       }
     }
-  },
-  "required": ["Code", "Items"]
+  }
 }
 ```
+
