@@ -13,3 +13,5 @@ logs/
 schema_inference.json
 
 archive/
+
+errors/
