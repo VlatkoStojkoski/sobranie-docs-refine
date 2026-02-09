@@ -26,31 +26,24 @@ Dates use AspDate format (`/Date(ms)/`). Pagination via `Page`/`Rows` or `Curren
 ## What this repo does
 
 1. **Collect** — Send requests using `config/generators.json`, save pairs to `collected/`.
-2. **Gather** — Flatten manifest into `collected/pairs.json` for refinement (optional).
-3. **Refine** — Clean up markdown: global + per-op docs, no notes or samples. One LLM call per operation, sequential. Writes incrementally so you can inspect results during the run. Issues flagged in `issues_for_review.md`.
-4. **Build** — Regenerate `docs/API.md` from global + ops (refine does this automatically at the end).
+2. **Gather** — Flatten manifest into `collected/pairs.json` (optional; refine does not use pairs).
+3. **Refine** — One LLM call per op: produce global_modification_notes + new_op. After all ops, apply notes in one batch to get final global.md. Writes each op doc as it goes; writes global once at the end. Issues to `issues_for_review.md`.
+4. **Build** — Regenerate `docs/API.md` from global + ops (refine runs this automatically at the end).
 
 Initial docs (`global.md`, `ops/*.md`) and `config/generators.json` are provided.
 
 ## Usage
 
 ```bash
-# One-time: split monolithic API.md (if migrating)
-python scripts/split_api_md.py
-
 # 1. Collect new pairs
 python scripts/collect.py
 python scripts/collect.py --no-cache
 
-# 2. Gather pairs into collected/pairs.json (optional; refine_api_md does not use pairs)
+# 2. Gather pairs into collected/pairs.json (optional)
 python scripts/gather_pairs.py
 python scripts/gather_pairs.py --generate-more --no-cache
 
-# 3. Refine (md-only cleanup, sequential, no notes)
-python scripts/refine_api_md.py
-python scripts/refine_api_md.py --limit 5 --dry-run
-
-# Alternative: refine_ops_cleanup (same idea, temporary script)
+# 3. Refine global + per-op docs (per-op notes, then batch global apply)
 python scripts/refine_ops_cleanup.py
 python scripts/refine_ops_cleanup.py --limit 5 --dry-run
 
@@ -58,9 +51,9 @@ python scripts/refine_ops_cleanup.py --limit 5 --dry-run
 python scripts/build_api_md.py
 ```
 
-**Refine options:** `--model`, `--max-tokens`, `--limit N`, `--dry-run`
+**Refine options:** `--model`, `--limit N`, `--dry-run`
 
-**During a run:** `docs/global.md` and `docs/ops/*.md` are written after each op. `tail -f logs/refine_api_md/<run_id>/issues_for_review.md` to watch issues. `docs/API.md` is updated only at the end.
+**During a run:** Each `docs/ops/<Op>.md` is written after its op; `docs/global.md` is written once at the end (batch apply). `tail -f logs/refine_ops_cleanup/<run_id>/issues_for_review.md` to watch issues. `docs/API.md` is regenerated at the end.
 
 **Env:** `ANTHROPIC_API_KEY` required.
 

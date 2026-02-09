@@ -2,7 +2,7 @@
 """
 Regenerate docs/API.md from docs/global.md + docs/ops/*.md.
 
-Ops are concatenated in alphabetical order. Run after refine_api_md updates.
+Ops (excluding OPERATION_TEMPLATE.md) are concatenated in alphabetical order. Run after refine updates.
 """
 
 from pathlib import Path
@@ -16,7 +16,7 @@ API_MD = DOCS / "API.md"
 
 def build():
     global_content = GLOBAL_MD.read_text(encoding="utf-8")
-    op_files = sorted(OPS_DIR.glob("*.md"))
+    op_files = sorted(p for p in OPS_DIR.glob("*.md") if p.stem != "OPERATION_TEMPLATE")
     op_contents = []
     for p in op_files:
         op_contents.append(p.read_text(encoding="utf-8"))

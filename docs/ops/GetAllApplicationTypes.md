@@ -8,7 +8,7 @@
   "properties": {
     "methodName": {
       "type": "string",
-      "enum": ["GetAllApplicationTypes"]
+      "const": "GetAllApplicationTypes"
     },
     "languageId": {
       "$ref": "#/$defs/LanguageId"
@@ -27,9 +27,7 @@
     "type": "object",
     "properties": {
       "Id": {
-        "type": "integer",
-        "$ref": "#/$defs/ApplicationTypeId",
-        "description": "Application type identifier (1=Case report, 2=Participation in public debate, 3=Discussion)"
+        "$ref": "#/$defs/ApplicationTypeId"
       },
       "ApplicationTitle": {
         "type": "string",

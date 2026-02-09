@@ -10,11 +10,11 @@ RULES
 
 **Per-operation doc (new_op) — required template:**
 - Structure (exactly three sections after the ## OperationName heading):
-  1. **### Request Schema** — JSON Schema for the request body only. Use $ref to global $defs for enums and shared types. Include type, properties, required, and description where they add clarity.
-  2. **### Response Schema** — JSON Schema for the response body only. Use $ref to global $defs. Include type, properties, items where applicable, required, and description where helpful.
+  1. **### Request Schema** — JSON Schema for the request body only. Use $ref to global $defs for enums and shared types. For fixed single values (e.g. methodName) use "const": "OperationName", not "enum": ["OperationName"]. Include type, properties, required, and description where they add clarity.
+  2. **### Response Schema** — JSON Schema for the response body only. Use $ref to global $defs. For a property that is an enum or shared type, use only "$ref" (do not combine with "type" or duplicate description). For fixed single values use "const", not single-element enum.
   3. **### Notes** — Operation-specific notes only: parameter casing, data quality quirks, language/fallback, usage hints, pagination, which filters apply. No enum definitions; reference global. Short pointers to global when relevant (e.g. "Uses common Page/Rows; see global.").
 - Preserve every field and behavior from the current op doc and global; do not drop field-level details. Move operation-specific details from global into this op's ### Notes (e.g. "returns flat array", "placeholder titles", "language fallback for this endpoint").
-- Level of detail: HIGH. Document every documented field. Schemas must be valid for all documented request/response shapes (use anyOf/optional when multiple shapes exist). Enums only via $ref to global—no inline enum definitions.
+- Level of detail: HIGH. Document every documented field. Schemas must be valid for all documented request/response shapes (use anyOf/optional when multiple shapes exist). Enums only via $ref to global—no inline enum definitions. One keyword per property: use $ref OR type (never both); use const for single fixed values, not enum with one element.
 - Must NOT contain: enum definitions (reference global $defs only); long copy-paste from global; bare Request/Response example blocks without a Schema. Do not invent schema details beyond what exists in the current op doc and global.
 
 **raisePossibleIssueToHuman:**

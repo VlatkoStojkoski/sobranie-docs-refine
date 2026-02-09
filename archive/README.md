@@ -113,7 +113,7 @@ Obsolete scripts, docs, config, and runtime data were moved here without reorgan
 - **config_obsolete/** — request_schemas.json, generator_meta_schema.json, enum_defs.json, generators_api_md.json
 - **runtime_data/** — data/, listing_cache/, schemas/ (snapshot at simplification time)
 
-Active project uses only: `scripts/{collect,gather_pairs,refine_api_md,cache,improved/llm}`, `config/generators.json`, `docs/API.md`, `prompts/`, `collected/`, `errors/`.
+Active project uses: `scripts/{collect,gather_pairs,refine_ops_cleanup,build_api_md,cache,improved/llm}`, `config/generators.json`, `config/refine.json`, `docs/API.md`, `docs/global.md`, `docs/ops/`, `prompts/`, `collected/`, `errors/`.
 
 ## License
 

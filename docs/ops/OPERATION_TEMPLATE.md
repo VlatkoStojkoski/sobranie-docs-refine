@@ -8,7 +8,8 @@
   "properties": {
     "methodName": {
       "type": "string",
-      "description": "Operation method name (camelCase or PascalCase per operation)"
+      "const": "OperationName",
+      "description": "Use const for the fixed method name (camelCase or PascalCase per operation); do not use single-element enum."
     }
   },
   "required": ["methodName"]
@@ -36,5 +37,6 @@
 ### Notes
 - This is a template placeholder. Replace with actual operation request/response schemas and operation-specific notes (parameter casing, pagination style, language fallback, data quality quirks).
 - Refer to global.md for common patterns, enums ($defs), and calling conventions.
-- Use $ref to global $defs for all enums and shared types (LanguageId, UUID, AspDate, etc.).
+- Use $ref to global $defs for all enums and shared types (LanguageId, UUID, AspDate, etc.). Use only $ref for such properties—do not combine with "type" or duplicate description.
+- Use "const" for fixed single values (e.g. methodName); do not use single-element "enum".
 - Include only operation-specific details and behaviors in this section.

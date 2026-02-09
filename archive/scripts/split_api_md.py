@@ -2,14 +2,15 @@
 """
 Split docs/API.md into docs/global.md and docs/ops/<Operation>.md.
 
-Run once to migrate to split-docs structure. After that, refine_api_md uses
+Run once to migrate to split-docs structure. After that, refine uses
 global + per-op files; build_api_md regenerates API.md.
+(Archived: one-time migration script.)
 """
 
 import re
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent  # archive/scripts -> repo root
 DOCS = ROOT / "docs"
 API_MD = DOCS / "API.md"
 GLOBAL_MD = DOCS / "global.md"

@@ -1,15 +1,11 @@
 #!/usr/bin/env python3
 """
-Temporary cleanup script: refine global.md and each docs/ops/<Op>.md.
+Refine docs/global.md and docs/ops/<Op>.md.
 
-- Per operation: generate global_modification_notes (what to change in global for this op) + new_op (template-following doc with all field details; specifics in op not global).
-- Batch: after all ops, apply the modification notes once to produce final global.md.
-- Global: only enums, conventions, common patterns; minimal. Per-op: Request Schema, Response Schema, Notes; no enum definitions, reference global $defs.
-- Structured output includes raisePossibleIssueToHuman; issues go to issues_for_review.md.
+Per operation: produce global_modification_notes (what to change in global for this op) and new_op (template-following doc; specifics in op not global). After all ops, apply notes in one batch to produce final global.md. Issues go to issues_for_review.md.
 
 Run: python scripts/refine_ops_cleanup.py [--dry-run] [--limit N]
-Input: only existing markdown (docs/global.md, docs/ops/*.md). No request/response samples. Sequential (no chunking).
-Output: docs/global.md (once, after batch apply), docs/ops/*.md (per op), logs/refine_ops_cleanup/<run_id>/refine.log + issues_for_review.md
+Output: docs/global.md (once at end), docs/ops/*.md, logs/refine_ops_cleanup/<run_id>/refine.log + issues_for_review.md
 """
 
 import argparse
@@ -78,7 +74,7 @@ CLEANUP_OUTPUT_SCHEMA = {
     "additionalProperties": False,
 }
 
-SYSTEM_CLEANUP = """You refine Sobranie.mk API documentation for a one-off cleanup. Use only the existing markdown (global + per-op doc); do not use request/response samples.
+SYSTEM_CLEANUP = """You refine Sobranie.mk API documentation. Use only the existing markdown (global + per-op doc); do not use request/response samples.
 
 Global: Output only global_modification_notes—concise instructions for what should change in global.md for this op's context (e.g. ensure enum X is in $defs; add a convention only if it applies to many ops; or "move this to op doc"). Do not output full global; notes will be batched and applied later. Put operation-specific details in new_op, not in global notes.
 
