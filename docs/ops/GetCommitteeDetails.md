@@ -1,15 +1,27 @@
 ## GetCommitteeDetails
 
-### Request
+### Request Schema
 ```json
 {
-  "methodName": "GetCommitteeDetails",
-  "committeeId": "b8b25861-9b5c-4d47-9717-007b83a8a339",
-  "languageId": 1
+  "type": "object",
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "const": "GetCommitteeDetails"
+    },
+    "committeeId": {
+      "$ref": "#/$defs/UUID",
+      "description": "Committee identifier from GetAllCommitteesForFilter"
+    },
+    "languageId": {
+      "$ref": "#/$defs/LanguageId"
+    }
+  },
+  "required": ["methodName", "committeeId", "languageId"]
 }
 ```
 
-### Response
+### Response Schema
 ```json
 {
   "type": "object",
@@ -24,18 +36,19 @@
         "type": "object",
         "properties": {
           "UserId": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID",
+            "description": "Elected committee member identifier"
           },
           "FullName": {
-            "type": "string"
+            "type": "string",
+            "description": "Full name of committee member"
           },
           "RoleId": {
             "$ref": "#/$defs/CommitteeRoleId"
           },
           "RoleTitle": {
             "type": "string",
-            "description": "Localized role name (e.g., 'Претседател/Претседателка на комисија')"
+            "description": "Localized role name (e.g., 'Претседател/Претседателка на комисија', 'Член/Членка на комисија')"
           }
         }
       },
@@ -47,11 +60,12 @@
         "type": "object",
         "properties": {
           "UserId": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID",
+            "description": "Staff member identifier"
           },
           "FullName": {
-            "type": "string"
+            "type": "string",
+            "description": "Full name of staff member"
           },
           "RoleId": {
             "$ref": "#/$defs/CommitteeRoleId"
@@ -62,7 +76,7 @@
           }
         }
       },
-      "description": "Administrative/professional staff (advisors, approvers). Note: same person may appear multiple times with different RoleId values if holding multiple roles"
+      "description": "Administrative/professional staff supporting the committee (advisors, approvers). Same person may appear multiple times with different RoleIds when holding multiple roles"
     },
     "Materials": {
       "type": "array",
@@ -70,27 +84,30 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID",
+            "description": "Material identifier"
           },
           "Title": {
-            "type": "string"
+            "type": "string",
+            "description": "Material title in the requested language"
           },
           "RegistrationDate": {
             "$ref": "#/$defs/AspDate"
           },
           "RegistrationNumber": {
-            "type": "string"
+            "type": "string",
+            "description": "Official registration number (e.g., '08-750/1')"
           },
           "StatusId": {
             "$ref": "#/$defs/MaterialStatusId"
           },
           "StatusTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "Localized material status (e.g., 'Доставен до пратеници')"
           }
         }
       },
-      "description": "Materials assigned to this committee for review/processing. Can be empty array [] when no materials linked"
+      "description": "Materials assigned to this committee for review/processing. Empty array [] when no materials linked"
     },
     "Meetings": {
       "type": "array",
@@ -98,15 +115,16 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID",
+            "description": "Sitting/meeting identifier"
           },
           "TypeTitle": {
             "type": "string",
-            "description": "Meeting type name (e.g., 'Комисиска седница' = Committee sitting)"
+            "description": "Meeting type name in the requested language (e.g., 'Комископска седница')"
           },
           "Date": {
-            "$ref": "#/$defs/AspDate"
+            "$ref": "#/$defs/AspDate",
+            "description": "Meeting date/time"
           },
           "Location": {
             "type": "string",
@@ -122,53 +140,33 @@
     },
     "Description": {
       "type": "string",
-      "description": "HTML-formatted committee description including mandate, responsibilities, composition requirements. May contain markup tags (<p>, <br/>, <div>). May be truncated with ellipsis (...) in response"
+      "description": "HTML-formatted committee description including mandate, responsibilities, composition requirements. May contain markup tags (<p>, <br/>, <div>). May be truncated with ellipsis in response"
     },
     "Email": {
       "type": "string",
       "description": "Committee contact email address"
     },
     "PhoneNumber": {
-      "type": ["string", "null"],
+      "oneOf": [
+        {"type": "string"},
+        {"type": "null"}
+      ],
       "description": "Committee contact phone number; may be null when not available"
     },
     "StructureId": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Parliamentary term/structure this committee belongs to"
+      "$ref": "#/$defs/UUID",
+      "description": "Parliamentary term/structure UUID this committee belongs to"
     }
   }
 }
 ```
 
-### Request Parameters
-- **committeeId** (string, UUID, required) — Committee identifier. Obtain from `GetAllCommitteesForFilter`.
-- **languageId** (integer, required) — Language for response text (1=Macedonian, 2=Albanian, 3=Turkish). Affects `Name`, `RoleTitle`, `StatusTitle`, `TypeTitle`, and `Description`.
-- **methodName** (string) — Operation name: `GetCommitteeDetails`.
-
-### Response Structure
-- **Name** — Committee name in the requested language.
-- **CompositionMembers** — Array of elected committee members (MPs) with official roles:
-  - RoleId 6 = Committee Chair (Претседател/Претседателка на комисија)
-  - RoleId 82 = Vice-Chair (Заменик-претседател/Заменик-претседателка на комисија)
-  - RoleId 7 = Member (Член/Членка на комисија)
-  - RoleId 83 = Deputy Member (Заменик-член)
-- **SecretariatMembers** — Array of administrative/professional staff supporting the committee:
-  - RoleId 10 = Approver (Одобрувач/Одобрувачка)
-  - RoleId 11 = Advisor (Советник/Советничка на комисија)
-  - **Note**: Same person (UserId/FullName) may appear multiple times with different RoleIds when holding multiple staff roles (e.g., both Approver and Advisor). This is expected behavior, not a data error.
-- **Materials** — Subset of materials assigned to this committee from GetAllMaterialsForPublicPortal. Uses MaterialStatusId enum (6=Delivered to MPs, 12=Closed, etc.). Returns empty array `[]` when no materials linked (not `null`).
-- **Meetings** — Committee sittings/sessions in reverse chronological order (most recent first). TypeTitle typically "Комископска седница" (Committee sitting). Use Meeting.Id with `GetSittingDetails` for full agenda and voting details.
-- **Description** — HTML-formatted text describing committee's mandate, composition, responsibilities, and reporting requirements. May contain markup tags; may be truncated with ellipsis.
-- **Email** — Official committee contact email.
-- **PhoneNumber** — Committee contact phone number; nullable (can be `null` when not available).
-- **StructureId** — UUID of the parliamentary term this committee belongs to (typically the current term).
-
-### Usage Notes
-- Returns comprehensive details for a single committee identified by `committeeId`.
-- **CompositionMembers** contains the official elected committee structure (chairs, members).
-- **SecretariatMembers** contains staff roles; individuals may hold multiple roles and appear multiple times.
-- **Materials** shows legislative items processed by this committee; filtered subset of GetAllMaterialsForPublicPortal results.
-- **Description** contains HTML markup; parse for display in client applications.
-- **Meetings** can be used with `GetSittingDetails` to retrieve full agenda, voting results, and documents.
-- Response includes `"_truncated": N` in documentation examples when arrays were truncated; actual API responses include all items.
+### Notes
+- **CompositionMembers** contains the officially elected committee structure (chairs, members, deputies). Use with `GetUserDetailsByStructure` for full MP profile data.
+- **SecretariatMembers** contains professional staff and administrative roles. Same person may appear multiple times with different RoleIds (expected behavior for staff holding multiple roles).
+- **Materials** shows a subset of legislative items from `GetAllMaterialsForPublicPortal` assigned to this committee.
+- **Description** contains HTML markup; parse appropriately for display in client applications.
+- **Meetings** entries can be used with `GetSittingDetails` to retrieve full agenda, voting results, and documents for each sitting.
+- Response examples in documentation may show `"_truncated": N` in arrays when actual arrays were truncated for documentation purposes; actual API responses include all available items.
+- **languageId** casing: uses camelCase (lowercase) in this operation.
+- Date/time values in `Meetings[].Date` follow AspDate format. Use parsing compatible with `/Date(timestamp)/` format.

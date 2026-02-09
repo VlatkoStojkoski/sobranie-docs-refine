@@ -1,46 +1,15 @@
 ## GetAllSittings
 
-### Notes
-Empty results behavior: When no sittings match the filter criteria, the API returns `{"TotalItems": 0, "Items": null}` rather than an empty items array.
-
-The response schema differs significantly from the documented schema. Actual responses include `SittingDate`, `TypeId`, `TypeTitle`, `StatusTitle`, `Location`, `SittingDescriptionTypeTitle`, `Continuations`, `Structure`, and `TotalRows` fields instead of `DateFrom`/`DateTo`, `SittingTypeId`, `CommitteeId`, `Number`, `SessionId`.
-
-`Number` appears in response items for both plenary (`TypeId: 1`) and committee (`TypeId: 2`) sittings, representing the sitting sequence number within that context (e.g., 10th committee sitting, 5th plenary sitting).
-
-`CommitteeTitle` provides the committee name when filtering across multiple committees.
-
-`Continuations` is an empty array in all observed responses; likely populated when a sitting is continued across multiple sessions.
-
-`Structure` and `TotalRows` appear to be metadata fields not populated in list responses.
-
-When `StructureId` is `null`, the API returns sittings from all parliamentary terms/structures, not limited to a single term. `TotalItems` reflects the cross-term total.
-
-### Request
-```json
-{
-  "methodName": "GetAllSittings",
-  "Page": 2,
-  "Rows": 15,
-  "LanguageId": 2,
-  "TypeId": 2,
-  "CommitteeId": "b8b25861-9b5c-4d47-9717-007b83a8a339",
-  "StatusId": 6,
-  "DateFrom": null,
-  "DateTo": null,
-  "SessionId": null,
-  "Number": null,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
-
 ### Request Schema
+
 ```json
 {
   "type": "object",
   "properties": {
     "methodName": {
       "type": "string",
-      "const": "GetAllSittings"
+      "const": "GetAllSittings",
+      "description": "Operation name"
     },
     "Page": {
       "type": "integer",
@@ -55,42 +24,42 @@ When `StructureId` is `null`, the API returns sittings from all parliamentary te
     },
     "TypeId": {
       "anyOf": [
-        {"type": "integer"},
+        {"$ref": "#/$defs/AgendaItemTypeId"},
         {"type": "null"}
       ],
-      "description": "Sitting type filter: 1=Plenary, 2=Committee. Set to null to include all types."
+      "description": "1=Plenary, 2=Committee. Set to null to include all types."
     },
     "CommitteeId": {
       "anyOf": [
-        {"type": "string", "format": "uuid"},
+        {"$ref": "#/$defs/UUID"},
         {"type": "null"}
       ],
-      "description": "UUID of committee to filter by. Use with TypeId: 2 for committee sittings. Set to null for plenary sittings or to include all committees."
+      "description": "UUID of committee. Use with TypeId: 2. Set to null for plenary or to include all committees."
     },
     "StatusId": {
       "anyOf": [
         {"$ref": "#/$defs/SittingStatusId"},
         {"type": "null"}
       ],
-      "description": "Filter sittings by status. Set to null to include all statuses."
+      "description": "Filter by status. Set to null to include all statuses."
     },
     "DateFrom": {
       "anyOf": [
         {"$ref": "#/$defs/AspDate"},
         {"type": "null"}
       ],
-      "description": "Filter sittings by start date. Set to null to omit date filtering."
+      "description": "Filter by start date. Set to null to omit."
     },
     "DateTo": {
       "anyOf": [
         {"$ref": "#/$defs/AspDate"},
         {"type": "null"}
       ],
-      "description": "Filter sittings by end date. Set to null to omit date filtering."
+      "description": "Filter by end date. Set to null to omit."
     },
     "SessionId": {
       "anyOf": [
-        {"type": "string", "format": "uuid"},
+        {"$ref": "#/$defs/UUID"},
         {"type": "null"}
       ],
       "description": "Filter by session UUID"
@@ -107,106 +76,123 @@ When `StructureId` is `null`, the API returns sittings from all parliamentary te
         {"$ref": "#/$defs/UUID"},
         {"type": "null"}
       ],
-      "description": "UUID of parliamentary term/structure. Set to null to retrieve sittings across all structures/terms. Use specific UUID (e.g., 5e00dbd6-ca3c-4d97-b748-f792b2fa3473) to filter by term."
+      "description": "UUID of parliamentary term/structure. Set to null to query across all terms. Commonly 5e00dbd6-ca3c-4d97-b748-f792b2fa3473 for current term."
     }
   },
   "required": ["methodName", "Page", "Rows", "LanguageId"]
 }
 ```
 
-### Response
+### Response Schema
+
 ```json
 {
   "type": "object",
   "properties": {
     "TotalItems": {
-      "type": "integer"
+      "type": "integer",
+      "description": "Total sittings matching filter across all pages"
     },
     "Items": {
-      "type": ["array", "null"],
-      "items": {
-        "type": "object",
-        "properties": {
-          "Id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "Number": {
-            "anyOf": [
-              {"type": "integer"},
-              {"type": "null"}
-            ],
-            "description": "Sitting sequence number within the committee (TypeId: 2) or plenary (TypeId: 1). Each committee maintains its own sequence."
-          },
-          "SittingDate": {
-            "$ref": "#/$defs/AspDate",
-            "description": "Primary sitting date/time"
-          },
-          "TypeId": {
-            "$ref": "#/$defs/AgendaItemTypeId",
-            "description": "Sitting type: 1=Plenary, 2=Committee"
-          },
-          "TypeTitle": {
-            "type": "string",
-            "description": "Localized sitting type name"
-          },
-          "StatusId": {
-            "$ref": "#/$defs/SittingStatusId"
-          },
-          "StatusTitle": {
-            "type": "string",
-            "description": "Localized status name"
-          },
-          "Location": {
-            "anyOf": [
-              {"type": "string"},
-              {"type": "null"}
-            ],
-            "description": "Physical location of sitting"
-          },
-          "CommitteeId": {
-            "anyOf": [
-              {"type": "string", "format": "uuid"},
-              {"type": "null"}
-            ],
-            "description": "UUID of committee. Present for committee sittings (TypeId: 2); null for plenary."
-          },
-          "CommitteeTitle": {
-            "anyOf": [
-              {"type": "string"},
-              {"type": "null"}
-            ],
-            "description": "Localized committee name. Present for committee sittings (TypeId: 2); null for plenary."
-          },
-          "SittingDescriptionTypeTitle": {
-            "anyOf": [
-              {"type": "string"},
-              {"type": "null"}
-            ],
-            "description": "Localized description of sitting subtype/format (e.g., regular committee sitting, public hearing)"
-          },
-          "Continuations": {
-            "type": "array",
-            "description": "Array of continuation sitting references. Empty when sitting has no continuations.",
-            "items": {
-              "type": "object"
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Id": {
+                "$ref": "#/$defs/UUID",
+                "description": "Unique identifier of the sitting"
+              },
+              "Number": {
+                "anyOf": [
+                  {"type": "integer"},
+                  {"type": "null"}
+                ],
+                "description": "Sitting sequence number within committee or plenary context"
+              },
+              "SittingDate": {
+                "$ref": "#/$defs/AspDate",
+                "description": "Primary sitting date/time"
+              },
+              "TypeId": {
+                "$ref": "#/$defs/AgendaItemTypeId",
+                "description": "1=Plenary, 2=Committee"
+              },
+              "TypeTitle": {
+                "type": "string",
+                "description": "Localized sitting type name (e.g. 'Пленарна седница', 'Комисионска седница')"
+              },
+              "StatusId": {
+                "$ref": "#/$defs/SittingStatusId"
+              },
+              "StatusTitle": {
+                "type": "string",
+                "description": "Localized status name"
+              },
+              "Location": {
+                "anyOf": [
+                  {"type": "string"},
+                  {"type": "null"}
+                ],
+                "description": "Physical location/room (e.g. 'Сала 4')"
+              },
+              "CommitteeId": {
+                "anyOf": [
+                  {"$ref": "#/$defs/UUID"},
+                  {"type": "null"}
+                ],
+                "description": "UUID of committee. Null for plenary sittings (TypeId: 1)."
+              },
+              "CommitteeTitle": {
+                "anyOf": [
+                  {"type": "string"},
+                  {"type": "null"}
+                ],
+                "description": "Localized committee name. Null for plenary (TypeId: 1)."
+              },
+              "SittingDescriptionTypeTitle": {
+                "anyOf": [
+                  {"type": "string"},
+                  {"type": "null"}
+                ],
+                "description": "Localized description of sitting subtype/format"
+              },
+              "Continuations": {
+                "type": "array",
+                "description": "Array of continuation sitting references. Empty in standard responses; likely populated when sitting spans multiple sessions.",
+                "items": {"type": "object"}
+              },
+              "Structure": {
+                "anyOf": [
+                  {"type": "object"},
+                  {"type": "null"}
+                ],
+                "description": "Structural metadata; typically null in list responses"
+              },
+              "TotalRows": {
+                "type": "integer",
+                "description": "Row count metadata field"
+              }
             }
-          },
-          "Structure": {
-            "anyOf": [
-              {"type": "object"},
-              {"type": "null"}
-            ],
-            "description": "Structural metadata, typically null in list responses"
-          },
-          "TotalRows": {
-            "type": "integer",
-            "description": "Row count metadata, typically 0 in list responses"
           }
-        }
-      }
+        },
+        {"type": "null"}
+      ],
+      "description": "Array of sittings or null when TotalItems is 0"
     }
   },
   "required": ["TotalItems", "Items"]
 }
 ```
+
+### Notes
+
+- **Empty results behavior:** When no sittings match filter criteria, returns `{"TotalItems": 0, "Items": null}` rather than empty array.
+- **Sitting sequence number:** `Number` field represents the sitting sequence number within the specific context: for plenary (`TypeId: 1`), the Nth plenary sitting; for committee (`TypeId: 2`), the Nth committee sitting. Each context maintains its own sequence.
+- **Committee metadata:** `CommitteeId` and `CommitteeTitle` are populated only for committee sittings (`TypeId: 2`); both are null for plenary (`TypeId: 1`).
+- **Continuations:** `Continuations` array is empty in standard responses; likely populated when a sitting spans multiple sessions.
+- **Structure field:** Metadata field typically null in list responses.
+- **Cross-structure queries:** When `StructureId` is null, returns sittings from all parliamentary terms/structures; `TotalItems` reflects cross-term total.
+- **Pagination:** Uses `Page` (1-based) and `Rows` pattern. When `TotalItems: 0`, `Items` is null, not an empty array.
+- **Localization:** `TypeTitle`, `StatusTitle`, `CommitteeTitle`, and `SittingDescriptionTypeTitle` are localized according to `LanguageId`.

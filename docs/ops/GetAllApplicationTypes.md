@@ -1,41 +1,25 @@
 ## GetAllApplicationTypes
 
-### Notes
-Returns all application types available in the system.
+### Request Schema
 
-**Usage:**
-- Use to populate dropdowns or filters for application-related operations
-- languageId determines the language of ApplicationTitle (1=Macedonian, 2=Albanian, 3=Turkish)
-
-**Language fallback behavior:**
-- When `languageId=3` (Turkish), the API may return English labels instead of Turkish translations, indicating fallback behavior for incomplete localizations.
-
-**Known application types by languageId:**
-- **languageId=1 (Macedonian):**
-  - 1: "Пријава на случај" (Case report)
-  - 2: "Учество во јавна расправа" (Participation in public discussion)
-  - 3: "Дискусија" (Discussion)
-- **languageId=2 (Albanian):**
-  - 1: "Paraqitja e rastit" (Case report)
-  - 2: "Pjesëmarrje në debatin publik" (Participation in public discussion)
-  - 3: "Diskutim" (Discussion)
-- **languageId=3 (Turkish - returns English fallback):**
-  - 1: "Case report"
-  - 2: "Participation in Public Debate"
-  - 3: "Discussion"
-
-**Response:**
-- Returns array of application types with Id and localized ApplicationTitle
-
-### Request
 ```json
 {
-  "methodName": "GetAllApplicationTypes",
-  "languageId": 1
+  "type": "object",
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "enum": ["GetAllApplicationTypes"]
+    },
+    "languageId": {
+      "$ref": "#/$defs/LanguageId"
+    }
+  },
+  "required": ["methodName", "languageId"]
 }
 ```
 
-### Response
+### Response Schema
+
 ```json
 {
   "type": "array",
@@ -43,13 +27,26 @@ Returns all application types available in the system.
     "type": "object",
     "properties": {
       "Id": {
-        "type": "integer"
+        "type": "integer",
+        "$ref": "#/$defs/ApplicationTypeId",
+        "description": "Application type identifier (1=Case report, 2=Participation in public debate, 3=Discussion)"
       },
       "ApplicationTitle": {
-        "type": "string"
+        "type": "string",
+        "description": "Localized title of the application type in the requested language"
       }
     },
     "required": ["Id", "ApplicationTitle"]
-  }
+  },
+  "description": "Flat array of application types; not paginated"
 }
 ```
+
+### Notes
+
+- Returns a flat array (not paginated); `TotalItems` and `Items` wrapper are not used.
+- `languageId` determines localization: 1=Macedonian, 2=Albanian, 3=Turkish.
+- Language fallback: When `languageId=3` (Turkish), the API may return English labels (e.g. "Case report", "Participation in Public Debate") instead of Turkish translations, indicating incomplete localization for Turkish.
+- `Id` values are 1, 2, 3 (see ApplicationTypeId in global $defs).
+- Use these IDs in filters and request bodies for application-related operations.
+- Typical use: populate dropdowns or application type filters.

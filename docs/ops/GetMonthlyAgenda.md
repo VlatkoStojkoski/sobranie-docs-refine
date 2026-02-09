@@ -1,32 +1,37 @@
 ## GetMonthlyAgenda
 
-### Request
+### Request Schema
+
 ```json
 {
   "type": "object",
   "properties": {
     "methodName": {
-      "const": "GetMonthlyAgenda"
+      "type": "string",
+      "const": "GetMonthlyAgenda",
+      "description": "Operation name"
     },
     "LanguageId": {
-      "$ref": "#/$defs/LanguageId"
+      "$ref": "#/$defs/LanguageId",
+      "description": "Controls localization of Title and Location fields (1=Macedonian, 2=Albanian, 3=Turkish)"
     },
     "Month": {
       "type": "integer",
       "minimum": 1,
       "maximum": 12,
-      "description": "Month (1–12) for which to retrieve agenda items"
+      "description": "Calendar month (1–12)"
     },
     "Year": {
       "type": "integer",
-      "description": "Four-digit year (e.g. 2025, 2026) for which to retrieve agenda items"
+      "description": "Four-digit year (e.g. 2025, 2026)"
     }
   },
   "required": ["methodName", "LanguageId", "Month", "Year"]
 }
 ```
 
-### Response
+### Response Schema
+
 ```json
 {
   "type": "array",
@@ -34,21 +39,20 @@
     "type": "object",
     "properties": {
       "Id": {
-        "type": "string",
-        "format": "uuid",
-        "description": "Identifier for the agenda item/sitting"
+        "$ref": "#/$defs/UUID",
+        "description": "Identifier for the sitting/agenda item"
       },
       "Title": {
         "type": "string",
-        "description": "Full descriptive title including sitting number, committee/body name, and location"
+        "description": "Full descriptive title typically in format: Седница бр. {number} на {body name} - {location} (in requested language)"
       },
       "Location": {
         "type": "string",
-        "description": "Physical location/room where the sitting will take place"
+        "description": "Physical room or venue (e.g. Сала \"Македонија\", Сала 4, Сала 5)"
       },
       "Start": {
         "$ref": "#/$defs/AspDate",
-        "description": "Start date/time of the agenda item"
+        "description": "Start date/time of the sitting"
       },
       "Type": {
         "$ref": "#/$defs/AgendaItemTypeId",
@@ -56,27 +60,31 @@
       }
     },
     "required": ["Id", "Title", "Location", "Start", "Type"]
-  }
+  },
+  "description": "Flat array of agenda items (sittings) for the requested month, ordered by Start date/time ascending. Empty array when no agenda items exist."
 }
 ```
 
 ### Notes
-- **Request parameters:**
-  - `methodName`: Always `"GetMonthlyAgenda"`
-  - `LanguageId`: Standard language parameter (1=Macedonian, 2=Albanian, 3=Turkish). Affects language of Title and Location fields.
-  - `Month`: Integer 1-12 specifying the calendar month to retrieve agenda items for. Required.
-  - `Year`: Four-digit year (e.g. 2025, 2026) specifying the calendar year to retrieve agenda items for. Required.
 
-- **Response structure:** Returns a flat array of agenda items (not wrapped in TotalItems/Items pagination structure).
+**Parameter casing:** Uses `methodName` (lowercase) and `LanguageId` (PascalCase).
 
-- **Title format:** Typically follows pattern "Седница бр. {number} на {body name} - {location}" (in Macedonian) or equivalent localization in requested language.
+**Request details:**
+- `methodName`: Always `"GetMonthlyAgenda"`
+- `LanguageId`: 1=Macedonian, 2=Albanian, 3=Turkish. Affects Title and Location localization.
+- `Month`: Integer 1–12
+- `Year`: Four-digit year
 
-- **Type values:**
-  - Type 1 = Plenary sittings (main parliament sessions, typically at "Сала „Македонија"")
-  - Type 2 = Committee sittings (committee meetings, typically at "Сала 4", "Сала 5", "Сала 6", etc.)
+**Response format:** Returns a flat array (not paginated; no TotalItems/Items wrapper).
 
-- **Empty results:** When no agenda items exist for the requested month/year, returns empty array `[]` (not null).
+**Type field:** Indicates sitting context:
+- `1` = Plenary sittings (main parliament sessions)
+- `2` = Committee sittings (committee meetings)
 
-- **Ordering:** Results are ordered by Start date/time.
+**Title format:** Typically "Седница бр. {number} на {body name} - {location}" structure in Macedonian or equivalent in requested language.
 
-- **Usage:** Useful for calendar views, scheduling displays, and retrieving upcoming parliamentary sessions. The `Id` can be used with `GetSittingDetails` to fetch detailed sitting information.
+**Empty results:** Returns empty array `[]` when no agenda items exist for the requested month/year.
+
+**Ordering:** Results ordered by Start date/time ascending.
+
+**Usage:** Pass the `Id` to `GetSittingDetails` to retrieve detailed sitting information including agenda tree, attendees, voting results, etc.

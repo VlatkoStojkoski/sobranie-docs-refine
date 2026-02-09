@@ -1,14 +1,27 @@
 ## GetAllMaterialTypesForFilter
 
-### Request
+### Request Schema
+
 ```json
 {
-  "methodName": "GetAllMaterialTypesForFilter",
-  "languageId": 1
+  "type": "object",
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "enum": ["GetAllMaterialTypesForFilter"],
+      "description": "Operation name"
+    },
+    "languageId": {
+      "$ref": "#/$defs/LanguageId",
+      "description": "1=Macedonian, 2=Albanian, 3=Turkish"
+    }
+  },
+  "required": ["methodName", "languageId"]
 }
 ```
 
-### Response
+### Response Schema
+
 ```json
 {
   "type": "array",
@@ -16,23 +29,25 @@
     "type": "object",
     "properties": {
       "Id": {
-        "type": "integer",
-        "description": "Material type identifier. See MaterialTypeId in $defs for known values (1–37, non-sequential; gaps at 12 and 25)."
+        "$ref": "#/$defs/MaterialTypeId",
+        "description": "Material type identifier"
       },
       "Title": {
         "type": "string",
-        "description": "Localized material type name in requested language (1=Macedonian, 2=Albanian, 3=Turkish). May contain leading/trailing whitespace or control characters (\\r, \\n) requiring trimming."
+        "description": "Localized material type name in requested language. May contain leading/trailing whitespace or control characters (\\r, \\n) requiring trimming for display."
       }
     },
     "required": ["Id", "Title"]
-  }
+  },
+  "description": "Flat array of 37 material types covering legislative materials (laws, amendments, budget), procedural items (elections, appointments, resignations), oversight mechanisms (interpellations, reports), and constitutional procedures (amendments, interpretations)."
 }
 ```
 
 ### Notes
-- Returns all available material types in the system (37 types with gaps at IDs 12 and 25).
-- **Data quality:** Response `Title` values may contain leading/trailing whitespace characters (`\r`, `\n`, spaces) that should be trimmed for display.
-- **Language support:** Tested with `languageId: 2` (Albanian) and `languageId: 1` (Macedonian). Titles are localized in the requested language.
-- **Non-sequential IDs:** Material type IDs are not consecutive. IDs 12 and 25 are absent from the enumeration.
-- **Usage:** Material type IDs returned here are used as `MaterialTypeId` filter values in `GetAllMaterialsForPublicPortal` operation and appear in material detail responses.
-- **Material types:** Catalog includes legislative materials (laws, amendments, budget), procedural items (elections, appointments, resignations), oversight mechanisms (interpellations, reports), and constitutional procedures (amendments, interpretations).
+
+- **Casing:** Uses lowercase `methodName` and `languageId` (camelCase).
+- **Localization:** Response titles are localized in the requested `languageId` (1=Macedonian, 2=Albanian, 3=Turkish).
+- **Data quality:** Title values may contain leading/trailing whitespace characters (`\r`, `\n`, spaces) that should be trimmed for display. See global data quality notes.
+- **Non-sequential IDs:** Material type IDs are not consecutive; IDs 12 and 25 are absent from the enumeration.
+- **Usage:** Material type IDs returned here are used as `MaterialTypeId` filter values in `GetAllMaterialsForPublicPortal` and appear in material detail responses (GetMaterialDetails).
+- **Returns:** Flat array of all material types (not paginated); no null check needed.

@@ -1,20 +1,30 @@
 ## GetAllParliamentaryGroups
 
-### Request
+### Request Schema
+
 ```json
 {
-  "methodName": "GetAllParliamentaryGroups",
-  "languageId": 1,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+  "type": "object",
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "enum": ["GetAllParliamentaryGroups"],
+      "description": "Operation name"
+    },
+    "languageId": {
+      "$ref": "#/$defs/LanguageId"
+    },
+    "StructureId": {
+      "$ref": "#/$defs/UUID",
+      "description": "Parliamentary term/structure UUID. Obtain from GetAllStructuresForFilter; often 5e00dbd6-ca3c-4d97-b748-f792b2fa3473 for current term. Filters groups to those active in the specified term."
+    }
+  },
+  "required": ["methodName", "languageId", "StructureId"]
 }
 ```
 
-### Request Parameters
-- **methodName** — `"GetAllParliamentaryGroups"` (required)
-- **languageId** — `1` = Macedonian, `2` = Albanian, `3` = Turkish (required)
-- **StructureId** — UUID of parliamentary term/structure (required). Obtain from `GetAllStructuresForFilter`. Commonly `5e00dbd6-ca3c-4d97-b748-f792b2fa3473` for current term. Determines which parliamentary groups to return based on the parliamentary term.
+### Response Schema
 
-### Response
 ```json
 {
   "type": "array",
@@ -22,12 +32,12 @@
     "type": "object",
     "properties": {
       "Id": {
-        "type": "string",
-        "format": "uuid"
+        "$ref": "#/$defs/UUID",
+        "description": "Parliamentary group unique identifier"
       },
       "Name": {
         "type": "string",
-        "description": "Full official name of the parliamentary group (e.g., \"Пратеничка група на партијата …\")"
+        "description": "Full official name of the parliamentary group. Localized in requested language."
       },
       "NumberOfDeputies": {
         "type": "integer",
@@ -39,16 +49,19 @@
           {"type": "string"},
           {"type": "null"}
         ],
-        "description": "Image identifier or URL for the parliamentary group. Often empty string when no image available."
+        "description": "Image identifier, URL, or base64-encoded image data. May be empty string when no image is available."
       }
     },
     "required": ["Id", "Name", "NumberOfDeputies", "Image"]
-  }
+  },
+  "description": "Direct array of parliamentary groups (not paginated)"
 }
 ```
 
 ### Notes
-- Returns all parliamentary groups (factions/caucuses) for the specified structure/term. Each group represents a coalition or party with seats in parliament for that term.
-- Response is a direct array, not wrapped in `TotalItems`/`Items` pagination structure.
-- All `Image` fields in current data are empty strings `""`, indicating parliamentary groups may not have images assigned in the system.
-- `NumberOfDeputies` reflects current membership count in each parliamentary group. Totals across all groups may not equal total MPs if there are independents or vacancies.
+
+- Response is a direct flat array, not wrapped in `TotalItems`/`Items` pagination structure.
+- Parameter casing: Uses `methodName` (lowercase) and `languageId` (lowercase).
+- All `Image` fields in current data are empty strings, indicating parliamentary groups may not have images assigned.
+- `Email` and `Phone` fields are typically `null` for parliamentary groups; contact is via individual members. See GetParliamentaryGroupDetails for additional fields.
+- `NumberOfDeputies` reflects current membership. Verify with GetParliamentaryGroupDetails to confirm full member roster and roles (78=Chair, 79=Vice-President, 81=Member).

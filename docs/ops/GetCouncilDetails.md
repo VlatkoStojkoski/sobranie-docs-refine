@@ -1,15 +1,31 @@
 ## GetCouncilDetails
 
-### Request
+### Request Schema
+
 ```json
 {
-  "methodName": "GetCouncilDetails",
-  "committeeId": "d596538c-f3d4-4440-8ae7-6e25ea094c6a",
-  "languageId": 1
+  "type": "object",
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "enum": ["GetCouncilDetails"],
+      "description": "Operation method name (lowercase)"
+    },
+    "committeeId": {
+      "$ref": "#/$defs/UUID",
+      "description": "UUID of the council to retrieve. Obtain from GetAllCouncils response."
+    },
+    "languageId": {
+      "$ref": "#/$defs/LanguageId",
+      "description": "Requested language for response labels and text (1=Macedonian, 2=Albanian, 3=Turkish). Controls language for Name, RoleTitle, Description, and other text fields."
+    }
+  },
+  "required": ["methodName", "committeeId", "languageId"]
 }
 ```
 
-### Response
+### Response Schema
+
 ```json
 {
   "type": "object",
@@ -24,21 +40,22 @@
         "type": "object",
         "properties": {
           "UserId": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID"
           },
           "FullName": {
             "type": "string"
           },
           "RoleId": {
-            "enum": [6, 7, 10, 11, 82]
+            "$ref": "#/$defs/CommitteeRoleId"
           },
           "RoleTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "Localized role name (e.g., 'Претседател/Претседателка', 'Член/Членка')"
           }
-        }
+        },
+        "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
       },
-      "description": "Official council composition members (MPs with voting roles). Typically includes president (RoleId 6), vice-president (82), and members (7)."
+      "description": "Official council composition members (MPs with voting roles). Typically includes president (RoleId 6), vice-president (82), and members (7). Ordered by role importance."
     },
     "SecretariatMembers": {
       "type": "array",
@@ -46,28 +63,29 @@
         "type": "object",
         "properties": {
           "UserId": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID"
           },
           "FullName": {
             "type": "string"
           },
           "RoleId": {
-            "enum": [6, 7, 10, 11, 82]
+            "$ref": "#/$defs/CommitteeRoleId"
           },
           "RoleTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "Localized role name (e.g., 'Одобрувач', 'Советник на комисија')"
           }
-        }
+        },
+        "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
       },
-      "description": "Administrative and advisory staff supporting the council. May contain duplicate UserId entries with different RoleId values (same person holding multiple roles)."
+      "description": "Administrative and advisory staff supporting the council. RoleId typically 10 (Approver) or 11 (Advisor). Note: Same person (UserId) may appear multiple times with different RoleIds when holding multiple roles. This is expected behavior."
     },
     "Materials": {
       "type": "array",
       "items": {
         "type": "object"
       },
-      "description": "Materials associated with the council. Empty array [] when no materials exist."
+      "description": "Materials associated with the council (e.g., founding decisions, policy documents). Empty array [] when no materials exist."
     },
     "Meetings": {
       "type": "array",
@@ -75,12 +93,11 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID"
           },
           "TypeTitle": {
             "type": "string",
-            "description": "Meeting type label (e.g., 'Комисиска седница' = Committee sitting)"
+            "description": "Meeting type label (e.g., 'Комисска седница' = Committee sitting)"
           },
           "Date": {
             "$ref": "#/$defs/AspDate"
@@ -93,7 +110,8 @@
             "type": "integer",
             "description": "Sequential sitting number for the council"
           }
-        }
+        },
+        "required": ["Id", "TypeTitle", "Date", "Location", "SittingNumber"]
       },
       "description": "Past and scheduled council meetings/sittings, ordered by date in reverse chronological order (most recent first)."
     },
@@ -101,7 +119,7 @@
       "anyOf": [
         {
           "type": "string",
-          "description": "HTML-formatted description of the council's mandate and responsibilities. May contain markup including paragraphs, links, and styling."
+          "description": "HTML-formatted description of the council's mandate and responsibilities. May contain markup including <p>, <span>, <a>, <br/> tags and inline styles. May include links to founding decisions and constitutional references."
         },
         {
           "type": "null"
@@ -110,7 +128,7 @@
     },
     "Email": {
       "type": "string",
-      "description": "Contact email address for the council"
+      "description": "Contact email address for the council (e.g., 'council-name@sobranie.mk')"
     },
     "PhoneNumber": {
       "anyOf": [
@@ -121,69 +139,22 @@
           "type": "null"
         }
       ],
-      "description": "Contact phone number for the council. Null when not available."
+      "description": "Contact phone number. Null when not available."
     },
     "StructureId": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Parliamentary term/structure this council belongs to"
+      "$ref": "#/$defs/UUID",
+      "description": "Parliamentary term/structure this council belongs to. Common value: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473 for current term. Matches StructureId parameter used in other operations."
     }
-  }
+  },
+  "required": ["Name", "CompositionMembers", "SecretariatMembers", "Materials", "Meetings", "Email", "StructureId"]
 }
 ```
 
-### Request Filter
-- **committeeId** — UUID of the council to retrieve details for. Obtain from GetAllCouncils response. Identifies which council to fetch information about.
-- **languageId** — Requested language for response labels and text (1=Macedonian, 2=Albanian, 3=Turkish). Controls language for Name, RoleTitle, Description, and other text fields.
-- **methodName** — Value: "GetCouncilDetails" (lowercase)
-
-### Response Keys
-
-**Name** — Full name of the council in the requested language.
-
-**CompositionMembers** — Array of official council composition members (voting members, typically MPs).
-- Same council member may appear in this array with only composition roles (6=President, 82=Vice-President, 7=Member).
-- Ordered by role importance (President typically first, then Vice-President, then Members).
-
-**SecretariatMembers** — Array of administrative and support staff.
-- RoleId values: 10=Approver (Одобрувач/Одобрувачка), 11=Advisor (Советник/Советничка на комисија).
-- Important: Same person (UserId) can appear multiple times with different RoleId values when they hold multiple roles (e.g., person serving as both Approver and Advisor).
-- This is expected behavior, not a data quality issue.
-
-**Materials** — Associated materials (e.g., founding decisions, policy documents).
-- Returns empty array `[]` when no materials exist (not `null`).
-- When populated, contains material objects.
-
-**Meetings** — Council meetings/sittings in reverse chronological order (most recent first).
-- **TypeTitle**: Typically "Комископска седница" (Committee sitting) for council meetings.
-- **SittingNumber**: Sequential number incremented per council.
-- **Location**: Physical venue (e.g., "Сала 4" = Room 4).
-- **Date**: AspDate format timestamp.
-
-**Description** — HTML-formatted text describing the council's legal basis, mandate, and responsibilities.
-- Can contain extensive HTML markup including `<p>`, `<span>`, `<a>`, `<br/>` tags and inline styles.
-- May include links to founding decisions, constitutional references, and other resources.
-- Nullable; can be `null` when not provided.
-
-**Email** — Official contact email for the council (e.g., "council-name@sobranie.mk").
-
-**PhoneNumber** — Contact phone number. Nullable; can be `null` when not provided.
-
-**StructureId** — UUID of the parliamentary term/structure to which this council belongs. Common value: `5e00dbd6-ca3c-4d97-b748-f792b2fa3473` for current parliamentary term. Matches StructureId parameter used in other operations.
-
-### Additional Notes
-
-- **RoleId enum values** (from $defs/RoleId):
-  - `6` = Committee President (Претседател/Претседателка на комисија)
-  - `82` = Committee Vice President (Заменик-претседател/Заменик-претседателка на комисија)
-  - `7` = Committee Member (Член/Членка на комисија)
-  - `10` = Approver (Одобрувач/Одобрувачка)
-  - `11` = Committee Advisor (Советник/Советничка на комисија)
-
-- **Duplicate users in SecretariatMembers**: A single person may appear multiple times in the SecretariatMembers array with different RoleId values. For example, one staff member can simultaneously hold roles as both Approver (RoleId: 10) and Advisor (RoleId: 11). This reflects that person's actual responsibilities and is expected behavior.
-
-- **Meetings ordering**: The Meetings array is ordered by Date in reverse chronological order (most recent first). Use the Date field to sort or filter client-side if needed.
-
-- **HTML content in Description**: The Description field contains rich HTML markup. Parse as HTML when displaying to end users. May include links to PDF documents and other resources related to the council's establishment and mandate.
+### Notes
 
 - **Parameter casing**: Uses lowercase `methodName` and `languageId` (standard method-based convention).
+- **RoleId enum** (CommitteeRoleId): See global $defs. Composition uses 6 (President), 82 (Vice-President), 7 (Member). Secretariat uses 10 (Approver), 11 (Advisor).
+- **Duplicate users in SecretariatMembers**: A single person may appear multiple times in the SecretariatMembers array with different RoleId values, reflecting their actual responsibilities. This is expected behavior.
+- **Meetings ordering**: The Meetings array is ordered by Date in reverse chronological order (most recent first).
+- **HTML content in Description**: Contains rich HTML markup. Parse as HTML when displaying to end users.
+- **Materials**: Returns empty array `[]` when no materials exist (not `null`).

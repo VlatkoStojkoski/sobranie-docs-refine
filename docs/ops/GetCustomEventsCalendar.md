@@ -1,33 +1,53 @@
 ## GetCustomEventsCalendar
 
-### Request
+### Request Schema
 ```json
 {
-  "model": {
-    "Language": 1,
-    "Month": 1,
-    "Year": 2026
-  }
+  "type": "object",
+  "properties": {
+    "model": {
+      "type": "object",
+      "properties": {
+        "Language": {
+          "$ref": "#/$defs/LanguageId",
+          "description": "Language for event descriptions and locations (1=Macedonian, 2=Albanian, 3=Turkish)"
+        },
+        "Month": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12,
+          "description": "Month (1–12)"
+        },
+        "Year": {
+          "type": "integer",
+          "description": "Four-digit year (e.g., 2024, 2026)"
+        }
+      },
+      "required": ["Language", "Month", "Year"]
+    }
+  },
+  "required": ["model"]
 }
 ```
 
-### Response
+### Response Schema
 ```json
 {
   "type": "object",
   "properties": {
     "d": {
       "type": "array",
+      "description": "Array of calendar events for the requested month/year",
       "items": {
         "type": "object",
         "properties": {
           "__type": {
             "type": "string",
-            "description": "e.g. moldova.controls.Models.CalendarViewModel"
+            "description": "ASMX type discriminator (e.g., 'moldova.controls.Models.CalendarViewModel')"
           },
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID",
+            "description": "Unique event identifier"
           },
           "EventDescription": {
             "type": "string",
@@ -42,13 +62,15 @@
               {"type": "string"},
               {"const": ""}
             ],
-            "description": "Physical location of event. May be empty string when location is not specified or not applicable"
+            "description": "Physical location/venue of event. May be empty string when location not specified or not applicable to event type"
           },
           "EventDate": {
-            "$ref": "#/$defs/AspDate"
+            "$ref": "#/$defs/AspDate",
+            "description": "Scheduled date/time of the event in AspDate format"
           },
           "EventType": {
-            "$ref": "#/$defs/EventTypeId"
+            "$ref": "#/$defs/EventTypeId",
+            "description": "Type of event (currently 5=press conference/visit/working session/commemoration/public event)"
           }
         },
         "required": ["__type", "Id", "EventDescription", "EventLink", "EventLocation", "EventDate", "EventType"]
@@ -59,15 +81,11 @@
 }
 ```
 
-### Request Filters
-- **Language** — LanguageId (1=Macedonian, 2=Albanian, 3=Turkish). Controls language of EventDescription and EventLocation.
-- **Month** — Integer 1-12 for the calendar month to retrieve.
-- **Year** — Four-digit year (e.g., 2024, 2026) to retrieve events for.
-
 ### Notes
-- Returns all calendar events for the specified month and year. Response is an array in the `d` property (ASMX wrapper).
-- All events in the sample data have `EventType: 5`, corresponding to press conferences, official visits, working sessions, commemorations, and public events. Other EventType values may exist but are not yet documented.
-- `EventLocation` can be empty string (`""`) when location is not specified or not applicable to the event type.
-- `EventLink` provides URL-safe slugs suitable for constructing event detail page URLs.
-- Response may be empty array `[]` if no events exist for the requested month/year.
-- `EventDescription` is localized based on the `Language` parameter; same event may return different language text with different Language values.
+- **ASMX response format:** Endpoint uses ASMX wrapper; results are returned in the `d` property directly as an array (not wrapped in `Items`/`TotalItems` pagination).
+- **Empty results:** Returns empty array `[]` if no events exist for the requested month/year.
+- **Language localization:** `EventDescription` and `EventLocation` are localized based on the `Language` parameter (1=Macedonian, 2=Albanian, 3=Turkish). The same event returns different language text when queried with different `Language` values.
+- **Event location handling:** `EventLocation` may be empty string when location is not specified or not applicable to the event type.
+- **Event types:** All documented sample events have `EventType: 5` (press conferences, official visits, working sessions, commemorations, public events). Other EventType values may exist but are not yet documented.
+- **Event links:** `EventLink` provides URL-safe slugs suitable for constructing event detail page URLs.
+- **Endpoint:** Non-standard ASMX endpoint at `https://www.sobranie.mk/Moldova/services/CalendarService.asmx/GetCustomEventsCalendar`; POST with `model` wrapper in request body.

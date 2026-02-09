@@ -1,14 +1,23 @@
 ## GetAllGenders
 
-### Request
+### Request Schema
 ```json
 {
-  "methodName": "GetAllGenders",
-  "languageId": 1
+  "type": "object",
+  "required": ["methodName", "languageId"],
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "enum": ["GetAllGenders"]
+    },
+    "languageId": {
+      "$ref": "#/$defs/LanguageId"
+    }
+  }
 }
 ```
 
-### Response
+### Response Schema
 ```json
 {
   "type": "array",
@@ -17,22 +26,22 @@
     "required": ["Id", "Title"],
     "properties": {
       "Id": {
-        "type": "integer",
-        "enum": [1, 2],
-        "description": "1=Male (Машки), 2=Female (Женски)"
+        "$ref": "#/$defs/GenderId"
       },
       "Title": {
         "type": "string",
-        "description": "Localized gender name"
+        "description": "Localized gender name in requested language"
       }
     }
-  }
+  },
+  "description": "Direct array of gender options (not paginated)"
 }
 ```
 
 ### Notes
-- Returns exactly 2 items: Male (Id=1) and Female (Id=2)
-- Response is a direct array (not wrapped in object with TotalItems/Items)
-- `Title` values are localized per the `languageId` request parameter. For languageId=1 (Macedonian): "Машки" (Male), "Женски" (Female)
-- Use `Id` values (1 or 2) as filter input in `GetParliamentMPsNoImage` and other operations requiring gender selection
-- Reference data: always returns the same 2 entries, no pagination
+- Returns exactly 2 items: Male (Id=1) and Female (Id=2).
+- Response is a direct array, not wrapped in object with `TotalItems`/`Items`.
+- `Title` values are localized per the `languageId` parameter (1=Macedonian, 2=Albanian, 3=Turkish).
+- Use `Id` values (1 or 2) as filter input in operations like `GetParliamentMPsNoImage`.
+- Reference data: always returns the same 2 entries, no pagination required.
+- Method name uses camelCase: `methodName`; language parameter uses camelCase: `languageId`.

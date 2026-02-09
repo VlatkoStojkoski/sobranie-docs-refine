@@ -1,18 +1,30 @@
 ## GetAllCouncils
 
-### Request
+### Request Schema
+
 ```json
 {
-  "methodName": "GetAllCouncils",
-  "languageId": 1,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+  "type": "object",
+  "required": ["methodName", "languageId", "StructureId"],
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "enum": ["GetAllCouncils"],
+      "description": "Operation name"
+    },
+    "languageId": {
+      "$ref": "#/$defs/LanguageId"
+    },
+    "StructureId": {
+      "$ref": "#/$defs/UUID",
+      "description": "Parliamentary term/structure identifier. Obtain from GetAllStructuresForFilter. Current common value: 5e00dbd6-ca3c-4d97-b748-f792b2fa3473. Filters councils to those active in the specified structure/term."
+    }
+  }
 }
 ```
 
-#### Request parameters
-- **StructureId** (UUID, required): Parliamentary term/structure. Obtain from `GetAllStructuresForFilter`. Common current value: `5e00dbd6-ca3c-4d97-b748-f792b2fa3473`. Filters councils to those active in the specified structure/term.
+### Response Schema
 
-### Response
 ```json
 {
   "type": "array",
@@ -21,8 +33,7 @@
     "required": ["Id", "Name", "TypeId", "TypeTitle"],
     "properties": {
       "Id": {
-        "type": "string",
-        "format": "uuid",
+        "$ref": "#/$defs/UUID",
         "description": "Unique identifier for the council"
       },
       "Name": {
@@ -30,9 +41,7 @@
         "description": "Council name in the requested language"
       },
       "TypeId": {
-        "type": "integer",
-        "enum": [1],
-        "description": "Council type. See CouncilTypeId in $defs. 1=Permanent (Постојана)"
+        "$ref": "#/$defs/CouncilTypeId"
       },
       "TypeTitle": {
         "type": "string",
@@ -44,7 +53,9 @@
 ```
 
 ### Notes
-- **Response format**: Returns a flat array of councils (not wrapped in TotalItems/Items structure).
-- **Council types**: Currently only type 1 (Permanent/Постојана) observed in sample data. Other types may exist in different structures or future parliamentary terms.
-- **Usage**: Council IDs returned in this operation can be used with `GetCouncilDetails` to retrieve detailed information about a specific council.
-- **StructureId required**: Operation requires a valid parliamentary term/structure ID to filter results appropriately.
+
+- **Response format:** Returns a flat array of councils (not wrapped in TotalItems/Items structure).
+- **Council types:** Currently only type 1 (Permanent/Постојана) observed. Other types may exist in different structures or future terms.
+- **Parameter casing:** Uses lowercase `methodName` and `languageId`.
+- **Usage:** Council IDs returned here can be used with `GetCouncilDetails` to retrieve detailed information.
+- **StructureId required:** Valid parliamentary term/structure ID is required to filter results appropriately.

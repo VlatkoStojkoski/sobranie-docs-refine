@@ -1,28 +1,119 @@
 ## GetAllQuestions
 
-### Request
+### Request Schema
+
 ```json
 {
-  "methodName": "GetAllQuestions",
-  "LanguageId": 1,
-  "CurrentPage": 1,
-  "Page": 1,
-  "Rows": 10,
-  "SearchText": "",
-  "RegistrationNumber": "",
-  "StatusId": null,
-  "From": "",
-  "To": "",
-  "CommitteeId": null,
-  "DateFrom": null,
-  "DateTo": null,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "const": "GetAllQuestions",
+      "description": "Operation method name"
+    },
+    "LanguageId": {
+      "$ref": "#/$defs/LanguageId",
+      "description": "Requested language for response labels and localized content"
+    },
+    "Page": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "1-based page number for pagination"
+    },
+    "Rows": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of items per page (typical values: 6, 8, 10, 12, 14, 18)"
+    },
+    "CurrentPage": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Appears alongside Page; purpose unclear (possibly legacy/redundant parameter). Recommend setting to same value as Page."
+    },
+    "SearchText": {
+      "type": "string",
+      "description": "Free-text search across question titles and content. Set to empty string to disable."
+    },
+    "RegistrationNumber": {
+      "anyOf": [
+        { "type": "string", "description": "Filter by question registration number (e.g. '08-750/1')" },
+        { "type": "null", "description": "null to omit filter" }
+      ]
+    },
+    "StatusId": {
+      "anyOf": [
+        { "$ref": "#/$defs/QuestionStatusId" },
+        { "type": "null", "description": "null to include all statuses" }
+      ],
+      "description": "Filter by question status"
+    },
+    "From": {
+      "type": "string",
+      "description": "Filter by question author name (MP name). Set to empty string to disable."
+    },
+    "To": {
+      "type": "string",
+      "description": "Filter by recipient name (minister/official). Set to empty string to disable."
+    },
+    "CommitteeId": {
+      "anyOf": [
+        { "$ref": "#/$defs/UUID" },
+        { "type": "null", "description": "null to include all committees" }
+      ],
+      "description": "Filter questions by committee"
+    },
+    "DateFrom": {
+      "anyOf": [
+        { "$ref": "#/$defs/AspDate" },
+        { "type": "null", "description": "null to omit start date filter" }
+      ],
+      "description": "Filter by DateAsked start (earliest)"
+    },
+    "DateTo": {
+      "anyOf": [
+        { "$ref": "#/$defs/AspDate" },
+        { "type": "null", "description": "null to omit end date filter" }
+      ],
+      "description": "Filter by DateAsked end (latest)"
+    },
+    "StructureId": {
+      "anyOf": [
+        { "$ref": "#/$defs/UUID" },
+        { "type": "null", "description": "null to query across all parliamentary terms/structures" }
+      ],
+      "description": "Parliamentary term/structure UUID"
+    }
+  },
+  "required": ["methodName", "LanguageId", "Page", "Rows"],
+  "$defs": {
+    "AspDate": {
+      "type": "string",
+      "pattern": "^/Date\\(\\d+\\)/$"
+    },
+    "LanguageId": {
+      "type": "integer",
+      "enum": [1, 2, 3],
+      "description": "1=Macedonian, 2=Albanian, 3=Turkish"
+    },
+    "QuestionStatusId": {
+      "type": "integer",
+      "enum": [17, 19, 20, 21],
+      "description": "17=Delivered, 19=Answered, 20=Secret answer, 21=Written answer"
+    },
+    "UUID": {
+      "type": "string",
+      "format": "uuid"
+    }
+  }
 }
 ```
 
-### Response
+### Response Schema
+
 ```json
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
     "TotalItems": {
@@ -39,15 +130,15 @@
               "Id": {
                 "type": "string",
                 "format": "uuid",
-                "description": "Unique identifier for the question"
+                "description": "Unique question identifier"
               },
               "Title": {
                 "type": "string",
-                "description": "Question text/title"
+                "description": "Question text/title in requested language"
               },
               "From": {
                 "type": "string",
-                "description": "Name of the MP who asked the question (questioner)"
+                "description": "Name of the MP who submitted the question (questioner)"
               },
               "To": {
                 "type": "string",
@@ -59,19 +150,20 @@
               },
               "StatusTitle": {
                 "type": "string",
-                "description": "Human-readable status of the question in the requested language (e.g. 'Доставено' = Delivered, 'Одговорено' = Answered). Maps to QuestionStatusId enum values."
+                "description": "Human-readable question status in requested language (e.g. 'Доставено'=Delivered, 'Одговорено'=Answered)"
               },
               "DateAsked": {
-                "$ref": "#/$defs/AspDate",
-                "description": "Date when the question was submitted"
+                "type": "string",
+                "pattern": "^/Date\\(\\d+\\)/$",
+                "description": "Date when question was submitted (AspDate format)"
               },
               "QuestionTypeTitle": {
                 "type": "string",
-                "description": "Type of question in the requested language (e.g. 'Писмено прашање' = Written question, 'Усно прашање' = Oral question)"
+                "description": "Type of question in requested language (e.g. 'Писмено прашање'=Written question, 'Усно прашање'=Oral question)"
               },
               "TotalRows": {
                 "type": "integer",
-                "description": "Per-item metadata field. Observed as 0 in all responses; purpose unclear (possibly legacy or unused field)."
+                "description": "Item-level field observed as 0 in all responses. Purpose unclear (possibly legacy)."
               }
             },
             "required": ["Id", "Title", "From", "To", "ToInstitution", "StatusTitle", "DateAsked", "QuestionTypeTitle", "TotalRows"]
@@ -79,7 +171,7 @@
         },
         {
           "type": "null",
-          "description": "When TotalItems is 0, Items becomes null instead of empty array"
+          "description": "When TotalItems=0, Items is null instead of empty array"
         }
       ]
     }
@@ -88,43 +180,33 @@
 }
 ```
 
-### Request Schema Details
+### Notes
 
-**Core parameters:**
-- **methodName** — Required; must be `"GetAllQuestions"`
-- **LanguageId** — Language for response labels (1=Macedonian, 2=Albanian, 3=Turkish)
-- **Page** — 1-based page number for pagination
-- **Rows** — Number of items per page (typical values: 6, 8, 10, 12, 14, 18)
-- **CurrentPage** — Appears alongside `Page`; purpose unclear (possibly legacy/redundant parameter). Typically set to same value as `Page`.
+#### Pagination
+Uses standard `Page`/`Rows` pagination pattern (1-based). Response includes `TotalItems` (full result count across all pages) and `Items` (current page subset only). When `TotalItems: 0`, the `Items` field is `null` rather than empty array `[]`.
 
-**Optional filters** (all can be empty string or null to omit):
-- **SearchText** — Free-text search across question titles and content. Set to `""` (empty string) to omit text filtering.
-- **RegistrationNumber** — Filter by question registration number. Set to `""` to omit.
-- **From** — Filter by question author name (MP name). Set to `""` to omit.
-- **To** — Filter by recipient name (minister/official). Set to `""` to omit.
-- **StatusId** — Filter by question status (see QuestionStatusId enum: 17=Delivered, 19=Answered, 20=Secret answer, 21=Written answer). Set to `null` to include all statuses. Example: `19` returns only answered questions.
-- **CommitteeId** — Filter questions by committee. UUID or `null` to include all committees.
-- **DateFrom / DateTo** — Filter by DateAsked range. AspDate format or `null` to omit date filtering.
-- **StructureId** — Parliamentary term UUID. Can be specific UUID (e.g., `5e00dbd6-ca3c-4d97-b748-f792b2fa3473` for current term) or `null` to query across all parliamentary terms/structures.
+#### LanguageId
+Response content (Title, From, To, StatusTitle, QuestionTypeTitle, ToInstitution) is returned in the requested language. Some fields may contain Cyrillic text or institutional names even for non-Macedonian language requests; see global Language Fallback section.
 
-### Per-operation Notes
+#### Parameter Casing
+Uses PascalCase: `LanguageId`, `StructureId`, `CommitteeId`, `RegistrationNumber`, `StatusId`, `DateFrom`, `DateTo`. Method name uses camelCase: `methodName`. Other filters (SearchText, From, To, Page, Rows, CurrentPage) use mixed case.
 
-- **Pagination behavior**: Uses standard `Page`/`Rows` pagination. Response includes `TotalItems` (full result count) and page subset of `Items`.
+#### CurrentPage vs Page
+Both parameters present in request; distinction unclear. Recommend setting both to same value. May be legacy or redundant parameter.
 
-- **StatusId filter example**: Setting `StatusId: 19` filters to answered questions only. Setting `StatusId: null` includes questions with all statuses.
+#### StructureId Nullable
+Unlike most listing operations that require `StructureId`, this operation accepts `null` for cross-term queries of all questions regardless of parliamentary structure. When set to a specific UUID, filters to questions in that parliamentary term only.
 
-- **CurrentPage vs Page**: Both parameters present in actual requests; their distinction is unclear. Recommend setting both to same value until behavior diverges. May be legacy/redundant parameter.
+#### Filter Parameter Details
+- **SearchText:** Free-text search. Set to empty string `""` to disable.
+- **From/To:** Text-based filters (MP name, recipient name). Set to empty string `""` to disable.
+- **RegistrationNumber:** Registration number filter (e.g. '08-750/1'). Use `null` to omit.
+- **StatusId:** Filter by QuestionStatusId (17=Delivered, 19=Answered, 20=Secret answer, 21=Written answer). Use `null` to include all statuses.
+- **CommitteeId:** UUID or `null` to include all committees.
+- **DateFrom/DateTo:** AspDate format or `null` to omit start/end date filtering. Filters on DateAsked field.
 
-- **StructureId nullable behavior**: Unlike most operations that require `StructureId`, GetAllQuestions accepts `null` for cross-term queries of all questions regardless of parliamentary structure.
-
-- **Empty string filters**: Multiple text filters (`SearchText`, `RegistrationNumber`, `From`, `To`) accept empty string `""` to disable filtering on that dimension.
-
-- **TotalRows in items**: Each item includes `TotalRows: 0` in the response. Purpose is unclear (possibly legacy or reserved field); total count provided via top-level `TotalItems` instead.
-
-- **Question types observed**: "Писмено прашање" (Written question), "Усно прашање" (Oral question). No separate question-type ID exposed; use `QuestionTypeTitle` for filtering/display.
-
-- **Status values observed**: "Доставено" (Delivered, StatusId 17), "Одговорено" (Answered, StatusId 19).
-
-- **Language localization**: Response content (Title, From, To, StatusTitle, QuestionTypeTitle, ToInstitution) is returned in the requested `LanguageId` language.
-
-- **ToInstitution data quality**: May contain placeholder values (e.g., `"/"`) similar to `GetAllInstitutionsForFilter`; handle gracefully in client code. Note: inconsistent formatting in API responses (e.g., "Министерството" vs "Министерство" for ministry names).
+#### Item Field Details
+- **TotalRows:** Each item includes `TotalRows: 0`. Purpose unclear (possibly legacy or reserved field); rely on top-level `TotalItems` for actual result count.
+- **QuestionTypeTitle:** Observed types include "Писмено прашање" (Written question) and "Усно прашање" (Oral question). No separate type ID exposed.
+- **ToInstitution:** May contain placeholder values (e.g. `/`) or inconsistent formatting ("Министерството" vs "Министерство"). Handle gracefully in client code.
+- **StatusTitle:** Observed values include "Доставено" (Delivered) and "Одговорено" (Answered) in Macedonian; response localizes per LanguageId.

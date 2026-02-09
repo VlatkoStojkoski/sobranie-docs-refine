@@ -1,30 +1,5 @@
 ## GetAllMaterialsForPublicPortal
 
-### Request
-```json
-{
-  "MethodName": "GetAllMaterialsForPublicPortal",
-  "LanguageId": 1,
-  "ItemsPerPage": 9,
-  "CurrentPage": 1,
-  "SearchText": "",
-  "AuthorText": "",
-  "ActNumber": "",
-  "StatusGroupId": null,
-  "MaterialTypeId": 1,
-  "ResponsibleCommitteeId": null,
-  "CoReportingCommittees": null,
-  "OpinionCommittees": null,
-  "RegistrationNumber": null,
-  "EUCompatible": null,
-  "DateFrom": null,
-  "DateTo": null,
-  "ProcedureTypeId": null,
-  "InitiatorTypeId": null,
-  "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
-}
-```
-
 ### Request Schema
 ```json
 {
@@ -36,120 +11,76 @@
       "description": "Operation name (PascalCase)"
     },
     "LanguageId": {
-      "$ref": "#/$defs/LanguageId"
+      "$ref": "#/$defs/LanguageId",
+      "description": "Localization: 1=Macedonian, 2=Albanian, 3=Turkish"
     },
     "ItemsPerPage": {
       "type": "integer",
-      "description": "Number of items to return per page (e.g. 7, 9, 15, 31, 46). Equivalent to Rows in other operations."
+      "description": "Number of items per page (e.g. 7, 9, 15, 31, 46). Equivalent to Rows in other operations."
     },
     "CurrentPage": {
       "type": "integer",
-      "description": "Which page of results to return (1-based). Equivalent to Page in other operations."
+      "description": "Which page (1-based). Equivalent to Page in other operations."
     },
     "SearchText": {
-      "anyOf": [
-        {"type": "string"},
-        {"type": "null"}
-      ],
-      "description": "Free-text search in material titles and content. Empty string or null to omit filtering."
+      "anyOf": [{"type": "string"}, {"type": "null"}],
+      "description": "Free-text search in material titles/content. Empty string or null to omit."
     },
     "AuthorText": {
-      "anyOf": [
-        {"type": "string"},
-        {"type": "null"}
-      ],
+      "anyOf": [{"type": "string"}, {"type": "null"}],
       "description": "Filter by author name (free text). Empty string or null to omit."
     },
     "ActNumber": {
-      "anyOf": [
-        {"type": "string"},
-        {"type": "null"}
-      ],
+      "anyOf": [{"type": "string"}, {"type": "null"}],
       "description": "Filter by act/law number. Empty string or null to omit."
     },
     "StatusGroupId": {
-      "anyOf": [
-        {"type": "integer"},
-        {"type": "null"}
-      ],
-      "description": "Filter by material status group (see MaterialStatusId/StatusGroupId). Null to include all statuses."
+      "anyOf": [{"$ref": "#/$defs/StatusGroupId"}, {"type": "null"}],
+      "description": "Filter by material status group (6=Delivered to MPs, 9=First reading, 10=Second reading, 11=Third reading, 12=Closed, 24=Rejected, 64=Committee processing). Null to include all statuses."
     },
     "MaterialTypeId": {
-      "anyOf": [
-        {"type": "integer"},
-        {"type": "null"}
-      ],
-      "description": "Filter by material type. Example: 1 for law proposals, 28 for analyses/reports/information. Null to include all types."
+      "anyOf": [{"$ref": "#/$defs/MaterialTypeId"}, {"type": "null"}],
+      "description": "Filter by material type. Example: 1=Law proposal, 28=Report/Analysis. Full list from GetAllMaterialTypesForFilter. Null to include all."
     },
     "ResponsibleCommitteeId": {
-      "anyOf": [
-        {"$ref": "#/$defs/UUID"},
-        {"type": "null"}
-      ],
-      "description": "UUID of responsible committee. Null to include all committees."
+      "anyOf": [{"$ref": "#/$defs/UUID"}, {"type": "null"}],
+      "description": "UUID of responsible committee. Null to include all."
     },
     "CoReportingCommittees": {
-      "anyOf": [
-        {"type": "array"},
-        {"type": "null"}
-      ],
+      "anyOf": [{"type": "array"}, {"type": "null"}],
       "description": "Filter by co-reporting committee IDs. Null to omit."
     },
     "OpinionCommittees": {
-      "anyOf": [
-        {"type": "array"},
-        {"type": "null"}
-      ],
+      "anyOf": [{"type": "array"}, {"type": "null"}],
       "description": "Filter by opinion committee IDs. Null to omit."
     },
     "RegistrationNumber": {
-      "anyOf": [
-        {"type": "string"},
-        {"type": "null"}
-      ],
+      "anyOf": [{"type": "string"}, {"type": "null"}],
       "description": "Filter by exact registration number (e.g. '08-750/1'). Null to omit."
     },
     "EUCompatible": {
-      "anyOf": [
-        {"type": "boolean"},
-        {"type": "null"}
-      ],
-      "description": "Filter by EU compatibility flag. true=compatible only, false=non-compatible only, null=all materials."
+      "anyOf": [{"type": "boolean"}, {"type": "null"}],
+      "description": "true=EU-compatible only, false=non-compatible only, null=all."
     },
     "DateFrom": {
-      "anyOf": [
-        {"$ref": "#/$defs/AspDate"},
-        {"type": "null"}
-      ],
+      "anyOf": [{"$ref": "#/$defs/AspDate"}, {"type": "null"}],
       "description": "Filter materials from this date. Null to omit."
     },
     "DateTo": {
-      "anyOf": [
-        {"$ref": "#/$defs/AspDate"},
-        {"type": "null"}
-      ],
+      "anyOf": [{"$ref": "#/$defs/AspDate"}, {"type": "null"}],
       "description": "Filter materials up to this date. Null to omit."
     },
     "ProcedureTypeId": {
-      "anyOf": [
-        {"type": "integer"},
-        {"type": "null"}
-      ],
-      "description": "Filter by procedure type (see ProcedureTypeId: 1=Regular, 2=Shortened, 3=Urgent). Null to include all."
+      "anyOf": [{"$ref": "#/$defs/ProcedureTypeId"}, {"type": "null"}],
+      "description": "Filter by procedure type (1=Regular, 2=Shortened, 3=Urgent). Null to include all."
     },
     "InitiatorTypeId": {
-      "anyOf": [
-        {"type": "integer"},
-        {"type": "null"}
-      ],
-      "description": "Filter by initiator/proposer type (see ProposerTypeId). Null to include all."
+      "anyOf": [{"$ref": "#/$defs/ProposerTypeId"}, {"type": "null"}],
+      "description": "Filter by initiator/proposer type. Null to include all."
     },
     "StructureId": {
-      "anyOf": [
-        {"$ref": "#/$defs/UUID"},
-        {"type": "null"}
-      ],
-      "description": "UUID of parliamentary term/structure. Null returns materials across all structures/terms. When specified, filters to that structure only."
+      "anyOf": [{"$ref": "#/$defs/UUID"}, {"type": "null"}],
+      "description": "UUID of parliamentary term/structure. Null returns materials across all terms/structures. Commonly 5e00dbd6-ca3c-4d97-b748-f792b2fa3473 for current term."
     }
   },
   "required": ["MethodName", "LanguageId", "ItemsPerPage", "CurrentPage"],
@@ -157,13 +88,14 @@
 }
 ```
 
-### Response
+### Response Schema
 ```json
 {
   "type": "object",
   "properties": {
     "TotalItems": {
-      "type": "integer"
+      "type": "integer",
+      "description": "Total count of materials matching filter across all pages."
     },
     "Items": {
       "anyOf": [
@@ -173,27 +105,24 @@
             "type": "object",
             "properties": {
               "Id": {
-                "type": "string",
-                "format": "uuid"
+                "$ref": "#/$defs/UUID",
+                "description": "UUID of the material."
               },
               "Title": {
-                "type": "string"
+                "type": "string",
+                "description": "Material title in requested language."
               },
               "TypeTitle": {
                 "type": "string",
-                "description": "Human-readable material type name (e.g. 'Предлог закон', 'Декларација, резолуција, одлука и препорака', 'Анализи, извештаи, информации и друг материјал'). May have leading whitespace."
+                "description": "Human-readable material type (e.g. 'Предлог закон', 'Декларација...'). May have leading whitespace (\\r, \\n); trim for display."
               },
               "Status": {
-                "anyOf": [
-                  {"type": "null"},
-                  {"type": "string"},
-                  {"type": "integer"}
-                ],
-                "description": "Status field. Observed as consistently null; status info provided via StatusGroupTitle."
+                "anyOf": [{"type": "null"}, {"type": "string"}, {"type": "integer"}],
+                "description": "Consistently null; use StatusGroupTitle for actual status."
               },
               "StatusGroupTitle": {
                 "type": "string",
-                "description": "Human-readable status group/phase (e.g. 'Доставен до пратеници', 'Затворен', 'Leximi i parë'). Localized per LanguageId."
+                "description": "Material status group in requested language (e.g. 'Доставен до пратеници', 'Затворен', 'Leximi i parë'). Localized per LanguageId."
               },
               "RegistrationNumber": {
                 "type": "string",
@@ -201,14 +130,11 @@
               },
               "RegistrationDate": {
                 "$ref": "#/$defs/AspDate",
-                "description": "Date when material was registered."
+                "description": "Date material was registered."
               },
               "ResponsibleAuthor": {
-                "anyOf": [
-                  {"type": "string"},
-                  {"type": "null"}
-                ],
-                "description": "Primary/first author name. May be institutional (full title) or individual MP name. Can contain Cyrillic even when other language requested. Null when no designated responsible author."
+                "anyOf": [{"type": "string"}, {"type": "null"}],
+                "description": "Primary/first author name. May be institutional (full title in Cyrillic) or individual MP name. Null when no designated responsible author."
               },
               "Authors": {
                 "anyOf": [
@@ -218,44 +144,40 @@
                       "type": "object",
                       "properties": {
                         "Id": {
-                          "type": "string",
-                          "format": "uuid",
-                          "description": "UUID of author. For institutional authors: '00000000-0000-0000-0000-000000000000'. For MPs: real user UUID."
+                          "$ref": "#/$defs/UUID",
+                          "description": "Author UUID. For institutions: 00000000-0000-0000-0000-000000000000. For MPs: real user UUID."
                         },
                         "FirstName": {
                           "type": "string",
-                          "description": "For institutional authors: full institution name/title. For MPs: first name."
+                          "description": "For institutions: full name/title. For MPs: first name."
                         },
                         "LastName": {
                           "type": "string",
-                          "description": "For institutional authors: empty string. For MPs: last name."
+                          "description": "For institutions: empty string. For MPs: last name."
                         }
                       },
                       "required": ["Id", "FirstName", "LastName"]
-                    }
+                    },
+                    "description": "Array of authors (MP or institutional). Can be empty []."
                   },
                   {"type": "null"}
-                ],
-                "description": "Array of authors. Can be empty array [] for certain proposer types. Includes both individual MPs and institutional authors."
+                ]
               },
               "ProposerTypeTitle": {
                 "type": "string",
-                "description": "Human-readable proposer type (e.g. 'Пратеник', 'Влада на Република Северна Македонија', 'Работно тело', 'Друга instituција'). Localized per LanguageId. May have leading whitespace."
+                "description": "Human-readable proposer type in requested language (e.g. 'Пратеник', 'Влада...', 'Работно тело'). May have leading whitespace (\\r, \\n); trim for display."
               },
               "ResponsibleCommittee": {
                 "type": "string",
-                "description": "Name of responsible committee in requested language. Empty string for materials without committee assignment (appointments, resignations, decisions)."
+                "description": "Name of responsible committee in requested language. Empty string \"\" for materials without committee assignment (appointments, resignations, decisions)."
               },
               "EUCompatible": {
                 "type": "boolean",
                 "description": "Whether material is EU-compatible/harmonized. Always present (not nullable)."
               },
               "TotalItems": {
-                "anyOf": [
-                  {"type": "null"},
-                  {"type": "integer"}
-                ],
-                "description": "Always null at item level. Total count is in root-level TotalItems."
+                "anyOf": [{"type": "null"}, {"type": "integer"}],
+                "description": "Always null at item level. Total count in root-level TotalItems."
               }
             },
             "required": ["Id", "Title", "TypeTitle", "StatusGroupTitle", "RegistrationNumber", "RegistrationDate", "ProposerTypeTitle", "ResponsibleCommittee", "EUCompatible"]
@@ -263,40 +185,34 @@
         },
         {"type": "null"}
       ],
-      "description": "Array of materials, null when no results, or empty array [] when TotalItems is 0."
+      "description": "Array of materials. Null when TotalItems: 0, or empty array [] depending on result set. Both indicate no matching materials."
     }
-  }
+  },
+  "required": ["TotalItems", "Items"],
+  "additionalProperties": false
 }
 ```
 
-### Per-operation Notes
+### Notes
 
-**Pagination:** Uses `ItemsPerPage` and `CurrentPage` instead of `Rows` and `Page` pattern. Pagination example: `CurrentPage: 3` with `ItemsPerPage: 19` returns items 39-57 of the total result set.
+**Pagination:** Uses `ItemsPerPage` and `CurrentPage` (alternative pagination pattern) instead of `Rows`/`Page`. Example: `CurrentPage: 3, ItemsPerPage: 19` returns items 39–57 of total.
 
-**Parameter casing:** Uses `MethodName` (capital M) and `LanguageId` (capital L) — PascalCase unlike some other operations.
+**Parameter casing:** Uses `MethodName` (capital M) and `LanguageId` (capital L) — PascalCase. See global Calling Conventions for context.
 
-**StructureId flexibility:** When `StructureId: null`, returns materials across all parliamentary terms/structures (not limited to current term). Example: can yield 976+ total items across all terms vs. smaller subset for specific term. When specified, filters to that structure only.
+**StructureId flexibility:** When `null`, returns materials across all parliamentary terms/structures (e.g., 976+ total). When specified, filters to that structure. Commonly `5e00dbd6-ca3c-4d97-b748-f792b2fa3473` for current term. See global StructureId section.
 
-**StatusGroupId usage:** When set to specific value (e.g. `12`), filters materials to that status group. Maps to MaterialStatusId enum values. Example: `StatusGroupId: 6` filters to "Delivered to MPs" materials, `StatusGroupId: 12` filters to "Closed" materials.
+**Filters:** StatusGroupId, MaterialTypeId, ResponsibleCommitteeId, ProcedureTypeId, InitiatorTypeId all support null (include all). StatusGroupId maps to MaterialStatusId enum values in global $defs. MaterialTypeId full list from GetAllMaterialTypesForFilter catalog.
 
-**MaterialTypeId values:** `1` = law proposals (законски предлози/projektligji), `28` = analyses/reports/information/other materials. Full list from GetAllMaterialTypesForFilter.
+**Institutional authors:** Government/institution materials have `Authors[0].Id = "00000000-0000-0000-0000-000000000000"` with full title/name in `FirstName`, empty `LastName`. See global Institutional Authors section.
 
-**Institutional authors pattern:** Government-proposed materials have `Authors[0].Id = "00000000-0000-0000-0000-000000000000"` with minister name/title in `FirstName`, empty `LastName`. Regulatory commissions, agencies, state audit, fiscal council, etc. follow same pattern. When `ProposerTypeTitle` is "Влада..." (Government), "Работно тело" (Working body), or "Друга институција" (Other institution), authors are institutional.
+**ResponsibleAuthor:** Can be `null`. Government materials show full Cyrillic institutional title even when LanguageId requests Albanian/Turkish; other fields respect requested language.
 
-**ResponsibleAuthor behavior:** Can be `null` for materials without designated responsible author (observed with working body proposals). Individual MP materials show MP name; governmental/institutional materials show full title/position in Cyrillic even when other languages requested.
+**ResponsibleCommittee:** Empty string `""` (not null) for materials without committee assignment (appointments, resignations, decisions). See global Committee & Plenary Contexts.
 
-**ResponsibleCommittee empty string:** Confirmed empty string `""` (not null) for appointment/election materials, resignation materials, and certain administrative materials that bypass committee review.
+**Authors array:** Can be empty `[]`. Multiple co-authors listed separately.
 
-**Authors array variations:** Can be empty array `[]` for certain proposer types (e.g., working body proposals after processing). Multiple co-authors listed as separate array items for MP-proposed materials.
+**TypeTitle/ProposerTypeTitle whitespace:** May include leading `\r`, `\n`, or spaces. Trim for display. See global Data Quality Notes.
 
-**TypeTitle whitespace:** May have leading `\r\n` characters (e.g. `"\r\nProjektligji"`, `"\r\nAnalizat, raportet, informacionet dhe materialet e tjera"`). Trim when displaying.
+**Response nullability:** When `TotalItems: 0`, Items may be `null` or `[]`. Both indicate no results. See global Common Patterns.
 
-**ProposerTypeTitle values observed:** "Пратеник" (MP), "Влада на Република Septembrie Македонија" (Government of RNM), "Работно тело" (Working body), "Друга instituција" (Other institution), "Dërguar" (Delivered - in Albanian). May have leading `\r\n` characters. Corresponds to ProposerTypeId enum.
-
-**StatusGroupTitle values observed:** "Прво читање" (First reading), "Второ читање" (Second reading), "Трето читање" (Third reading), "Затворен" (Closed), "Доставен до пратеници" (Delivered to MPs), "Finalized" (English), "Mbyllur" (Albanian), "Dorëzohet deputetëve" (Albanian), "Leximi i parë" (Albanian), "Leximi i dytë" (Albanian).
-
-**Cross-language institutional text:** Even when requesting Albanian (`LanguageId: 2`) or Turkish (`LanguageId: 3`), the `ResponsibleAuthor` field for government-proposed materials may contain Cyrillic text (Macedonian minister names/titles). Other fields respect requested language.
-
-**Response includes null Items:** When `TotalItems: 0`, response returns `Items: []` (empty array) or `Items: null` depending on the specific result set. Both cases indicate no matching materials.
-
-**EUCompatible filter:** Values `true`, `false`, or `null`. `false` is the common case for MP-proposed materials in typical legislative sessions.
+**EUCompatible:** `true` (EU-compatible only), `false` (non-compatible only), `null` (all materials).

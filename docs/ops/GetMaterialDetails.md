@@ -1,66 +1,92 @@
 ## GetMaterialDetails
 
-### Request
+### Request Schema
 ```json
 {
-  "methodName": "GetMaterialDetails",
-  "MaterialId": "759ba4db-41e1-4fdd-9176-21cb7c260522",
-  "LanguageId": 1,
-  "AmendmentsPage": 1,
-  "AmendmentsRows": 5
+  "type": "object",
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "const": "GetMaterialDetails",
+      "description": "Operation name"
+    },
+    "MaterialId": {
+      "$ref": "#/$defs/UUID",
+      "description": "Material identifier from GetAllMaterialsForPublicPortal"
+    },
+    "LanguageId": {
+      "$ref": "#/$defs/LanguageId",
+      "description": "Language for localized content (1=Macedonian, 2=Albanian, 3=Turkish)"
+    },
+    "AmendmentsPage": {
+      "type": "integer",
+      "description": "Page number for amendments pagination (1-based); optional, default 1"
+    },
+    "AmendmentsRows": {
+      "type": "integer",
+      "description": "Number of amendments per page (e.g. 5, 25); optional"
+    }
+  },
+  "required": ["methodName", "MaterialId", "LanguageId"],
+  "additionalProperties": false
 }
 ```
 
-**Request parameters:**
-- **methodName** — Required, string. Operation name: "GetMaterialDetails"
-- **MaterialId** — Required, UUID string. Material identifier from GetAllMaterialsForPublicPortal
-- **LanguageId** — Required, integer. Language for localized content (1=Macedonian, 2=Albanian, 3=Turkish)
-- **AmendmentsPage** — Optional, integer. Page number for amendments pagination (1-based). Controls which page of amendments to retrieve in FirstReadingAmendments and SecondReadingAmendments arrays.
-- **AmendmentsRows** — Optional, integer. Number of amendments per page (e.g. 5, 25, 47). Controls size of amendment arrays.
-
-### Response
+### Response Schema
 ```json
 {
   "type": "object",
   "properties": {
     "Title": {
-      "type": "string"
+      "type": "string",
+      "description": "Full title/name of the material"
     },
     "StatusGroupTitle": {
-      "type": "string"
+      "type": "string",
+      "description": "Current procedural stage in requested language (e.g. \"Прво читање\" = First reading)"
     },
     "TypeTitle": {
-      "type": "string"
+      "type": "string",
+      "description": "Material type name in requested language. May contain leading/trailing whitespace; trim for display."
     },
     "ProposerTypeTitle": {
-      "type": "string"
+      "type": "string",
+      "description": "Proposer type in natural language (e.g. \"Пратеник\" = MP, \"Влада на Република Северна Македонија\" = Government)"
     },
     "ResponsibleAuthor": {
-      "type": "string"
+      "type": "string",
+      "description": "Name and title of primary responsible author/proposer. For multi-author materials, represents lead author. May be empty when no responsible author designated. May contain Cyrillic (Macedonian) even if other language requested."
     },
     "Institution": {
-      "type": "string"
+      "type": "string",
+      "description": "Institution name when material proposed by institutional entity. Empty string when proposer is MPs or not applicable."
     },
     "ProposerCommittee": {
       "anyOf": [
         {"type": "string"},
         {"type": "null"}
-      ]
+      ],
+      "description": "Committee name if material proposed by committee. Null for government/MP proposals."
     },
     "ProcedureTypeTitle": {
-      "type": "string"
+      "type": "string",
+      "description": "Procedure type in natural language (e.g. \"Редовна постапка\" = Regular, \"Скратена постапка\" = Shortened, \"Итна постапка\" = Urgent)"
     },
     "RegistrationNumber": {
-      "type": "string"
+      "type": "string",
+      "description": "Official registration number (format: XX-XXX/X, e.g. 08-676/1)"
     },
     "RegistrationDate": {
-      "$ref": "#/$defs/AspDate"
+      "$ref": "#/$defs/AspDate",
+      "description": "Date material was registered"
     },
     "EUCompatible": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Indicates EU compatibility assessment"
     },
     "ParentTitle": {
-      "type": "string"
+      "type": "string",
+      "description": "Title of parent material if this is amendment or derivative. Empty string for standalone materials."
     },
     "Committees": {
       "type": "array",
@@ -68,24 +94,32 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID",
+            "description": "Committee UUID"
           },
           "Name": {
-            "type": "string"
+            "type": "string",
+            "description": "Committee name"
           },
           "IsLegislative": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "True if Legislative-Legal Committee (Законодавно-правна комисија)"
           },
           "IsResponsible": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "True if lead/responsible committee"
           },
           "Documents": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object"
+            },
+            "description": "Committee-specific documents array (may be empty)"
           }
-        }
-      }
+        },
+        "required": ["Id", "Name", "IsLegislative", "IsResponsible", "Documents"]
+      },
+      "description": "Committees assigned to review the material"
     },
     "Documents": {
       "type": "array",
@@ -93,40 +127,54 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID",
+            "description": "Document UUID"
           },
           "Title": {
-            "type": "string"
+            "type": "string",
+            "description": "Document name"
           },
           "Url": {
-            "type": "string"
+            "type": "string",
+            "description": "SharePoint download URL"
           },
           "FileName": {
             "anyOf": [
               {"type": "string"},
               {"type": "null"}
-            ]
+            ],
+            "description": "Original filename (often null)"
           },
           "DocumentTypeId": {
-            "type": "integer"
+            "$ref": "#/$defs/DocumentTypeId",
+            "description": "Document type (see global $defs)"
           },
           "DocumentTypeTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "Human-readable document type. May contain leading/trailing whitespace and control characters (\\r, \\n); trim for display."
           },
           "IsExported": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "True if exported/published"
           }
-        }
-      }
+        },
+        "required": ["Id", "Title", "Url", "DocumentTypeId", "DocumentTypeTitle", "IsExported"]
+      },
+      "description": "Array of attached documents. Large arrays may be truncated (indicated by _truncated marker)."
     },
     "FirstReadingAmendments": {
       "type": "array",
-      "items": {}
+      "items": {
+        "type": "object"
+      },
+      "description": "Amendments for first reading. Empty array when no amendments."
     },
     "SecondReadingAmendments": {
       "type": "array",
-      "items": {}
+      "items": {
+        "type": "object"
+      },
+      "description": "Amendments for second reading. Empty array when no amendments."
     },
     "FirstReadingSittings": {
       "type": "array",
@@ -134,11 +182,10 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID"
           },
           "SittingTypeId": {
-            "type": "integer"
+            "$ref": "#/$defs/SittingTypeId"
           },
           "SittingTypeTitle": {
             "type": "string"
@@ -147,15 +194,21 @@
             "$ref": "#/$defs/AspDate"
           },
           "CommitteeId": {
-            "type": ["string", "null"],
-            "format": "uuid"
+            "anyOf": [
+              {"$ref": "#/$defs/UUID"},
+              {"type": "null"}
+            ],
+            "description": "Null for plenary; populated for committee sitting"
           },
           "CommitteeTitle": {
-            "type": "string",
-            "nullable": true
+            "anyOf": [
+              {"type": "string"},
+              {"type": "null"}
+            ],
+            "description": "Null for plenary; populated for committee sitting"
           },
           "StatusGroupId": {
-            "type": "integer"
+            "$ref": "#/$defs/StatusGroupId"
           },
           "ObjectStatusId": {
             "type": "integer"
@@ -168,10 +221,14 @@
           },
           "VotingResults": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object"
+            }
           }
-        }
-      }
+        },
+        "required": ["Id", "SittingTypeId", "SittingTypeTitle", "SittingDate", "CommitteeId", "CommitteeTitle", "StatusGroupId", "ObjectStatusId", "SittingTitle", "SittingNumber", "VotingResults"]
+      },
+      "description": "Sittings discussing material at first reading. Empty when not yet scheduled."
     },
     "SecondReadingSittings": {
       "type": "array",
@@ -179,11 +236,10 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID"
           },
           "SittingTypeId": {
-            "type": "integer"
+            "$ref": "#/$defs/SittingTypeId"
           },
           "SittingTypeTitle": {
             "type": "string"
@@ -192,15 +248,19 @@
             "$ref": "#/$defs/AspDate"
           },
           "CommitteeId": {
-            "type": ["string", "null"],
-            "format": "uuid"
+            "anyOf": [
+              {"$ref": "#/$defs/UUID"},
+              {"type": "null"}
+            ]
           },
           "CommitteeTitle": {
-            "type": "string",
-            "nullable": true
+            "anyOf": [
+              {"type": "string"},
+              {"type": "null"}
+            ]
           },
           "StatusGroupId": {
-            "type": "integer"
+            "$ref": "#/$defs/StatusGroupId"
           },
           "ObjectStatusId": {
             "type": "integer"
@@ -213,10 +273,14 @@
           },
           "VotingResults": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object"
+            }
           }
-        }
-      }
+        },
+        "required": ["Id", "SittingTypeId", "SittingTypeTitle", "SittingDate", "CommitteeId", "CommitteeTitle", "StatusGroupId", "ObjectStatusId", "SittingTitle", "SittingNumber", "VotingResults"]
+      },
+      "description": "Sittings at second reading. Same structure as FirstReadingSittings."
     },
     "ThirdReadingSittings": {
       "type": "array",
@@ -224,11 +288,10 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID"
           },
           "SittingTypeId": {
-            "type": "integer"
+            "$ref": "#/$defs/SittingTypeId"
           },
           "SittingTypeTitle": {
             "type": "string"
@@ -237,15 +300,19 @@
             "$ref": "#/$defs/AspDate"
           },
           "CommitteeId": {
-            "type": ["string", "null"],
-            "format": "uuid"
+            "anyOf": [
+              {"$ref": "#/$defs/UUID"},
+              {"type": "null"}
+            ]
           },
           "CommitteeTitle": {
-            "type": "string",
-            "nullable": true
+            "anyOf": [
+              {"type": "string"},
+              {"type": "null"}
+            ]
           },
           "StatusGroupId": {
-            "type": "integer"
+            "$ref": "#/$defs/StatusGroupId"
           },
           "ObjectStatusId": {
             "type": "integer"
@@ -258,10 +325,14 @@
           },
           "VotingResults": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object"
+            }
           }
-        }
-      }
+        },
+        "required": ["Id", "SittingTypeId", "SittingTypeTitle", "SittingDate", "CommitteeId", "CommitteeTitle", "StatusGroupId", "ObjectStatusId", "SittingTitle", "SittingNumber", "VotingResults"]
+      },
+      "description": "Sittings at third reading. Same structure as FirstReadingSittings."
     },
     "Sittings": {
       "type": "array",
@@ -269,11 +340,10 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID"
           },
           "SittingTypeId": {
-            "type": "integer"
+            "$ref": "#/$defs/SittingTypeId"
           },
           "SittingTypeTitle": {
             "type": "string"
@@ -282,15 +352,19 @@
             "$ref": "#/$defs/AspDate"
           },
           "CommitteeId": {
-            "type": ["string", "null"],
-            "format": "uuid"
+            "anyOf": [
+              {"$ref": "#/$defs/UUID"},
+              {"type": "null"}
+            ]
           },
           "CommitteeTitle": {
-            "type": "string",
-            "nullable": true
+            "anyOf": [
+              {"type": "string"},
+              {"type": "null"}
+            ]
           },
           "StatusGroupId": {
-            "type": "integer"
+            "$ref": "#/$defs/StatusGroupId"
           },
           "ObjectStatusId": {
             "type": "integer"
@@ -303,10 +377,14 @@
           },
           "VotingResults": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object"
+            }
           }
-        }
-      }
+        },
+        "required": ["Id", "SittingTypeId", "SittingTypeTitle", "SittingDate", "CommitteeId", "CommitteeTitle", "StatusGroupId", "ObjectStatusId", "SittingTitle", "SittingNumber", "VotingResults"]
+      },
+      "description": "General array of all related sittings. Empty when none. Same structure as FirstReadingSittings."
     },
     "Authors": {
       "type": "array",
@@ -314,110 +392,76 @@
         "type": "object",
         "properties": {
           "Id": {
-            "type": "string",
-            "format": "uuid"
+            "$ref": "#/$defs/UUID",
+            "description": "For MPs: actual UUID. For institutional authors: all-zeros UUID (00000000-0000-0000-0000-000000000000)"
           },
           "FirstName": {
-            "type": "string"
+            "type": "string",
+            "description": "For MPs: first name. For institutional authors: full institution name/title."
           },
           "LastName": {
-            "type": "string"
+            "type": "string",
+            "description": "For MPs: last name. For institutional authors: empty string."
           }
-        }
-      }
+        },
+        "required": ["Id", "FirstName", "LastName"]
+      },
+      "description": "Array of co-authors/co-proposers. Can contain multiple MP co-proposers. ResponsibleAuthor typically contains first/primary author."
     },
     "IsWithdrawn": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "True if withdrawn from consideration"
     },
     "TerminationStatusTitle": {
       "anyOf": [
         {"type": "string"},
         {"type": "null"}
-      ]
+      ],
+      "description": "Final status when closed/terminated (e.g. \"Донесен\" = Adopted, \"Миратуар\" = Approved). Null when still active."
     },
     "TerminationNote": {
       "anyOf": [
         {"type": "string"},
         {"type": "null"}
-      ]
+      ],
+      "description": "Administrative note explaining termination. Null when still active."
     },
     "TerminationDate": {
       "anyOf": [
         {"$ref": "#/$defs/AspDate"},
         {"type": "null"}
-      ]
+      ],
+      "description": "Timestamp when finalized. Null when still active."
     },
     "AmendmentsTotalRows": {
-      "type": "integer"
+      "type": "integer",
+      "description": "Total count of amendments for pagination. 0 when no amendments exist."
     }
-  }
+  },
+  "required": ["Title", "StatusGroupTitle", "TypeTitle", "ProposerTypeTitle", "ResponsibleAuthor", "Institution", "ProposerCommittee", "ProcedureTypeTitle", "RegistrationNumber", "RegistrationDate", "EUCompatible", "ParentTitle", "Committees", "Documents", "FirstReadingAmendments", "SecondReadingAmendments", "FirstReadingSittings", "SecondReadingSittings", "ThirdReadingSittings", "Sittings", "Authors", "IsWithdrawn", "TerminationStatusTitle", "TerminationNote", "TerminationDate", "AmendmentsTotalRows"]
 }
 ```
 
-## Response keys
+### Notes
 
-- **Title** — Full title/name of the material
-- **StatusGroupTitle** — Current procedural stage (e.g. "Прво читање" = First reading, "Второ читање" = Second reading, "Затворен" = Closed)
-- **TypeTitle** — Material type name in requested language (e.g. "Предлог закон" = Draft law, "Анализи, извештаи, информации и друг материјал" = Analyses/reports/information/other materials). May contain leading/trailing whitespace.
-- **ProposerTypeTitle** — Proposer type in natural language (e.g. "Пратеник" = MP, "Влада на Република Северна Македонија" = Government)
-- **ResponsibleAuthor** — Name and title of primary responsible author/proposer. For multi-author materials, represents the lead author from the Authors list. May be empty when no responsible author designated.
-- **Institution** — Institution name when material proposed by institutional entity (e.g. ministry, government body). Empty string `""` when proposer is MPs or when not applicable.
-- **ProposerCommittee** — Committee name if material proposed by committee. Null for government/MP proposals or other non-committee entities.
-- **ProcedureTypeTitle** — Procedure type in natural language (e.g. "Редовна постапка" = Regular procedure, "Скратена постапка" = Shortened procedure, "Итна постапка" = Urgent procedure)
-- **RegistrationNumber** — Official registration number assigned by parliament (format: "XX-XXX/X", e.g. "08-676/1")
-- **RegistrationDate** — Date material was officially registered with parliament (AspDate format). May include future dates (test data or planned materials).
-- **EUCompatible** — Boolean indicating whether material is compatible with EU legislation/standards
-- **ParentTitle** — Title of parent material if this is amendment or derivative material. Empty string `""` for standalone materials.
-- **Committees** — Array of committees assigned to review the material
-  - **Id** — Committee UUID
-  - **Name** — Committee name
-  - **IsLegislative** — Boolean; true if this is the Legislative-Legal Committee (Законодавно-правна комисија)
-  - **IsResponsible** — Boolean; true if this is the lead/responsible committee for the material
-  - **Documents** — Committee-specific documents array (may be empty)
-- **Documents** — Array of attached documents for the material
-  - **Id** — Document UUID
-  - **Title** — Document name
-  - **Url** — SharePoint download URL
-  - **FileName** — Original filename (often null)
-  - **DocumentTypeId** — Document type identifier (see $defs: 1=Document, 7=Full text of material, 8=Adopted act, 9=Notification to MPs, 30=Committee report without approval, 46=Legal-Legislative Committee report, 52=Report, 65=Supplemented draft law)
-  - **DocumentTypeTitle** — Human-readable document type. May contain control characters like `\r\n`.
-  - **IsExported** — Boolean; true if document has been exported/published
-- **FirstReadingAmendments** — Array of amendments proposed during first reading. Empty array `[]` when no amendments submitted for first reading.
-- **SecondReadingAmendments** — Array of amendments proposed during second reading. Empty array `[]` when no amendments submitted for second reading.
-- **FirstReadingSittings** — Array of sittings where material was discussed at first reading stage. Empty array when material not yet scheduled for first reading discussion. Each sitting includes: Id, SittingTypeId (1=plenary, 2=committee), SittingTypeTitle, SittingDate (AspDate), CommitteeId (null for plenary), CommitteeTitle, StatusGroupId, ObjectStatusId, SittingTitle, SittingNumber, VotingResults.
-- **SecondReadingSittings** — Array of sittings where material was discussed at second reading stage. Empty array when material not yet scheduled for second reading discussion. Same structure as FirstReadingSittings.
-- **ThirdReadingSittings** — Array of sittings where material was discussed at third reading stage. Empty array when material not yet scheduled for third reading discussion. Same structure as FirstReadingSittings.
-- **Sittings** — General array of all related sittings (usage purpose may overlap with reading-specific arrays). Empty when no sittings associated. Same structure as FirstReadingSittings.
-- **Authors** — Array of co-authors/co-proposers
-  - **Id** — UUID identifier. For MPs: actual UUID. For institutional authors: all-zeros UUID `"00000000-0000-0000-0000-000000000000"`
-  - **FirstName** — For MPs: first name. For institutional authors: full institution name/title.
-  - **LastName** — For MPs: last name. For institutional authors: empty string.
-- **IsWithdrawn** — Boolean; true if material has been withdrawn from consideration by proposer(s)
-- **TerminationStatusTitle** — Final status when material is closed/terminated (e.g. "Донесен" = Adopted, "Миратуар" = Approved). Null when material still active.
-- **TerminationNote** — Administrative note explaining termination reason/outcome (e.g. "СОБРАНИЕТО ГО ДОНЕСЕ ЗАКОНОТ" = Parliament adopted the law). Null when material still active.
-- **TerminationDate** — AspDate timestamp when material was finalized/closed. Null when material still active.
-- **AmendmentsTotalRows** — Total count of amendments across all reading stages for pagination purposes. Value 0 when no amendments exist.
+- **Amendments pagination:** Request parameters `AmendmentsPage` and `AmendmentsRows` control amendment array pagination (1-based). Response field `AmendmentsTotalRows` provides total count. When no amendments exist (AmendmentsTotalRows: 0), both amendment arrays return empty [].
 
-## Per-operation notes
+- **Multi-author materials:** Authors array can contain multiple MP co-proposers. ResponsibleAuthor typically contains first/primary author name and title.
 
-- **Amendments pagination**: The `AmendmentsPage` and `AmendmentsRows` request parameters control pagination of the amendment arrays (`FirstReadingAmendments`, `SecondReadingAmendments`). The `AmendmentsTotalRows` response field provides the total amendment count across all pages. When no amendments exist (`AmendmentsTotalRows: 0`), both amendment arrays return empty `[]` rather than null.
+- **Committee processing:** Materials assigned to multiple committees with different roles. IsResponsible: true identifies lead committee. IsLegislative: true identifies legislative-legal review committee. Each committee may have associated Documents array.
 
-- **Multi-author materials**: The `Authors` array can contain multiple MP authors for co-proposed materials. The `ResponsibleAuthor` field typically contains the first/primary author's name from this list.
+- **Reading stages:** Materials progress through three reading stages. Each reading has corresponding *ReadingSittings array containing plenary (SittingTypeId: 1, CommitteeId: null) and/or committee (SittingTypeId: 2, with populated CommitteeId/CommitteeTitle) sitting records. Empty arrays indicate material not yet reached that stage. In sitting objects, StatusGroupId 9=first reading, 10=second reading, 11=third reading.
 
-- **Committee processing**: Materials are assigned to multiple committees with different roles. The `IsResponsible: true` flag identifies the lead committee. The `IsLegislative: true` flag identifies the legislative-legal review committee (standard for all legislative materials). Each committee may have associated `Documents` array (may be empty).
+- **Empty arrays:** Amendment and sitting arrays return empty arrays [] when no data exists, not null.
 
-- **Reading stages**: Materials progress through three reading stages (first, second, third). Each reading has a corresponding `*ReadingSittings` array containing plenary (`SittingTypeId: 1`, `CommitteeId: null`) and/or committee (`SittingTypeId: 2`, with populated `CommitteeId`/`CommitteeTitle`) sitting records. Empty arrays indicate the material has not yet reached that stage.
+- **Institutional authors:** When ProposerTypeId is 2 (Government), Authors array contains entries with Id as all-zeros UUID, FirstName containing full official title/name (e.g. minister name), and LastName as empty string. ResponsibleAuthor duplicates this information and may contain Cyrillic text (Macedonian) even when other language requested. Institution field contains ministry/institution name.
 
-- **Status tracking**: In sitting objects, `StatusGroupId` and `ObjectStatusId` both equal 9 indicates completed first reading; values 10 and 11 indicate second and third readings respectively.
+- **Data quality - whitespace:** TypeTitle, DocumentTypeTitle, and other catalog fields may contain leading/trailing whitespace and control characters (\r, \n). Trim as needed for display.
 
-- **Empty arrays**: Amendment and sitting arrays (`FirstReadingAmendments`, `SecondReadingAmendments`, FirstReadingSittings, SecondReadingSittings, ThirdReadingSittings, Sittings`) return empty arrays `[]` when no data exists, not `null` (contrast with paginated list operations where `TotalItems: 0` causes `Items: null`).
+- **Document truncation:** Large document arrays may be truncated (indicated by _truncated marker). Total document count not provided; full list may require alternative queries.
 
-- **Institutional authors**: When `ProposerTypeId` is 2 (Government), the `Authors` array contains entries with `Id: "00000000-0000-0000-0000-000000000000"`, `FirstName` containing the full official title/name (e.g. minister name), and `LastName` as empty string. The `ResponsibleAuthor` field duplicates this information. The `Institution` field contains the ministry/institution name.
+- **Registration date precision:** RegistrationDate field may include future timestamps (indicating test data, planned materials, or specific timezone handling).
 
-- **Data quality - whitespace**: The `TypeTitle` and `DocumentTypeTitle` fields may contain leading/trailing whitespace and control characters (`\r`, `\n`). Trim as needed for display.
+- **Sittings duplicates:** Sittings array may contain multiple entries with same SittingNumber but different Id and SittingDate values. This represents multi-day sessions or continuations of the same formal sitting.
 
-- **Document truncation**: Large document arrays may be truncated (indicated by `"_truncated": 1` marker in final element). Total document count not provided; full document list may require multiple calls or alternative queries.
-
-- **Registration date precision**: The `RegistrationDate` field uses AspDate format and may include future timestamps (indicating test data, planned materials, or specific timezone handling).
-
-- **Sittings duplicates**: The `Sittings` array may contain multiple entries with the same `SittingNumber` but different `Id` and `SittingDate` values. This likely represents multi-day sessions or continuations of the same formal sitting.
+- **Language behavior:** Localized fields (StatusGroupTitle, TypeTitle, ProposerTypeTitle, ProcedureTypeTitle) return text in requested LanguageId (1=Macedonian, 2=Albanian, 3=Turkish). However, ResponsibleAuthor and Institution for government-proposed materials may contain Cyrillic regardless of requested language.
