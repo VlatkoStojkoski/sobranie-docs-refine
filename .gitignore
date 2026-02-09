@@ -11,3 +11,5 @@ collected/
 listing_cache/
 logs/
 schema_inference.json
+
+archive/
