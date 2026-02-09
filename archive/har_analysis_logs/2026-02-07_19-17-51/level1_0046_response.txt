@@ -1,1 +1,0 @@
-{"reasoning": "This is a request for a static HTML calendar component from a third-party library (Moldova calendar). It's a client-side UI widget, not a data fetch or API call specific to parliament operations.", "answer": "NO"}

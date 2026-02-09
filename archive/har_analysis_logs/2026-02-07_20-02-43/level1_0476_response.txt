@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to the Sobranie API endpoint '/GetAllQuestions' that fetches parliamentary questions data with pagination parameters. This is clearly parliament data retrieval through the MakePostRequest API mechanism.", "answer": "YES"}

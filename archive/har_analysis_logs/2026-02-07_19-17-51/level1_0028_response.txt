@@ -1,1 +1,0 @@
-{"reasoning": "This is an HTML template file used for rendering question details in the UI. It's a static component file, not a data fetch or API call that retrieves parliament information.", "answer": "NO"}

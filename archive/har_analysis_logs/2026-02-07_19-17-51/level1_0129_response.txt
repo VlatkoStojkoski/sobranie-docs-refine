@@ -1,1 +1,0 @@
-{"reasoning": "This is a direct API call to GetAllSittings method via the MakePostRequest endpoint, clearly fetching parliament sitting data with pagination and language parameters. This is core parliament data retrieval.", "answer": "YES"}

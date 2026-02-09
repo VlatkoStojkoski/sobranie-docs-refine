@@ -1,1 +1,0 @@
-{"reasoning": "This is a calendar HTML file from a third-party component (Moldova directory) that appears to be a static resource for rendering a calendar widget, not a parliament data fetch or API endpoint.", "answer": "NO"}

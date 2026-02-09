@@ -1,1 +1,0 @@
-{"reasoning": "This is a static HTML file for a calendar widget component (Moldova calendar library), which is a client-side UI asset similar to JavaScript libraries. It's not parliament data, not an API endpoint, and not actual parliamentary documents.", "answer": "NO"}

@@ -1,1 +1,0 @@
-{"reasoning": "This is an HTML template file (singleNewsInstance.min.html) being loaded, which is a static asset used for rendering news content on the frontend. It's not a data API call, document URL, or parliament data fetch.", "answer": "NO"}

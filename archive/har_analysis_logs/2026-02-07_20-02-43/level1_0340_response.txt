@@ -1,1 +1,0 @@
-{"reasoning": "This is an HTML template file (.min.html) used for displaying news instances. While it's from the main sobranie.mk domain and relates to news functionality, it appears to be a static template asset rather than an API endpoint or data fetch that delivers parliament content.", "answer": "NO"}

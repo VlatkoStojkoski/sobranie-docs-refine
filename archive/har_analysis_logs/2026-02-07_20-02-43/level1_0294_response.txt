@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to the parliament's API endpoint (MakePostRequest) with methodName 'GetAllSittingStatuses', which clearly fetches parliamentary sitting/session status data. This is core parliament data.", "answer": "YES"}

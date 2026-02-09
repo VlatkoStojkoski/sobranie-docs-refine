@@ -1,1 +1,0 @@
-{"reasoning": "This is an API call to sobranie.mk's MakePostRequest endpoint requesting parliamentary sitting statuses data. It's fetching structured parliament data about session statuses, which is core legislative information.", "answer": "YES"}

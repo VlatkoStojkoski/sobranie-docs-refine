@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to the sobranie.mk API endpoint 'MakePostRequest' that calls the 'GetSittingDetails' method with a specific sitting ID. This is clearly fetching parliament session data, which is core legislative content.", "answer": "YES"}

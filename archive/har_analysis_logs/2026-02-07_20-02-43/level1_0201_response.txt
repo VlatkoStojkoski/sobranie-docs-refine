@@ -1,1 +1,0 @@
-{"reasoning": "This is an HTML template file (.min.html) used for rendering news items on the client-side. It's a static template asset similar to CSS/JS files, not a data fetch, API call, or document URL that would contain parliamentary information.", "answer": "NO"}

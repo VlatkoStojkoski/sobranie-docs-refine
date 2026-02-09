@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to a .asmx API endpoint (GetCustomEventsCalendar) that fetches calendar events data from the Parliament system. The request includes structured parameters for language, month, and year, indicating it retrieves parliament-related calendar information. This matches the criteria for relevant API calls.", "answer": "YES"}

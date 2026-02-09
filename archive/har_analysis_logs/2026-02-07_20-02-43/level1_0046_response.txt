@@ -1,1 +1,0 @@
-{"reasoning": "This is a static HTML calendar component file located in a third-party Scripts/Moldova directory, not a parliament data fetch, API endpoint, or document URL. It appears to be a reusable calendar widget rather than sobranie.mk parliament content.", "answer": "NO"}

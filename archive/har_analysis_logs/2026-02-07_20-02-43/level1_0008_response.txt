@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to the sobranie.mk API endpoint MakePostRequest calling the GetAllQuestionStatuses method with LanguageId parameter. This is clearly an API call fetching parliament data about question statuses, which is core parliamentary information.", "answer": "YES"}

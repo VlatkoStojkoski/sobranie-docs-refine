@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to an .asmx web service endpoint (GetCustomEventsCalendar) that fetches calendar events data for the parliament. It's an API call retrieving structured parliament data, which matches the relevance criteria for sobranie.mk API endpoints.", "answer": "YES"}

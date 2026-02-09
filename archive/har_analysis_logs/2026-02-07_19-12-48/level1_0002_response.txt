@@ -1,1 +1,0 @@
-Error: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': "'claude-sonnet-4-20250514' does not support output format."}, 'request_id': 'req_011CXudnU3SgZp7oa2Bf1yG5'}

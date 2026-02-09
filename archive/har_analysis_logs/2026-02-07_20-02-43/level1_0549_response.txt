@@ -1,1 +1,0 @@
-{"reasoning": "This is a static HTML file for a calendar widget located in a Scripts/Moldova directory, which appears to be a third-party component rather than parliament-specific functionality. It's not an API endpoint, data fetch, or document URL.", "answer": "NO"}

@@ -1,1 +1,0 @@
-{"reasoning": "This is an HTML template file (.min.html) used for rendering news instances on the frontend. It's a static view component, not a data API or document resource. Similar to other static assets like JS/CSS files.", "answer": "NO"}
