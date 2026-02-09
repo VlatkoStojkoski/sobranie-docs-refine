@@ -108,7 +108,7 @@ def main() -> int:
         print("ERROR: docs/global.md or docs/ops/ not found.")
         return 1
 
-    op_files = sorted(f.stem for f in OPS_DIR.glob("*.md"))
+    op_files = sorted(p.stem for p in OPS_DIR.glob("*.md") if p.stem != "OPERATION_TEMPLATE")
     if not op_files:
         print("No operation markdown files in docs/ops/.")
         return 0

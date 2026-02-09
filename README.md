@@ -1,6 +1,6 @@
 # Sobranie.mk API
 
-Macedonian Parliament (Собрание) API documentation. LLM-driven refinement of `docs/global.md` and `docs/ops/<Operation>.md` from live request/response pairs.
+Macedonian Parliament (Собрание) API documentation. LLM-driven refinement of `docs/global.md` and `docs/ops/<Operation>.md`. Collect fetches live request/response pairs; refine uses only existing markdown.
 
 ## The API
 
@@ -55,6 +55,6 @@ python scripts/build_api_md.py
 
 **During a run:** Each `docs/ops/<Op>.md` is written after its op; `docs/global.md` is written once at the end (batch apply). `tail -f logs/refine_ops_cleanup/<run_id>/issues_for_review.md` to watch issues. `docs/API.md` is regenerated at the end.
 
-**Env:** `ANTHROPIC_API_KEY` required.
+**Env:** `ANTHROPIC_API_KEY` required for refine (not for collect).
 
-See `docs/API.md` for the full API reference. See `DECISIONS.md` for rationale and details.
+See **`CONTRIBUTING.md`** for step-by-step: refining docs vs generating new pairs. See `docs/API.md` for the full API reference. See `DECISIONS.md` for rationale and details.

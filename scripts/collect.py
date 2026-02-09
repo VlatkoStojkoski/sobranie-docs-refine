@@ -9,6 +9,7 @@ import argparse
 import json
 import logging
 import random
+import re
 import sys
 import time
 from datetime import datetime
@@ -74,6 +75,20 @@ def get_url(op: str, op_cfg: dict) -> str:
     return url if url.startswith("http") else API
 
 
+def _aspdate_to_year(asp: str) -> int | None:
+    """Parse AspDate /Date(ms)/ to calendar year. Returns None if not parseable."""
+    if not isinstance(asp, str):
+        return None
+    m = re.search(r"/Date\((\d+)\)/", asp)
+    if not m:
+        return None
+    try:
+        ms = int(m.group(1))
+        return datetime.fromtimestamp(ms / 1000.0).year
+    except (ValueError, OSError):
+        return None
+
+
 def _generate_value(gen: dict, catalog: dict, listing_ids: dict, op_cfg: dict) -> object:
     g = gen.get("generator", "constant")
     if g == "constant":
@@ -84,6 +99,18 @@ def _generate_value(gen: dict, catalog: dict, listing_ids: dict, op_cfg: dict) -
     if g == "range":
         lo, hi = int(gen.get("min", 0)), int(gen.get("max", 10))
         return random.randint(lo, hi)
+    if g == "current_structure":
+        vals = catalog.get("_current_structure", [])
+        return vals[0] if vals else None
+    if g == "current_structure_year":
+        years = catalog.get("_current_structure_years", [])
+        if len(years) >= 2:
+            lo, hi = years[0], years[1]
+            now_year = datetime.now().year
+            hi = min(hi, now_year)
+            if lo <= hi:
+                return random.randint(lo, hi)
+        return datetime.now().year
     if g == "catalog":
         src = gen.get("source", "")
         fld = gen.get("field", "Id")
@@ -161,6 +188,9 @@ def main():
     listing_ids: dict[str, list] = {}
 
     non_detail = [o for o, c in ops.items() if c.get("type") != "detail"]
+    # Run GetAllStructuresForFilter first so we have current structure and date range for other ops
+    if "GetAllStructuresForFilter" in non_detail:
+        non_detail = ["GetAllStructuresForFilter"] + [o for o in non_detail if o != "GetAllStructuresForFilter"]
     detail = [o for o, c in ops.items() if c.get("type") == "detail"]
     order = non_detail + detail
 
@@ -223,6 +253,27 @@ def main():
                 listing_ids.setdefault(op, []).extend(ids)
                 catalog.setdefault(op, {}).setdefault(fld, []).extend(ids)
             catalog.setdefault(op, {}).setdefault("Id", []).extend(extract_ids(resp, "Id"))
+
+            # Set current structure and its date range (years) for downstream ops
+            if op == "GetAllStructuresForFilter" and "_current_structure" not in catalog and isinstance(resp, list):
+                for item in resp:
+                    if isinstance(item, dict) and item.get("IsCurrent") is True and item.get("Id"):
+                        catalog["_current_structure"] = [item["Id"]]
+                        y_from = _aspdate_to_year(item.get("DateFrom") or "")
+                        y_to = _aspdate_to_year(item.get("DateTo") or "")
+                        if y_from is not None:
+                            y_to = y_to if y_to is not None else datetime.now().year
+                            catalog["_current_structure_years"] = [y_from, min(y_to, datetime.now().year)]
+                        break
+                if "_current_structure" not in catalog and resp:
+                    first = resp[0]
+                    if isinstance(first, dict) and first.get("Id"):
+                        catalog["_current_structure"] = [first["Id"]]
+                        y_from = _aspdate_to_year(first.get("DateFrom") or "")
+                        y_to = _aspdate_to_year(first.get("DateTo") or "")
+                        if y_from is not None:
+                            y_to = y_to if y_to is not None else datetime.now().year
+                            catalog["_current_structure_years"] = [y_from, min(y_to, datetime.now().year)]
 
             path = LISTING_CACHE / f"{run_id}_{op}_{nnn}.json"
             path.write_text(json.dumps({"request": body, "response": resp, "extracted_ids": list(set(listing_ids.get(op, []))), "item_count": len(resp.get("Items") or []) if isinstance(resp, dict) else 0}, ensure_ascii=False, indent=2), encoding="utf-8")

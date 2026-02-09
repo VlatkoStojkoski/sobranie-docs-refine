@@ -1,6 +1,6 @@
 # Sobranie.mk API Index
 
-> North Macedonian Parliament (Собрание) — operation index and calling conventions.
+> Macedonian Parliament (Собрание) — operation index and calling conventions.
 
 ## Calling Conventions
 
