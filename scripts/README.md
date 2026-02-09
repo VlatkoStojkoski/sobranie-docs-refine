@@ -1,6 +1,25 @@
 # Scripts
 
-## Pipeline
+## Improved Flow (Phases 0–5)
+
+```bash
+# Phase 0: Preparation (dirs, HAR, migration)
+python scripts/phase0_prepare.py
+
+# Phase 1–2: One-time setup (request schemas, generator config)
+source .env  # or: set -a && source .env && set +a
+python scripts/phase1_request_schemas.py
+python scripts/phase2_generator_config.py
+
+# Phase 3–5: Collection and schema output
+python scripts/phase3_collect.py
+python scripts/phase4_response_schemas.py
+
+# Validation
+python scripts/validate_schemas.py
+```
+
+## Legacy Pipeline
 
 1. **collect.py** — Diverse API samples  
    - Listings with randomized filters (TypeId, StatusId, MaterialTypeId, etc.)  

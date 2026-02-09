@@ -1,0 +1,1392 @@
+{
+  "schemas": {
+    "GetAllApplicationTypes": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllApplicationTypes",
+            "/GetAllApplicationTypes"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllCommitteesForFilter": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllCommitteesForFilter",
+            "/GetAllCommitteesForFilter"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "structureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllCouncils": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllCouncils",
+            "/GetAllCouncils"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "StructureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllGenders": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllGenders",
+            "/GetAllGenders"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllInstitutionsForFilter": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllInstitutionsForFilter",
+            "/GetAllInstitutionsForFilter"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllMPsClubsByStructure": {
+      "type": "object",
+      "properties": {
+        "MethodName": {
+          "type": "string",
+          "enum": [
+            "GetAllMPsClubsByStructure",
+            "/GetAllMPsClubsByStructure"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "StructureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "MethodName",
+        "LanguageId"
+      ]
+    },
+    "GetAllMaterialStatusesForFilter": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllMaterialStatusesForFilter",
+            "/GetAllMaterialStatusesForFilter"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllMaterialTypesForFilter": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllMaterialTypesForFilter",
+            "/GetAllMaterialTypesForFilter"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllMaterialsForPublicPortal": {
+      "type": "object",
+      "properties": {
+        "MethodName": {
+          "type": "string",
+          "enum": [
+            "GetAllMaterialsForPublicPortal",
+            "/GetAllMaterialsForPublicPortal"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "ItemsPerPage": {
+          "type": "integer"
+        },
+        "CurrentPage": {
+          "type": "integer"
+        },
+        "StructureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "SearchText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "AuthorText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ActNumber": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "StatusGroupId": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "MaterialTypeId": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ResponsibleCommitteeId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "CoReportingCommittees": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "OpinionCommittees": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "RegistrationNumber": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "EUCompatible": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "DateFrom": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "DateTo": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ProcedureTypeId": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "InitiatorTypeId": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "MethodName",
+        "LanguageId",
+        "ItemsPerPage",
+        "CurrentPage"
+      ]
+    },
+    "GetAllParliamentaryGroups": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllParliamentaryGroups",
+            "/GetAllParliamentaryGroups"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "StructureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllPoliticalParties": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllPoliticalParties",
+            "/GetAllPoliticalParties"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "StructureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllProcedureTypes": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllProcedureTypes",
+            "/GetAllProcedureTypes"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAllQuestionStatuses": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllQuestionStatuses",
+            "/GetAllQuestionStatuses"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "LanguageId"
+          ]
+        },
+        {
+          "required": [
+            "languageId"
+          ]
+        }
+      ]
+    },
+    "GetAllQuestions": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllQuestions",
+            "/GetAllQuestions"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "CurrentPage": {
+          "type": "integer"
+        },
+        "Page": {
+          "type": "integer"
+        },
+        "Rows": {
+          "type": "integer"
+        },
+        "StructureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "SearchText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "RegistrationNumber": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "StatusId": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "From": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "To": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "CommitteeId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "DateFrom": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "DateTo": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "methodName",
+        "LanguageId",
+        "CurrentPage",
+        "Page",
+        "Rows"
+      ]
+    },
+    "GetAllSittingStatuses": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllSittingStatuses",
+            "/GetAllSittingStatuses"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName",
+        "LanguageId"
+      ]
+    },
+    "GetAllSittings": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllSittings",
+            "/GetAllSittings"
+          ]
+        },
+        "Page": {
+          "type": "integer"
+        },
+        "Rows": {
+          "type": "integer"
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "StructureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "TypeId": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "CommitteeId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "StatusId": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "DateFrom": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "DateTo": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "SessionId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "Number": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "methodName",
+        "Page",
+        "Rows",
+        "LanguageId"
+      ]
+    },
+    "GetAllStructuresForFilter": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAllStructuresForFilter",
+            "/GetAllStructuresForFilter"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetAmendmentDetails": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetAmendmentDetails",
+            "/GetAmendmentDetails"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "amendmentId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId",
+        "amendmentId"
+      ]
+    },
+    "GetCommitteeDetails": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetCommitteeDetails",
+            "/GetCommitteeDetails"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "committeeId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId",
+        "committeeId"
+      ]
+    },
+    "GetCouncilDetails": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetCouncilDetails",
+            "/GetCouncilDetails"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "committeeId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId",
+        "committeeId"
+      ]
+    },
+    "GetCustomEventsCalendar": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "object",
+          "properties": {
+            "Language": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            },
+            "Month": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "Year": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "Language",
+            "Month",
+            "Year"
+          ]
+        }
+      },
+      "required": [
+        "model"
+      ]
+    },
+    "GetMPsClubDetails": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetMPsClubDetails",
+            "/GetMPsClubDetails"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "mpsClubId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "methodName",
+        "LanguageId",
+        "mpsClubId"
+      ]
+    },
+    "GetMaterialDetails": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetMaterialDetails",
+            "/GetMaterialDetails"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "MaterialId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "AmendmentsPage": {
+          "type": "integer"
+        },
+        "AmendmentsRows": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "methodName",
+        "LanguageId",
+        "MaterialId",
+        "AmendmentsPage",
+        "AmendmentsRows"
+      ]
+    },
+    "GetMonthlyAgenda": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetMonthlyAgenda",
+            "/GetMonthlyAgenda"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "Month": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "Year": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "methodName",
+        "LanguageId",
+        "Month",
+        "Year"
+      ]
+    },
+    "GetOfficialVisitsForUser": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "model"
+      ]
+    },
+    "GetParliamentMPsNoImage": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetParliamentMPsNoImage",
+            "/GetParliamentMPsNoImage"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "page": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rows": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "StructureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "genderId": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ageFrom": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ageTo": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "politicalPartyId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "searchText": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "coalition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "constituency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetParliamentaryGroupDetails": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetParliamentaryGroupDetails",
+            "/GetParliamentaryGroupDetails"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "parliamentaryGroupId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "methodName",
+        "LanguageId",
+        "parliamentaryGroupId"
+      ]
+    },
+    "GetPoliticalPartyDetails": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetPoliticalPartyDetails",
+            "/GetPoliticalPartyDetails"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "politicalPartyId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "methodName",
+        "LanguageId"
+      ]
+    },
+    "GetProposerTypes": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetProposerTypes",
+            "/GetProposerTypes"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId"
+      ]
+    },
+    "GetQuestionDetails": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetQuestionDetails",
+            "/GetQuestionDetails"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "QuestionId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "methodName",
+        "LanguageId",
+        "QuestionId"
+      ]
+    },
+    "GetSittingDetails": {
+      "type": "object",
+      "properties": {
+        "MethodName": {
+          "type": "string",
+          "enum": [
+            "GetSittingDetails",
+            "/GetSittingDetails"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "SittingId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "MethodName",
+        "LanguageId",
+        "SittingId"
+      ]
+    },
+    "GetUserDetailsByStructure": {
+      "type": "object",
+      "properties": {
+        "methodName": {
+          "type": "string",
+          "enum": [
+            "GetUserDetailsByStructure",
+            "/GetUserDetailsByStructure"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "userId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "structureId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "methodName",
+        "languageId",
+        "userId"
+      ]
+    },
+    "GetVotingResultsForAgendaItem": {
+      "type": "object",
+      "properties": {
+        "MethodName": {
+          "type": "string",
+          "enum": [
+            "GetVotingResultsForAgendaItem",
+            "/GetVotingResultsForAgendaItem"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "VotingDefinitionId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "AgendaItemId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "MethodName",
+        "LanguageId",
+        "VotingDefinitionId",
+        "AgendaItemId"
+      ]
+    },
+    "GetVotingResultsForAgendaItemReportDocument": {
+      "type": "object",
+      "properties": {
+        "MethodName": {
+          "type": "string",
+          "enum": [
+            "GetVotingResultsForAgendaItemReportDocument",
+            "/GetVotingResultsForAgendaItemReportDocument"
+          ]
+        },
+        "LanguageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "VotingDefinitionId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "AgendaItemId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "MethodName",
+        "LanguageId",
+        "VotingDefinitionId",
+        "AgendaItemId"
+      ]
+    },
+    "GetVotingResultsForSitting": {
+      "type": "object",
+      "properties": {
+        "MethodName": {
+          "type": "string",
+          "enum": [
+            "GetVotingResultsForSitting",
+            "/GetVotingResultsForSitting"
+          ]
+        },
+        "languageId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "votingDefinitionId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "sittingId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "MethodName",
+        "languageId",
+        "votingDefinitionId",
+        "sittingId"
+      ]
+    },
+    "LoadLanguage": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  }
+}

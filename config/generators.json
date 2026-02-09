@@ -1,0 +1,820 @@
+{
+  "sample_size_default": 5,
+  "operations": {
+    "GetAllApplicationTypes": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllApplicationTypes"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetAllCommitteesForFilter": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllCommitteesForFilter"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "structureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetAllCouncils": {
+      "type": "listing",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllCouncils"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "StructureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetAllGenders": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllGenders"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetAllInstitutionsForFilter": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllInstitutionsForFilter"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetAllMPsClubsByStructure": {
+      "type": "listing",
+      "fields": {
+        "MethodName": {
+          "generator": "constant",
+          "value": "GetAllMPsClubsByStructure"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "StructureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetAllMaterialStatusesForFilter": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllMaterialStatusesForFilter"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetAllMaterialTypesForFilter": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllMaterialTypesForFilter"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetAllMaterialsForPublicPortal": {
+      "type": "listing",
+      "fields": {
+        "MethodName": {
+          "generator": "constant",
+          "value": "GetAllMaterialsForPublicPortal"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "ItemsPerPage": {
+          "generator": "range",
+          "min": 10,
+          "max": 50
+        },
+        "CurrentPage": {
+          "generator": "range",
+          "min": 1,
+          "max": 3
+        },
+        "StructureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetAllParliamentaryGroups": {
+      "type": "listing",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllParliamentaryGroups"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "StructureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetAllPoliticalParties": {
+      "type": "listing",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllPoliticalParties"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "StructureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetAllProcedureTypes": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllProcedureTypes"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetAllQuestionStatuses": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllQuestionStatuses"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetAllQuestions": {
+      "type": "listing",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllQuestions"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "CurrentPage": {
+          "generator": "range",
+          "min": 1,
+          "max": 3
+        },
+        "Page": {
+          "generator": "range",
+          "min": 1,
+          "max": 3
+        },
+        "Rows": {
+          "generator": "range",
+          "min": 10,
+          "max": 50
+        },
+        "StructureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetAllSittingStatuses": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllSittingStatuses"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetAllSittings": {
+      "type": "listing",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllSittings"
+        },
+        "Page": {
+          "generator": "range",
+          "min": 1,
+          "max": 3
+        },
+        "Rows": {
+          "generator": "range",
+          "min": 10,
+          "max": 50
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "TypeId": {
+          "generator": "range",
+          "min": 1,
+          "max": 6
+        },
+        "StructureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetAllStructuresForFilter": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetAllStructuresForFilter"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetAmendmentDetails": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetMaterialDetails",
+        "field": "amendmentId"
+      },
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "/GetAmendmentDetails"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "amendmentId": {
+          "generator": "uuid_from_listing"
+        }
+      }
+    },
+    "GetCommitteeDetails": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetAllCommitteesForFilter",
+        "field": "Id"
+      },
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetCommitteeDetails"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "committeeId": {
+          "generator": "uuid_from_listing"
+        }
+      }
+    },
+    "GetCouncilDetails": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetAllCouncils",
+        "field": "Id"
+      },
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetCouncilDetails"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "committeeId": {
+          "generator": "uuid_from_listing"
+        }
+      }
+    },
+    "GetCustomEventsCalendar": {
+      "type": "other",
+      "url": "https://www.sobranie.mk/Moldova/services/CalendarService.asmx/GetCustomEventsCalendar",
+      "fields": {
+        "model": {
+          "generator": "object",
+          "properties": {
+            "Language": {"generator": "enum", "values": [1, 2, 3]},
+            "Month": {"generator": "range", "min": 1, "max": 12},
+            "Year": {"generator": "range", "min": 2023, "max": 2026}
+          }
+        }
+      }
+    },
+    "GetMPsClubDetails": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetAllMPsClubsByStructure",
+        "field": "Id"
+      },
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetMPsClubDetails"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "mpsClubId": {
+          "generator": "uuid_from_listing"
+        }
+      }
+    },
+    "GetMaterialDetails": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetAllMaterialsForPublicPortal",
+        "field": "Id"
+      },
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetMaterialDetails"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "MaterialId": {
+          "generator": "uuid_from_listing"
+        },
+        "AmendmentsPage": {
+          "generator": "range",
+          "min": 1,
+          "max": 3
+        },
+        "AmendmentsRows": {
+          "generator": "range",
+          "min": 10,
+          "max": 50
+        }
+      }
+    },
+    "GetMonthlyAgenda": {
+      "type": "listing",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetMonthlyAgenda"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "Month": {
+          "generator": "range",
+          "min": 1,
+          "max": 12
+        },
+        "Year": {
+          "generator": "range",
+          "min": 2020,
+          "max": 2024
+        }
+      }
+    },
+    "GetOfficialVisitsForUser": {
+      "type": "other",
+      "url": "https://www.sobranie.mk/Moldova/services/OfficialVisits.asmx/GetOfficialVisitsForUser",
+      "fields": {
+        "model": {
+          "generator": "catalog",
+          "source": "GetParliamentMPsNoImage",
+          "field": "UserId"
+        }
+      }
+    },
+    "GetParliamentMPsNoImage": {
+      "type": "listing",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetParliamentMPsNoImage"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "page": {
+          "generator": "range",
+          "min": 1,
+          "max": 3
+        },
+        "rows": {
+          "generator": "range",
+          "min": 10,
+          "max": 50
+        },
+        "StructureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetParliamentaryGroupDetails": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetAllParliamentaryGroups",
+        "field": "Id"
+      },
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetParliamentaryGroupDetails"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "parliamentaryGroupId": {
+          "generator": "uuid_from_listing"
+        }
+      }
+    },
+    "GetPoliticalPartyDetails": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetAllPoliticalParties",
+        "field": "Id"
+      },
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetPoliticalPartyDetails"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "politicalPartyId": {
+          "generator": "uuid_from_listing"
+        }
+      }
+    },
+    "GetProposerTypes": {
+      "type": "other",
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetProposerTypes"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    "GetQuestionDetails": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetAllQuestions",
+        "field": "Id"
+      },
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "/GetQuestionDetails"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "QuestionId": {
+          "generator": "uuid_from_listing"
+        }
+      }
+    },
+    "GetSittingDetails": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetAllSittings",
+        "field": "Id"
+      },
+      "fields": {
+        "MethodName": {
+          "generator": "constant",
+          "value": "GetSittingDetails"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "SittingId": {
+          "generator": "uuid_from_listing"
+        }
+      }
+    },
+    "GetUserDetailsByStructure": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetParliamentMPsNoImage",
+        "field": "UserId"
+      },
+      "fields": {
+        "methodName": {
+          "generator": "constant",
+          "value": "GetUserDetailsByStructure"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "userId": {
+          "generator": "uuid_from_listing"
+        },
+        "structureId": {
+          "generator": "catalog",
+          "source": "GetAllStructuresForFilter",
+          "field": "Id"
+        }
+      }
+    },
+    "GetVotingResultsForAgendaItem": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetSittingDetails",
+        "field": "VotingDefinitionId"
+      },
+      "fields": {
+        "MethodName": {
+          "generator": "constant",
+          "value": "GetVotingResultsForAgendaItem"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "VotingDefinitionId": {
+          "generator": "uuid_from_listing"
+        },
+        "AgendaItemId": {
+          "generator": "constant",
+          "value": "1"
+        }
+      }
+    },
+    "GetVotingResultsForAgendaItemReportDocument": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetSittingDetails",
+        "field": "VotingDefinitionId"
+      },
+      "fields": {
+        "MethodName": {
+          "generator": "constant",
+          "value": "GetVotingResultsForAgendaItemReportDocument"
+        },
+        "LanguageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "VotingDefinitionId": {
+          "generator": "uuid_from_listing"
+        },
+        "AgendaItemId": {
+          "generator": "constant",
+          "value": "1"
+        }
+      }
+    },
+    "GetVotingResultsForSitting": {
+      "type": "detail",
+      "id_source": {
+        "operation": "GetSittingDetails",
+        "field": "VotingDefinitionId"
+      },
+      "fields": {
+        "MethodName": {
+          "generator": "constant",
+          "value": "GetVotingResultsForSitting"
+        },
+        "languageId": {
+          "generator": "enum",
+          "values": [
+            1,
+            2,
+            3
+          ]
+        },
+        "votingDefinitionId": {
+          "generator": "uuid_from_listing"
+        },
+        "sittingId": {
+          "generator": "catalog",
+          "source": "GetAllSittings",
+          "field": "Id"
+        }
+      }
+    },
+    "LoadLanguage": {
+      "type": "other",
+      "url": "https://www.sobranie.mk/Infrastructure/LoadLanguage",
+      "fields": {}
+    }
+  }
+}
