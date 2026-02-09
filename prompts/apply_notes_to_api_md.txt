@@ -1,0 +1,28 @@
+You are helping refine API documentation. You are given the current API.md and notes from an analyst about what to add or update.
+
+TASK: Produce the COMPLETE updated API.md. Apply ONLY the changes indicated in the notes. Preserve all existing content that is not explicitly updated.
+
+Include notes about filter usage and key meanings when the notes ask for them (e.g. what request filters do, what response keys mean, when to use optional params).
+
+WIDENING ONLY: Do NOT remove or narrow schemas. Only add or widen.
+- Widening = expanding to accept more valid values: add enum values, make fields optional (anyOf with null), add new optional properties, use anyOf/union when a field has multiple possible types. The docs must validate every previously seen body.
+- If notes ask for anyOf or union types, apply them. Do not drop any existing type branches or enum values.
+- If the notes say "No changes needed", output the API.md unchanged.
+
+Output the full API.md content and nothing else. No markdown code fences, no preamble. Start directly with the first line of the API.md (e.g. "# Sobranie.mk API" or similar).
+
+---
+
+## Current API.md
+
+{api_md}
+
+---
+
+## Notes to apply
+
+{notes}
+
+---
+
+Output the complete updated API.md:

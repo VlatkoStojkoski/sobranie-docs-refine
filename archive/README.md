@@ -104,6 +104,17 @@ export ANTHROPIC_API_KEY=sk-...  # for LLM-based scripts
 
 See `scripts/README.md` for detailed usage and env vars.
 
+## 2026-02 simplification (additions)
+
+Obsolete scripts, docs, config, and runtime data were moved here without reorganizing existing archive content:
+
+- **scripts_obsolete/** — phase0–4, bootstrap_api_md, build_docs, gather_pairs_for_api_md, infer_schema, enrich, generate_openapi, validate_schemas, har_parser, inference, schema_widener
+- **docs_obsolete/** — API_DOCS, API_INDEX, API_MD_PIPELINE, DOCS_COMPARISON, ENRICHMENT_REPORT, IMPROVED_FLOW, SCHEMA_INFERENCE_REPORT, openapi.yaml
+- **config_obsolete/** — request_schemas.json, generator_meta_schema.json, enum_defs.json, generators_api_md.json
+- **runtime_data/** — data/, listing_cache/, schemas/ (snapshot at simplification time)
+
+Active project uses only: `scripts/{collect,gather_pairs,refine_api_md,cache,improved/llm}`, `config/generators.json`, `docs/API.md`, `prompts/`, `collected/`, `errors/`.
+
 ## License
 
 Documentation only. The sobranie.mk API and data belong to the Assembly of the Republic of North Macedonia.

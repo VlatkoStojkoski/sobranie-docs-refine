@@ -4,7 +4,7 @@ Phase 4: Response schemas via algorithmic inference + LLM refinement.
 Phase 5: Combine and write schemas/api.json.
 
 Run: python scripts/phase4_response_schemas.py
-Env: ANTHROPIC_API_KEY or OPENAI_API_KEY
+Env: ANTHROPIC_API_KEY
 """
 
 import json

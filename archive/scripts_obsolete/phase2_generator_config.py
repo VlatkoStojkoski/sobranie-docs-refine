@@ -3,7 +3,7 @@
 Phase 2: Generator config from request schemas + taxonomy via LLM.
 
 Run: python scripts/phase2_generator_config.py
-Env: ANTHROPIC_API_KEY or OPENAI_API_KEY
+Env: ANTHROPIC_API_KEY
 """
 
 import json

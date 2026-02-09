@@ -111,15 +111,22 @@ def generate_body(op: str, op_cfg: dict, catalog: dict, listing_ids: dict) -> di
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--no-cache", action="store_true")
+    parser.add_argument(
+        "--config",
+        default=None,
+        help="Path to generators config (default: config/generators.json)",
+    )
     args = parser.parse_args()
     use_cache = not args.no_cache
 
     sys.path.insert(0, str(ROOT / "scripts"))
     from cache import get as cache_get, set_ as cache_set
 
-    cfg_path = CONFIG / "generators.json"
+    cfg_path = Path(args.config) if args.config else CONFIG / "generators.json"
+    if not cfg_path.is_absolute():
+        cfg_path = ROOT / cfg_path
     if not cfg_path.exists():
-        print("ERROR: Run phase2 first.")
+        print("ERROR: Config not found:", cfg_path)
         return 1
 
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))

@@ -48,7 +48,7 @@ This flow replaces the current collect → infer_schema → build_docs → enric
 | 24 | Scope | All known operations |
 | 25 | Migration | Reuse collected/, schema_inference, docs, archive |
 | 26 | Phasing | Single monolithic doc; focus on simplicity |
-| 27 | Tools | Python; Anthropic or OpenAI |
+| 27 | Tools | Python; Anthropic Claude |
 | 28 | Non-standard endpoints | First-class; own config (GetCustomEventsCalendar, LoadLanguage, GetOfficialVisitsForUser) |
 | 29 | Routing | MakePostRequest + methodName; three non-standard URLs |
 | 30 | languageId, StructureId | Enums from catalogs (fetched at runtime) |
@@ -113,7 +113,7 @@ One file: `schemas/api.json` (or configurable path).
    - Input: inferred schema per operation
    - Tasks: enum vs string/int discernment; add descriptions for schema values
    - Output: refined schema (structured output, JSON)
-   - Model: Anthropic or OpenAI
+   - Model: Anthropic Claude
 4. **Combine** request schemas (from Phase 1) + refined response schemas + $defs → Phase 5 output.
 
 ### Output
@@ -264,7 +264,7 @@ listing_cache/
 ### Dependencies
 - HAR at `data/session.har`
 - Docs, archive, collected (for enrichment)
-- LLM (Anthropic or OpenAI)
+- LLM (Anthropic Claude)
 
 ---
 
@@ -331,7 +331,7 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5
 1. **Simplicity first** — Prefer small, focused scripts over monolithic ones.
 2. **Reuse** — Adapt `infer_schema.py`, `collect.py`, `cache.py` where it reduces effort.
 3. **No truncation** — Remove truncation from collection; store full bodies.
-4. **LLM structured output** — Use Claude structured output or OpenAI JSON mode for deterministic schema/config output.
+4. **LLM structured output** — Use Claude structured output for deterministic schema/config output.
 5. **Validation** — Use `jsonschema` (Python) for schema validation.
 6. **Catalog fetch** — Run catalog ops at start of Phase 3; persist to listing cache for optional reuse.
 7. **Non-standard endpoints** — Explicit entries in generator config with URL and request structure.

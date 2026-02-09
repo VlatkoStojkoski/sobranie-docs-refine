@@ -9,7 +9,7 @@ Phase 1: Request schemas from HAR + enrichment + LLM.
 5. Persist config/request_schemas.json
 
 Run: python scripts/phase1_request_schemas.py
-Env: ANTHROPIC_API_KEY or OPENAI_API_KEY
+Env: ANTHROPIC_API_KEY
 """
 
 import json
