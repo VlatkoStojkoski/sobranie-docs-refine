@@ -1,21 +1,25 @@
-You are helping refine API documentation. You are given the current API.md and notes from an analyst about what to add or update.
+You are helping refine API documentation. You are given the global docs and the per-operation doc for one endpoint, plus notes from an analyst about what to add or update.
 
-TASK: Produce the COMPLETE updated API.md. Apply ONLY the changes indicated in the notes. Preserve all existing content that is not explicitly updated.
-
-Include notes about filter usage and key meanings when the notes ask for them (e.g. what request filters do, what response keys mean, when to use optional params).
+TASK: Apply the notes and produce TWO outputs:
+1. new_global: the complete updated global.md (if notes affect global: Common filters, Common keys, $defs). Otherwise return the current global content unchanged.
+2. new_op: the complete updated per-operation .md for this endpoint. Apply operation-specific changes from the notes. If notes say "No changes needed" and no op-specific changes, return the current op content unchanged.
 
 WIDENING ONLY: Do NOT remove or narrow schemas. Only add or widen.
-- Widening = expanding to accept more valid values: add enum values, make fields optional (anyOf with null), add new optional properties, use anyOf/union when a field has multiple possible types. The docs must validate every previously seen body.
-- If notes ask for anyOf or union types, apply them. Do not drop any existing type branches or enum values.
-- If the notes say "No changes needed", output the API.md unchanged.
-
-Output the full API.md content and nothing else. No markdown code fences, no preamble. Start directly with the first line of the API.md (e.g. "# Sobranie.mk API" or similar).
+- Add enum values, anyOf with null, new optional properties, union types when notes ask.
+- Include filter usage and key meaning notes when the notes ask for them.
+- Preserve all existing content that is not explicitly updated.
 
 ---
 
-## Current API.md
+## Current global.md
 
-{api_md}
+{global_md}
+
+---
+
+## Current per-operation doc: {operation}
+
+{op_md}
 
 ---
 
@@ -25,4 +29,4 @@ Output the full API.md content and nothing else. No markdown code fences, no pre
 
 ---
 
-Output the complete updated API.md:
+Return a JSON object with exactly two string keys: "new_global" and "new_op", each containing the full updated content. No markdown fences, no preamble. Start each value directly with the first line of the document.

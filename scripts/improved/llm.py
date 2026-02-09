@@ -3,8 +3,12 @@ LLM client for Anthropic Claude. Supports structured JSON output.
 """
 
 import json
+import logging
 import os
+import time
 from pathlib import Path
+
+log = logging.getLogger("llm")
 
 # Load .env from project root so ANTHROPIC_API_KEY is available
 try:
@@ -13,7 +17,6 @@ try:
     load_dotenv(root / ".env")
 except ImportError:
     pass
-import re
 
 
 def _strip_markdown_json(text: str) -> str:
@@ -57,6 +60,37 @@ def complete_json(
     return json.loads(text)
 
 
+# JSON schema for apply step: {new_global: string, new_op: string}
+APPLY_OUTPUT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "new_global": {"type": "string", "description": "Full updated global.md content"},
+        "new_op": {"type": "string", "description": "Full updated per-operation .md content"},
+    },
+    "required": ["new_global", "new_op"],
+    "additionalProperties": False,
+}
+
+
+def complete_structured(
+    prompt: str,
+    schema: dict,
+    system: str | None = None,
+    model: str | None = None,
+    max_tokens: int | None = None,
+) -> dict:
+    """
+    Send prompt with structured output (output_config.format).
+    Returns parsed JSON matching schema. Requires models with structured output support
+    (claude-sonnet-4-5, claude-haiku-4-5, claude-opus-4-5, claude-opus-4-6).
+    """
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise RuntimeError("Set ANTHROPIC_API_KEY")
+    return _anthropic_complete_structured(
+        prompt, schema, system, model, max_tokens
+    )
+
+
 def _anthropic_complete(
     prompt: str,
     system: str | None,
@@ -67,6 +101,8 @@ def _anthropic_complete(
 
     client = Anthropic()
     m = model or "claude-sonnet-4-20250514"
+    log.debug("complete: model=%s", m)
+    t0 = time.perf_counter()
     kwargs = {
         "model": m,
         "max_tokens": max_tokens if max_tokens is not None else 16000,
@@ -75,4 +111,41 @@ def _anthropic_complete(
     if system:
         kwargs["system"] = system
     msg = client.messages.create(**kwargs)
+    elapsed = time.perf_counter() - t0
+    usage = getattr(msg, "usage", None)
+    tok = f", in={usage.input_tokens} out={usage.output_tokens}" if usage else ""
+    log.info("complete done: %.1fs%s", elapsed, tok)
     return msg.content[0].text if msg.content else ""
+
+
+def _anthropic_complete_structured(
+    prompt: str,
+    schema: dict,
+    system: str | None,
+    model: str | None,
+    max_tokens: int | None,
+) -> dict:
+    from anthropic import Anthropic
+
+    # Structured output can be large; use 20min timeout to avoid "Streaming is required" error
+    client = Anthropic(timeout=1200.0)
+    m = model or "claude-haiku-4-5"
+    log.debug("complete_structured: model=%s", m)
+    t0 = time.perf_counter()
+    kwargs = {
+        "model": m,
+        "max_tokens": max_tokens if max_tokens is not None else 16000,
+        "messages": [{"role": "user", "content": prompt}],
+        "output_config": {
+            "format": {"type": "json_schema", "schema": schema},
+        },
+    }
+    if system:
+        kwargs["system"] = system
+    msg = client.messages.create(**kwargs)
+    elapsed = time.perf_counter() - t0
+    usage = getattr(msg, "usage", None)
+    tok = f", in={usage.input_tokens} out={usage.output_tokens}" if usage else ""
+    log.info("complete_structured done: %.1fs%s", elapsed, tok)
+    text = msg.content[0].text if msg.content else "{}"
+    return json.loads(text)

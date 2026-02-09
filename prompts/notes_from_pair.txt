@@ -1,38 +1,37 @@
-You are helping refine API documentation. You are given the current API.md and one request/response pair from a real API call.
+You are helping refine API documentation. You are given the global docs (conventions, $defs, common filters/keys) and the per-operation doc for one endpoint, plus one request/response pair from a real API call.
 
-TASK: Produce concise notes on what should be ADDED or UPDATED in the API.md based on this pair.
-- New enum values or types
-- New or optional fields in request/response schemas
-- New IDs or examples worth documenting
-- Descriptions or notes that would help developers
-- Any gaps between the current docs and this actual response
+TASK: Produce concise notes on what should be ADDED or UPDATED based on this pair.
+- Changes to global: add to Common request filters, Common response keys, $defs when the pair informs shared concepts
+- Changes to the operation file: add enum values, optional fields, request/response schema updates, per-op notes
 
 FILTER USAGE AND KEY MEANINGS: Add notes for request filters and response keys when useful.
 - Request filters (e.g. TypeId, StatusId, CommitteeId, StructureId, Page, Rows): explain what each filter does, how it affects results, and when to use or omit it.
-- Response keys (e.g. TotalItems, Items, d, Id, Title): explain the meaning and typical usage of non-obvious keys, especially when the pair shows how they are populated.
+- Response keys (e.g. TotalItems, Items, d, Id, Title): explain the meaning and typical usage of non-obvious keys.
 
 WIDENING: You must ONLY suggest additive or widening changes — never narrowing.
-- Widening = expanding schemas to accept MORE valid values. Examples: add an enum value; make a field optional (anyOf with null); add a new optional property; change a single type to a union (anyOf) when the same field appears with different types across samples.
-- Use anyOf / union types when a field can have multiple shapes: e.g. anyOf with [string, null] for nullable strings; anyOf with [integer, array] when the API returns different types. The docs should accept every value we have seen, so unions are expected and correct.
-- Do NOT remove or narrow anything (e.g. dropping enum values, making optional fields required, removing anyOf branches) — that would invalidate previously documented request/response bodies.
-- If the pair adds no new information beyond what is already in the API.md, output "No changes needed."
+- Widening = expanding schemas to accept MORE valid values. Examples: add an enum value; make a field optional (anyOf with null); add a new optional property; use anyOf when a field has multiple types.
+- Do NOT remove or narrow anything. If the pair adds no new information, output "No changes needed."
 
 ---
 
-## Current API.md
+## Global docs (conventions, $defs, common filters/keys)
 
-{api_md}
+{global_md}
 
 ---
 
-## Operation: {operation}
+## Per-operation doc: {operation}
 
-### Request (actual)
+{op_md}
+
+---
+
+## Request (actual)
 ```json
 {request_json}
 ```
 
-### Response (actual)
+## Response (actual)
 ```json
 {response_json}
 ```

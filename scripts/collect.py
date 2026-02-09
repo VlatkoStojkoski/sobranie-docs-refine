@@ -7,6 +7,7 @@ Run: python scripts/collect.py [--no-cache]
 
 import argparse
 import json
+import logging
 import random
 import sys
 import time
@@ -18,6 +19,7 @@ CONFIG = ROOT / "config"
 COLLECTED = ROOT / "collected"
 ERRORS = ROOT / "errors"
 LISTING_CACHE = ROOT / "listing_cache"
+LOGS = ROOT / "logs" / "collect"
 
 API = "https://www.sobranie.mk/Routing/MakePostRequest"
 CALENDAR = "https://www.sobranie.mk/Moldova/services/CalendarService.asmx/GetCustomEventsCalendar"
@@ -126,6 +128,25 @@ def main():
     default_n = cfg.get("sample_size_default", 5)
     run_id = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
+    log_dir = LOGS / run_id
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = log_dir / "collect.log"
+    log = logging.getLogger("collect")
+    log.setLevel(logging.DEBUG)
+    log.handlers.clear()
+    fh = logging.FileHandler(log_file, encoding="utf-8")
+    fh.setLevel(logging.DEBUG)
+    fh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
+    log.addHandler(fh)
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.INFO)
+    ch.setFormatter(logging.Formatter("%(message)s"))
+    log.addHandler(ch)
+
+    log.info(f"Collect run {run_id} | cache={'on' if use_cache else 'off'}")
+    log.info(f"Ops: {len(ops)}, default n={default_n}")
+    log.debug(f"Args: {vars(args)}")
+
     LISTING_CACHE.mkdir(parents=True, exist_ok=True)
     cache_index = []
     if (LISTING_CACHE / "index.json").exists():
@@ -161,6 +182,12 @@ def main():
                 except (ValueError, IndexError):
                     pass
 
+    total_requests = sum(ops.get(o, {}).get("sample_size") or default_n for o in ops)
+    log.info(f"Total requests: {total_requests}")
+    start_time = time.perf_counter()
+    req_count = 0
+    err_count = 0
+
     for op in order:
         op_cfg = ops.get(op, {})
         n = op_cfg.get("sample_size") or default_n
@@ -169,6 +196,7 @@ def main():
         op_dir.mkdir(parents=True, exist_ok=True)
         (ERRORS / op).mkdir(parents=True, exist_ok=True)
 
+        log.info(f"Op: {op} (n={n})")
         for _ in range(n):
             op_counters[op] = op_counters.get(op, 0) + 1
             nnn = f"{op_counters[op]:03d}"
@@ -178,10 +206,15 @@ def main():
 
             (op_dir / f"req_{nnn}.json").write_text(json.dumps(body, ensure_ascii=False, indent=2), encoding="utf-8")
 
+            req_count += 1
             if is_error(resp):
+                err_count += 1
+                log.warning(f"  {op} req_{nnn} -> ERR {resp.get('_error', '?')}")
+                log.debug(f"  {op} req_{nnn} error body: {resp.get('_body', '')[:200]}")
                 (ERRORS / op / f"err_{nnn}.json").write_text(json.dumps(resp, ensure_ascii=False, indent=2), encoding="utf-8")
                 errors_manifest["errors"].append({"req": f"{op}/req_{nnn}.json", "error": f"{op}/err_{nnn}.json"})
             else:
+                log.debug(f"  {op} req_{nnn} -> OK")
                 (op_dir / f"resp_{nnn}.json").write_text(json.dumps(resp, ensure_ascii=False, indent=2), encoding="utf-8")
                 run_pairs.append({"req": f"{op}/req_{nnn}.json", "resp": f"{op}/resp_{nnn}.json"})
 
@@ -195,12 +228,17 @@ def main():
             path.write_text(json.dumps({"request": body, "response": resp, "extracted_ids": list(set(listing_ids.get(op, []))), "item_count": len(resp.get("Items") or []) if isinstance(resp, dict) else 0}, ensure_ascii=False, indent=2), encoding="utf-8")
             cache_index.append({"run_id": run_id, "operation": op, "path": str(path.relative_to(ROOT))})
 
+        log.info(f"  Progress: {req_count}/{total_requests} ({err_count} err)")
+
+    elapsed = time.perf_counter() - start_time
+    log.info(f"Done: {len(run_pairs)} pairs saved, {err_count} errors, {elapsed:.1f}s")
+    log.debug(f"Manifest runs: {len(manifest['runs']) + 1}")
+
     manifest["runs"].append({"run_id": run_id, "pairs": run_pairs})
     (COLLECTED / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     (COLLECTED / "errors_manifest.json").write_text(json.dumps(errors_manifest, indent=2), encoding="utf-8")
     (LISTING_CACHE / "index.json").write_text(json.dumps(cache_index, indent=2), encoding="utf-8")
 
-    print(f"Collect done. Run {run_id}. {len(run_pairs)} pairs saved.")
     return 0
 
 
