@@ -56,6 +56,14 @@ def is_error(resp) -> bool:
     return isinstance(resp, dict) and resp.get("_error") is not None
 
 
+def is_permanent_client_error(resp) -> bool:
+    """4xx errors are treated as deterministic for this payload."""
+    if not is_error(resp):
+        return False
+    code = resp.get("_error")
+    return isinstance(code, int) and 400 <= code < 500
+
+
 # --- Jsonpath extraction ---
 
 def jp_extract(data, path: str) -> list:
@@ -196,6 +204,10 @@ def main():
     # Bootstrap: get current structure
     globals_ = bootstrap_structure(use_cache, cache_get, cache_set, log)
 
+    # Ensure first-run directories exist before reading/iterating.
+    COLLECTED.mkdir(parents=True, exist_ok=True)
+    ERRORS.mkdir(parents=True, exist_ok=True)
+
     # Load existing manifest and counters
     manifest = {"runs": []}
     if (COLLECTED / "manifest.json").exists():
@@ -214,8 +226,11 @@ def main():
                 except (ValueError, IndexError):
                     pass
 
-    # Global dedup: track (operation, body_hash) to avoid duplicate requests across pipelines
-    sent: set[str] = set()
+    # Global dedup of finalized outcomes:
+    # - successful requests
+    # - deterministic client errors (4xx)
+    # Transient failures are intentionally NOT finalized so retries can re-send.
+    finalized: set[str] = set()
 
     run_pairs = []
     start_time = time.perf_counter()
@@ -270,10 +285,9 @@ def main():
             body = generate_body(params, store, globals_)
 
             dedup_key = f"{op}:{body_hash(body)}"
-            if dedup_key in sent:
+            if dedup_key in finalized:
                 log.debug(f"    {op} skipped (duplicate)")
                 continue
-            sent.add(dedup_key)
 
             op_counters[op] = op_counters.get(op, 0) + 1
             nnn = f"{op_counters[op]:03d}"
@@ -292,6 +306,8 @@ def main():
                 stage_errs += 1
                 log.warning(f"    {op} req_{nnn} -> ERR {resp.get('_error', '?')}")
                 log.debug(f"    {op} req_{nnn} error: {resp.get('_body', '')[:200]}")
+                if is_permanent_client_error(resp):
+                    finalized.add(dedup_key)
                 (ERRORS / op / f"err_{nnn}.json").write_text(
                     json.dumps(resp, ensure_ascii=False, indent=2), encoding="utf-8",
                 )
@@ -299,6 +315,7 @@ def main():
                     "req": f"{op}/req_{nnn}.json", "error": f"{op}/err_{nnn}.json",
                 })
             else:
+                finalized.add(dedup_key)
                 log.debug(f"    {op} req_{nnn} -> OK")
                 (op_dir / f"resp_{nnn}.json").write_text(
                     json.dumps(resp, ensure_ascii=False, indent=2), encoding="utf-8",
