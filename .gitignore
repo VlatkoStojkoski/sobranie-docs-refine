@@ -1,18 +1,31 @@
+# Environment and secrets (never commit)
+.env
+.env.local
+.env.*.local
+
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
 .venv/
 venv/
-.env
+*.egg-info/
+.eggs/
 
-# Collected data and cache
+# Collected data, caches, and runtime outputs
 collected/
 .api_cache/
 .llm_cache/
 listing_cache/
 logs/
+errors/
 schema_inference.json
 
-archive/
+# Archive (optional; uncomment to ignore)
+# archive/
 
-errors/
+# OS and editor
+.DS_Store
+*.swp
+*.swo
+*~
