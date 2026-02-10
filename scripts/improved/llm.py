@@ -103,7 +103,10 @@ def _anthropic_complete(
     elapsed = time.perf_counter() - t0
     usage = getattr(msg, "usage", None)
     tok = f", in={usage.input_tokens} out={usage.output_tokens}" if usage else ""
-    log.info("complete done: %.1fs%s", elapsed, tok)
+    stop = getattr(msg, "stop_reason", None)
+    log.info("complete done: %.1fs%s, stop=%s", elapsed, tok, stop)
+    if stop == "max_tokens":
+        log.warning("complete response truncated (stop_reason=max_tokens)")
     return msg.content[0].text if msg.content else ""
 
 
@@ -135,6 +138,13 @@ def _anthropic_complete_structured(
     elapsed = time.perf_counter() - t0
     usage = getattr(msg, "usage", None)
     tok = f", in={usage.input_tokens} out={usage.output_tokens}" if usage else ""
-    log.info("complete_structured done: %.1fs%s", elapsed, tok)
+    stop = getattr(msg, "stop_reason", None)
+    log.info("complete_structured done: %.1fs%s, stop=%s", elapsed, tok, stop)
+    if stop == "max_tokens":
+        raise RuntimeError(
+            f"Structured output truncated (stop_reason=max_tokens, "
+            f"max_tokens={kwargs.get('max_tokens')}). "
+            f"Response may be incomplete; skipping to avoid data corruption."
+        )
     text = msg.content[0].text if msg.content else "{}"
     return json.loads(text)

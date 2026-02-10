@@ -94,8 +94,8 @@ REQUEST_MAX_TOKENS = 2000
 
 
 def _estimate_tokens(s: str) -> int:
-    """Rough token count for prompt text (Claude/GPT ~4 chars per token)."""
-    return max(1, len(s) // 4)
+    """Rough token count for prompt text (~3 chars per token for Cyrillic-heavy content)."""
+    return max(1, len(s) // 3)
 
 
 def _truncate_values(data, max_str: int = MAX_STR_LENGTH):
@@ -452,7 +452,6 @@ def main() -> int:
                 log.info(f"    -> {len(notes)} chars of notes")
                 notes_batch.append(notes)
                 batch_keys.append(pair["req"])
-                pairs_done += 1
 
             # --- Apply step (when batch full or last pair for this op) ---
             should_apply = notes_batch and (len(notes_batch) >= batch_size or is_last)
@@ -501,6 +500,7 @@ def main() -> int:
                 # Mark batch pairs as processed
                 for k in batch_keys:
                     processed.add(k)
+                pairs_done += len(batch_keys)
                 notes_batch.clear()
                 batch_keys.clear()
 
