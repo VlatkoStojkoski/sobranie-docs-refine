@@ -149,7 +149,7 @@ def _replace_at_path(data, path, value):
 
 
 def _shrink_largest_array(data):
-    """Shrink the largest array (by item count) by half; add _truncated for the rest. Return new data."""
+    """Shrink the largest array (by item count) by half; add _truncated marker. Return new data."""
     candidates = _find_largest_lists(data)
     if not candidates:
         return data
@@ -158,7 +158,11 @@ def _shrink_largest_array(data):
         return data
     lst = _get_at_path(data, path)
     n = (length + 1) // 2
-    new_list = list(lst[:n]) + [{"_truncated": length - n}]
+    # Only add truncation marker if items are dicts; otherwise just truncate
+    if lst and isinstance(lst[0], dict):
+        new_list = list(lst[:n]) + [{"_truncated": length - n}]
+    else:
+        new_list = list(lst[:n])
     return _replace_at_path(data, path, new_list)
 
 
@@ -252,7 +256,10 @@ def load_state(path: Path) -> dict:
 
 
 def save_state(path: Path, state: dict):
-    path.write_text(json.dumps(state, indent=2), encoding="utf-8")
+    """Atomically save state to avoid corruption on crash."""
+    temp_path = path.with_suffix('.json.tmp')
+    temp_path.write_text(json.dumps(state, indent=2), encoding="utf-8")
+    temp_path.replace(path)  # Atomic rename
 
 
 def load_pairs_from_manifest(run_id: str | None = None) -> list[dict]:

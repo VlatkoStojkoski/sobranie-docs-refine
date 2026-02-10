@@ -9,8 +9,8 @@
         {"operation": "GetAllMaterialStatusesForFilter", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllMaterialStatusesForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
         {"operation": "GetAllMaterialTypesForFilter", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllMaterialTypesForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
         {"operation": "GetAllProcedureTypes", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllProcedureTypes"}, "languageId": {"generator": "constant", "value": 1}}},
-        {"operation": "GetAllQuestionStatuses", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllQuestionStatuses"}, "LanguageId": {"generator": "constant", "value": 1}}},
-        {"operation": "GetAllSittingStatuses", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllSittingStatuses"}, "LanguageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllQuestionStatuses", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllQuestionStatuses"}, "languageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllSittingStatuses", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllSittingStatuses"}, "languageId": {"generator": "constant", "value": 1}}},
         {"operation": "GetAllInstitutionsForFilter", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllInstitutionsForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
         {"operation": "GetProposerTypes", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetProposerTypes"}, "languageId": {"generator": "constant", "value": 1}}},
         {"operation": "LoadLanguage", "calls": 1, "url": "https://www.sobranie.mk/Infrastructure/LoadLanguage", "params": {}}
@@ -21,12 +21,12 @@
       "stages": [
         {
           "operation": "GetAllSittings", "calls": 6,
-          "params": {"methodName": {"generator": "constant", "value": "GetAllSittings"}, "Page": {"generator": "range", "min": 1, "max": 3}, "Rows": {"generator": "range", "min": 10, "max": 50}, "LanguageId": {"generator": "constant", "value": 1}, "TypeId": {"generator": "range", "min": 1, "max": 2}, "StructureId": {"generator": "current_structure"}},
+          "params": {"methodName": {"generator": "constant", "value": "GetAllSittings"}, "page": {"generator": "range", "min": 1, "max": 3}, "rows": {"generator": "range", "min": 10, "max": 50}, "languageId": {"generator": "constant", "value": 1}, "typeId": {"generator": "range", "min": 1, "max": 2}, "structureId": {"generator": "current_structure"}},
           "extract": {"sittingId": "$.Items[*].Id"}
         },
         {
           "operation": "GetSittingDetails", "calls": 8,
-          "params": {"MethodName": {"generator": "constant", "value": "GetSittingDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "SittingId": {"source": "sittingId"}},
+          "params": {"methodName": {"generator": "constant", "value": "GetSittingDetails"}, "languageId": {"generator": "constant", "value": 1}, "sittingId": {"source": "sittingId"}},
           "extract": {
             "votingPair": {
               "from": "$..children[?VotingDefinitions[0]]",
@@ -39,15 +39,15 @@
         },
         {
           "operation": "GetVotingResultsForAgendaItem", "calls": 4,
-          "params": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForAgendaItem"}, "LanguageId": {"generator": "constant", "value": 1}, "VotingDefinitionId": {"source": "votingPair.votingDefId"}, "AgendaItemId": {"source": "votingPair.agendaItemId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetVotingResultsForAgendaItem"}, "languageId": {"generator": "constant", "value": 1}, "votingDefinitionId": {"source": "votingPair.votingDefId"}, "agendaItemId": {"source": "votingPair.agendaItemId"}}
         },
         {
           "operation": "GetVotingResultsForAgendaItemReportDocument", "calls": 4,
-          "params": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForAgendaItemReportDocument"}, "LanguageId": {"generator": "constant", "value": 1}, "VotingDefinitionId": {"source": "votingPair.votingDefId"}, "AgendaItemId": {"source": "votingPair.agendaItemId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetVotingResultsForAgendaItemReportDocument"}, "languageId": {"generator": "constant", "value": 1}, "votingDefinitionId": {"source": "votingPair.votingDefId"}, "agendaItemId": {"source": "votingPair.agendaItemId"}}
         },
         {
           "operation": "GetVotingResultsForSitting", "calls": 4,
-          "params": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForSitting"}, "languageId": {"generator": "constant", "value": 1}, "votingDefinitionId": {"source": "votingPair.votingDefId"}, "sittingId": {"source": "sittingId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetVotingResultsForSitting"}, "languageId": {"generator": "constant", "value": 1}, "votingDefinitionId": {"source": "votingPair.votingDefId"}, "sittingId": {"source": "sittingId"}}
         }
       ]
     },
@@ -56,17 +56,17 @@
       "stages": [
         {
           "operation": "GetAllMaterialsForPublicPortal", "calls": 4,
-          "params": {"MethodName": {"generator": "constant", "value": "GetAllMaterialsForPublicPortal"}, "LanguageId": {"generator": "constant", "value": 1}, "ItemsPerPage": {"generator": "range", "min": 10, "max": 50}, "CurrentPage": {"generator": "range", "min": 1, "max": 3}, "StructureId": {"generator": "current_structure"}},
+          "params": {"methodName": {"generator": "constant", "value": "GetAllMaterialsForPublicPortal"}, "languageId": {"generator": "constant", "value": 1}, "itemsPerPage": {"generator": "range", "min": 10, "max": 50}, "currentPage": {"generator": "range", "min": 1, "max": 3}, "structureId": {"generator": "current_structure"}},
           "extract": {"materialId": "$.Items[*].Id"}
         },
         {
           "operation": "GetMaterialDetails", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "GetMaterialDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "MaterialId": {"source": "materialId"}, "AmendmentsPage": {"generator": "range", "min": 1, "max": 3}, "AmendmentsRows": {"generator": "range", "min": 10, "max": 50}},
+          "params": {"methodName": {"generator": "constant", "value": "GetMaterialDetails"}, "languageId": {"generator": "constant", "value": 1}, "materialId": {"source": "materialId"}, "amendmentsPage": {"generator": "range", "min": 1, "max": 3}, "amendmentsRows": {"generator": "range", "min": 10, "max": 50}},
           "extract": {"amendmentId": "$..FirstReadingAmendments[*].Id"}
         },
         {
           "operation": "GetAmendmentDetails", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "/GetAmendmentDetails"}, "languageId": {"generator": "constant", "value": 1}, "amendmentId": {"source": "amendmentId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetAmendmentDetails"}, "languageId": {"generator": "constant", "value": 1}, "amendmentId": {"source": "amendmentId"}}
         }
       ]
     },
@@ -75,12 +75,12 @@
       "stages": [
         {
           "operation": "GetAllQuestions", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "GetAllQuestions"}, "LanguageId": {"generator": "constant", "value": 1}, "CurrentPage": {"generator": "range", "min": 1, "max": 3}, "Page": {"generator": "range", "min": 1, "max": 3}, "Rows": {"generator": "range", "min": 10, "max": 50}, "StructureId": {"generator": "current_structure"}},
+          "params": {"methodName": {"generator": "constant", "value": "GetAllQuestions"}, "languageId": {"generator": "constant", "value": 1}, "currentPage": {"generator": "range", "min": 1, "max": 3}, "page": {"generator": "range", "min": 1, "max": 3}, "rows": {"generator": "range", "min": 10, "max": 50}, "structureId": {"generator": "current_structure"}},
           "extract": {"questionId": "$.Items[*].Id"}
         },
         {
           "operation": "GetQuestionDetails", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "/GetQuestionDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "QuestionId": {"source": "questionId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetQuestionDetails"}, "languageId": {"generator": "constant", "value": 1}, "questionId": {"source": "questionId"}}
         }
       ]
     },
@@ -108,7 +108,7 @@
         },
         {
           "operation": "GetCouncilDetails", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "GetCouncilDetails"}, "languageId": {"generator": "constant", "value": 1}, "committeeId": {"source": "councilId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetCouncilDetails"}, "languageId": {"generator": "constant", "value": 1}, "councilId": {"source": "councilId"}}
         }
       ]
     },
@@ -117,12 +117,12 @@
       "stages": [
         {
           "operation": "GetAllMPsClubsByStructure", "calls": 1,
-          "params": {"MethodName": {"generator": "constant", "value": "GetAllMPsClubsByStructure"}, "LanguageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}},
+          "params": {"methodName": {"generator": "constant", "value": "GetAllMPsClubsByStructure"}, "languageId": {"generator": "constant", "value": 1}, "structureId": {"generator": "current_structure"}},
           "extract": {"mpsClubId": "$[*].Id"}
         },
         {
           "operation": "GetMPsClubDetails", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "GetMPsClubDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "mpsClubId": {"source": "mpsClubId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetMPsClubDetails"}, "languageId": {"generator": "constant", "value": 1}, "mpsClubId": {"source": "mpsClubId"}}
         }
       ]
     },
@@ -131,12 +131,12 @@
       "stages": [
         {
           "operation": "GetAllParliamentaryGroups", "calls": 1,
-          "params": {"methodName": {"generator": "constant", "value": "GetAllParliamentaryGroups"}, "languageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}},
+          "params": {"methodName": {"generator": "constant", "value": "GetAllParliamentaryGroups"}, "languageId": {"generator": "constant", "value": 1}, "structureId": {"generator": "current_structure"}},
           "extract": {"parlGroupId": "$[*].Id"}
         },
         {
           "operation": "GetParliamentaryGroupDetails", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "GetParliamentaryGroupDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "parliamentaryGroupId": {"source": "parlGroupId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetParliamentaryGroupDetails"}, "languageId": {"generator": "constant", "value": 1}, "parliamentaryGroupId": {"source": "parlGroupId"}}
         }
       ]
     },
@@ -145,12 +145,12 @@
       "stages": [
         {
           "operation": "GetAllPoliticalParties", "calls": 1,
-          "params": {"methodName": {"generator": "constant", "value": "GetAllPoliticalParties"}, "languageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}},
+          "params": {"methodName": {"generator": "constant", "value": "GetAllPoliticalParties"}, "languageId": {"generator": "constant", "value": 1}, "structureId": {"generator": "current_structure"}},
           "extract": {"partyId": "$[*].Id"}
         },
         {
           "operation": "GetPoliticalPartyDetails", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "GetPoliticalPartyDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "politicalPartyId": {"source": "partyId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetPoliticalPartyDetails"}, "languageId": {"generator": "constant", "value": 1}, "politicalPartyId": {"source": "partyId"}}
         }
       ]
     },
@@ -159,7 +159,7 @@
       "stages": [
         {
           "operation": "GetParliamentMPsNoImage", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "GetParliamentMPsNoImage"}, "languageId": {"generator": "constant", "value": 1}, "page": {"generator": "range", "min": 1, "max": 3}, "rows": {"generator": "range", "min": 10, "max": 50}, "StructureId": {"generator": "current_structure"}},
+          "params": {"methodName": {"generator": "constant", "value": "GetParliamentMPsNoImage"}, "languageId": {"generator": "constant", "value": 1}, "page": {"generator": "range", "min": 1, "max": 3}, "rows": {"generator": "range", "min": 10, "max": 50}, "structureId": {"generator": "current_structure"}},
           "extract": {"userId": "$.MembersOfParliament[*].UserId"}
         },
         {
@@ -188,7 +188,7 @@
       "stages": [
         {
           "operation": "GetMonthlyAgenda", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "GetMonthlyAgenda"}, "LanguageId": {"generator": "constant", "value": 1}, "Month": {"generator": "range", "min": 1, "max": 12}, "Year": {"generator": "current_structure_year"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetMonthlyAgenda"}, "languageId": {"generator": "constant", "value": 1}, "month": {"generator": "range", "min": 1, "max": 12}, "year": {"generator": "current_structure_year"}}
         }
       ]
     }

@@ -13,7 +13,7 @@ CACHE_DIR = ROOT / ".api_cache"
 def _key(url: str, payload: dict) -> str:
     body = json.dumps(payload, sort_keys=True)
     h = hashlib.sha256(f"{url}\n{body}".encode()).hexdigest()
-    return h[:16]
+    return h[:32]  # Use 32 chars (128 bits) to avoid collision risk
 
 
 def get(url: str, payload: dict) -> dict | None:

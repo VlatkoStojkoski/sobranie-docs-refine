@@ -149,7 +149,11 @@ def bootstrap_structure(use_cache, cache_get, cache_set, log) -> dict:
         first = resp[0]
         if isinstance(first, dict) and first.get("Id"):
             globals_["current_structure"] = first["Id"]
-    log.info(f"Bootstrap: structure={globals_.get('current_structure', '?')}")
+    # Ensure current_structure_years has a fallback
+    if "current_structure_years" not in globals_:
+        current_year = datetime.now().year
+        globals_["current_structure_years"] = [current_year - 5, current_year]
+    log.info(f"Bootstrap: structure={globals_.get('current_structure', '?')}, years={globals_.get('current_structure_years', '?')}")
     return globals_
 
 
@@ -269,7 +273,8 @@ def main():
         for _ in range(actual_calls):
             body = generate_body(params, store, globals_)
 
-            dedup_key = f"{op}:{body_hash(body)}"
+            # Include URL in dedup key to handle same operation to different endpoints
+            dedup_key = f"{url}:{op}:{body_hash(body)}"
             if dedup_key in sent:
                 log.debug(f"    {op} skipped (duplicate)")
                 continue
@@ -311,10 +316,19 @@ def main():
                 for store_key, extractor in extract.items():
                     if isinstance(extractor, str):
                         ids = jp_extract(resp, extractor)
-                        store.setdefault(store_key, []).extend(ids)
+                        # Validate and deduplicate extracted IDs
+                        existing = set(store.get(store_key, []))
+                        valid_ids = [
+                            id_ for id_ in ids
+                            if id_ and isinstance(id_, (str, int, float)) and id_ not in existing
+                        ]
+                        store.setdefault(store_key, []).extend(valid_ids)
                     elif isinstance(extractor, dict) and "from" in extractor:
                         parent_expr = jp_parse(extractor["from"])
                         pick = extractor.get("pick", {})
+                        # Track existing rows to avoid duplicates
+                        existing_rows = store.get(store_key, [])
+                        existing_set = {tuple(sorted(r.items())) for r in existing_rows if isinstance(r, dict)}
                         for match in parent_expr.find(resp):
                             obj = match.value
                             row = {}
@@ -324,7 +338,10 @@ def main():
                                 if sub_matches and sub_matches[0].value:
                                     row[field_key] = sub_matches[0].value
                             if len(row) == len(pick):
-                                store.setdefault(store_key, []).append(row)
+                                row_tuple = tuple(sorted(row.items()))
+                                if row_tuple not in existing_set:
+                                    store.setdefault(store_key, []).append(row)
+                                    existing_set.add(row_tuple)
 
                 if op == "GetAllStructuresForFilter" and "current_structure" not in globals_:
                     globals_ = bootstrap_structure(use_cache, cache_get, cache_set, log)
