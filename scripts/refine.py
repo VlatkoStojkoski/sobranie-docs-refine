@@ -212,8 +212,8 @@ def _setup_logging(log_dir: Path) -> logging.Logger:
     return log
 
 
-def _llm_cache_key(prompt: str, schema: dict, system: str) -> str:
-    payload = json.dumps({"s": system, "p": prompt, "sc": schema}, sort_keys=True)
+def _llm_cache_key(prompt: str, schema: dict, system: str, model: str = "") -> str:
+    payload = json.dumps({"s": system, "p": prompt, "sc": schema, "m": model}, sort_keys=True)
     return hashlib.sha256(payload.encode()).hexdigest()[:20]
 
 
@@ -221,7 +221,7 @@ def llm_call(prompt, schema, system, model, max_tokens, *, use_cache=True, log=N
     """Call LLM with optional file-based caching."""
     from improved.llm import complete_structured
 
-    key = _llm_cache_key(prompt, schema, system)
+    key = _llm_cache_key(prompt, schema, system, model or "")
     cache_file = LLM_CACHE_DIR / f"{key}.json"
 
     if use_cache and cache_file.exists():
