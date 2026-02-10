@@ -22,6 +22,7 @@ import argparse
 import hashlib
 import json
 import logging
+import os
 import sys
 import time
 from datetime import datetime
@@ -217,6 +218,41 @@ def _llm_cache_key(prompt: str, schema: dict, system: str) -> str:
     return hashlib.sha256(payload.encode()).hexdigest()[:20]
 
 
+def _read_llm_cache(cache_file: Path, model: str | None, max_tokens: int | None, log=None):
+    """Return cached result when metadata matches current call parameters."""
+    try:
+        cached = json.loads(cache_file.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+
+    if isinstance(cached, dict) and "_meta" in cached and "result" in cached:
+        meta = cached.get("_meta") if isinstance(cached.get("_meta"), dict) else {}
+        if meta.get("model") == model and meta.get("max_tokens") == max_tokens:
+            if log:
+                log.debug(f"  LLM cache hit: {cache_file.stem}")
+            return cached.get("result")
+        if log:
+            log.debug(f"  LLM cache miss: metadata mismatch for {cache_file.stem}")
+        return None
+
+    # Legacy cache entries do not carry model metadata and can return stale
+    # results when model/max_tokens changes. Treat as miss for correctness.
+    if log:
+        log.debug(f"  LLM cache miss: legacy entry format for {cache_file.stem}")
+    return None
+
+
+def _write_llm_cache(cache_file: Path, result, model: str | None, max_tokens: int | None):
+    payload = {
+        "_meta": {
+            "model": model,
+            "max_tokens": max_tokens,
+        },
+        "result": result,
+    }
+    cache_file.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def llm_call(prompt, schema, system, model, max_tokens, *, use_cache=True, log=None):
     """Call LLM with optional file-based caching."""
     from improved.llm import complete_structured
@@ -225,20 +261,16 @@ def llm_call(prompt, schema, system, model, max_tokens, *, use_cache=True, log=N
     cache_file = LLM_CACHE_DIR / f"{key}.json"
 
     if use_cache and cache_file.exists():
-        try:
-            result = json.loads(cache_file.read_text(encoding="utf-8"))
-            if log:
-                log.debug(f"  LLM cache hit: {key}")
-            return result
-        except (json.JSONDecodeError, OSError):
-            pass
+        cached = _read_llm_cache(cache_file, model=model, max_tokens=max_tokens, log=log)
+        if cached is not None:
+            return cached
 
     result = complete_structured(
         prompt, schema=schema, system=system, model=model, max_tokens=max_tokens,
     )
 
     LLM_CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    cache_file.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    _write_llm_cache(cache_file, result, model=model, max_tokens=max_tokens)
     return result
 
 
@@ -288,6 +320,97 @@ def rebuild_api_md(log):
         log.debug("  API.md rebuilt")
     except Exception as e:
         log.warning(f"  API.md rebuild failed: {e}")
+
+
+def _validate_apply_output(
+    operation: str,
+    new_op: str,
+    new_global: str,
+    old_op: str,
+    old_global: str,
+) -> list[str]:
+    """Return validation errors for apply output."""
+    errors: list[str] = []
+
+    if not isinstance(new_op, str) or not new_op.strip():
+        errors.append("newOperationMd is empty")
+    else:
+        required_sections = [
+            f"## {operation}",
+            "### Request Schema",
+            "### Response Schema",
+            "### Notes",
+        ]
+        for section in required_sections:
+            if section not in new_op:
+                errors.append(f"newOperationMd missing section: {section}")
+        if "```json" not in new_op:
+            errors.append("newOperationMd missing JSON code fence(s)")
+        min_len = max(300, int(len(old_op) * 0.60))
+        if len(new_op.strip()) < min_len:
+            errors.append(
+                f"newOperationMd too short ({len(new_op.strip())} < {min_len})"
+            )
+
+    if not isinstance(new_global, str) or not new_global.strip():
+        errors.append("newGlobalMd is empty")
+    else:
+        if not new_global.lstrip().startswith("# "):
+            errors.append("newGlobalMd missing top-level markdown heading")
+        if "## $defs" not in new_global:
+            errors.append("newGlobalMd missing required '## $defs' section")
+        min_len = max(500, int(len(old_global) * 0.60))
+        if len(new_global.strip()) < min_len:
+            errors.append(
+                f"newGlobalMd too short ({len(new_global.strip())} < {min_len})"
+            )
+
+    return errors
+
+
+def _atomic_write_text(path: Path, content: str):
+    tmp_path = path.parent / f".{path.name}.tmp-{os.getpid()}-{time.time_ns()}"
+    try:
+        tmp_path.write_text(content, encoding="utf-8")
+        os.replace(tmp_path, path)
+    finally:
+        if tmp_path.exists():
+            try:
+                tmp_path.unlink()
+            except OSError:
+                pass
+
+
+def _write_docs_transactional(
+    *,
+    op_path: Path,
+    global_path: Path,
+    new_op: str,
+    new_global: str,
+    backup_dir: Path,
+):
+    """Backup current docs and atomically replace both files."""
+    old_op = op_path.read_text(encoding="utf-8")
+    old_global = global_path.read_text(encoding="utf-8")
+
+    backup_dir.mkdir(parents=True, exist_ok=True)
+    (backup_dir / op_path.name).write_text(old_op, encoding="utf-8")
+    (backup_dir / global_path.name).write_text(old_global, encoding="utf-8")
+
+    try:
+        _atomic_write_text(op_path, new_op)
+        _atomic_write_text(global_path, new_global)
+    except Exception:
+        # Best-effort rollback to preserve last known-good docs.
+        try:
+            _atomic_write_text(op_path, old_op)
+        except Exception:
+            pass
+        try:
+            _atomic_write_text(global_path, old_global)
+        except Exception:
+            pass
+        raise
 
 
 # --- Main ---
@@ -485,9 +608,39 @@ def main() -> int:
                 new_global = result.get("newGlobalMd", global_md)
                 concerns = result.get("seriousConcerns", "")
 
-                op_path.write_text(new_op, encoding="utf-8")
-                GLOBAL_MD.write_text(new_global, encoding="utf-8")
-                log.info(f"  Wrote {op}.md + global.md")
+                validation_errors = _validate_apply_output(
+                    operation=op,
+                    new_op=new_op,
+                    new_global=new_global,
+                    old_op=op_md,
+                    old_global=global_md,
+                )
+                if validation_errors:
+                    for err in validation_errors:
+                        log.error(f"  Apply output invalid: {err}")
+                    log.error("  Aborting run to protect docs from invalid apply output.")
+                    state["processed"] = sorted(processed)
+                    save_state(state_path, state)
+                    return 1
+
+                backup_dir = log_dir / "backups" / (
+                    f"apply_{applies_done + 1:04d}_{op}_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+                )
+                try:
+                    _write_docs_transactional(
+                        op_path=op_path,
+                        global_path=GLOBAL_MD,
+                        new_op=new_op,
+                        new_global=new_global,
+                        backup_dir=backup_dir,
+                    )
+                except Exception as e:
+                    log.error(f"  Failed to write docs transactionally: {e}")
+                    state["processed"] = sorted(processed)
+                    save_state(state_path, state)
+                    return 1
+
+                log.info(f"  Wrote {op}.md + global.md (backup: {backup_dir})")
 
                 rebuild_api_md(log)
                 applies_done += 1
