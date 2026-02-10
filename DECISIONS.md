@@ -4,21 +4,27 @@ All rationale and decisions from development. Single source of truth for why thi
 
 ---
 
-## Approach: LLM-driven API.md
+## Goal: procedural doc improvement from req/res pairs
 
-- **Single artifact**: One `docs/API.md` regenerated from global + ops. Schemas, notes, conventions, per-operation docs.
-- **Refinement**: Md-only. For each operation: send global + op doc to LLM; get `global_modification_notes`, `new_op`, `raisePossibleIssueToHuman`. Write each `new_op` to docs immediately. After all ops, apply all modification notes in one batch to produce final `docs/global.md`. No request/response samples.
-- **No bootstrap/generation of initial files**: global.md, ops/*.md, and config/generators.json are provided by us.
-- **Claude only**: Anthropic Claude exclusively. No OpenAI.
+The project procedurally improves API documentation by collecting real request/response pairs and using an LLM to refine the docs based on what the API actually returns.
 
----
+**Pipeline:**
 
-## Refinement flow
+1. **Collect** — Generate requests from `config/generators.json`, send to the live API, save req/res pairs to `collected/<Operation>/`.
+2. **Refine** — For each collected pair:
+   - **Notes step:** LLM receives current op md + global md + the req/res pair. Returns concise notes on what the docs should add or update. Saved to `logs/refine/<run_id>/notes/`.
+   - **Apply step:** Every `batch_size` notes (configurable), LLM receives current op md + global md + batched notes. Returns `newOperationMd`, `newGlobalMd`, and optionally `seriousConcerns`. Docs are overwritten immediately.
+   - **Rebuild:** `docs/API.md` is regenerated from global + ops after every successful apply.
+3. **Resume** — Progress tracked in `logs/refine/<run_id>/state.json`. Stop anytime; `--resume <run_id>` to continue.
 
-- **Input**: Existing markdown only — `docs/global.md` and `docs/ops/<Op>.md`. No pairs, no notes.
-- **Process**: One LLM call per operation, sequential. Per op: output global_modification_notes (concise instructions for global) and new_op (full op doc following template; specifics in op not global). After the loop, one batch LLM call applies all notes to produce final global.md.
-- **Output**: Each `docs/ops/<Op>.md` written after its op. `docs/global.md` written once at the end. Issues to `logs/refine_ops_cleanup/<run_id>/issues_for_review.md`. `docs/API.md` regenerated at the end.
-- **Single script**: `refine_ops_cleanup.py`.
+**Principles:**
+
+- No info lost from previous iterations. New docs only refine.
+- Only widen, never narrow: add enum values, add anyOf with null, add optional properties, add union types. Never remove values, never make optional fields required, never drop anyOf branches.
+- Docs must validate every request/response body that has previously been used to improve them.
+- Improving = more accurate and precise, not necessarily longer. Simplify when possible.
+- Clear separation: global has conventions, $defs, common patterns; ops have request/response schemas and op-specific notes.
+- Enum values defined in global `$defs` only; op docs reference via `$ref`.
 
 ---
 
@@ -34,78 +40,56 @@ From analysis of collected data:
 
 ---
 
-## API.md structure
+## Doc structure
 
-- **Top**: Intro, calling conventions, operations table.
-- **$defs**: Shared types (AspDate, UUID, LanguageId, etc.).
-- **Common patterns**: Domain conventions.
-- **Common request filters**: Usage notes for TypeId, StatusId, CommitteeId, StructureId, Page/Rows, etc. Deduplicate globally.
-- **Common response keys**: Meaning/usage for TotalItems, Items, d, etc. Deduplicate globally.
-- **Per-operation**: Notes, Request, Response. Add `### Notes` when filter/key notes are discovered.
+- **docs/global.md**: Conventions, `$defs`, common filters/keys, common patterns. Shared across all operations.
+- **docs/ops/<Operation>.md**: Per-operation doc. Template: `## OperationName`, `### Request Schema` (JSON Schema), `### Response Schema` (JSON Schema), `### Notes`.
+- **docs/API.md**: Generated from global + ops by `build_api_md.py`. Full reference.
 
----
+**Per-op template rules:**
 
-## Widening and anyOf
-
-LLM must only widen, never narrow:
-
-- **Widening** = expand schemas to accept more values: add enum values, make fields optional (anyOf with null), add optional properties, use anyOf/union when a field has multiple types.
-- **anyOf/union** = required when a field can have multiple shapes. Docs must validate every previously seen body.
-- **Never** remove enum values, make optional fields required, or drop anyOf branches.
-
----
-
-## Filter usage and key meanings
-
-- Request filters: explain what each does, how it affects results, when to use/omit.
-- Response keys: explain meaning and typical usage. Add to Common sections; deduplicate globally.
+- Use `const` for single fixed values, not single-element enum.
+- One keyword per property: `$ref` OR `type`, not both.
+- Enums only via `$ref` to global `$defs` — no inline enum definitions.
+- Use `anyOf` when a field has multiple shapes.
 
 ---
 
 ## Config
 
-- **config/generators.json**: The one generator config. Macedonian-only, meaningful generators.
-- **config/refine.json**: `model_apply` — model for refine (e.g. claude-haiku-4-5).
-
----
-
-## Split docs (token savings)
-
-- **docs/global.md**: Conventions, $defs, common filters/keys.
-- **docs/ops/<Operation>.md**: Per-operation request/response, notes.
-- **docs/API.md**: Regenerated by `build_api_md.py` from global + ops (for UX).
-- Refine sends only global + relevant op file per call → smaller context. Per op returns `{global_modification_notes, new_op, raisePossibleIssueToHuman}`; notes are batched and applied once at the end. Sequential, ~31 op calls + 1 batch call.
+- **config/generators.json**: Request generators per operation. Macedonian-only, meaningful generators.
+- **config/refine.json**: `model_notes` (for notes step), `model_apply` (for apply step), `batch_size`.
 
 ---
 
 ## Scripts
 
-- **collect.py**: Send requests using generators, save to collected/. Uses cache. Logs to `logs/collect/<run_id>/`.
-- **gather_pairs.py**: Flatten manifest pairs into collected/pairs.json; optionally run collect first (`--generate-more`). Logs to `logs/gather_pairs/<run_id>/`. Refine does not use pairs.
-- **refine_ops_cleanup.py**: Refine global + per-op docs. Processes every .md in docs/ops/ except OPERATION_TEMPLATE. Per-op modification notes, then batch apply for global. One LLM call per op + one batch call. Logs to `logs/refine_ops_cleanup/<run_id>/`. Calls build_api_md at the end.
-- **build_api_md.py**: Regenerate API.md from global + ops (excludes OPERATION_TEMPLATE.md). Called automatically by refine at the end.
-
-One-time migration script `split_api_md.py` is in `archive/scripts/` if needed.
+- **collect.py**: Generate requests from `generators.json`, send to API, save pairs to `collected/`. Uses file-based cache (`.api_cache/`). Logs to `logs/collect/<run_id>/`.
+- **refine.py**: Pair-driven refine. Notes step per pair, batched apply step, write docs, rebuild API.md. LLM calls cached in `.llm_cache/`. Resumable via state file. Logs to `logs/refine/<run_id>/`.
+- **build_api_md.py**: Regenerate `docs/API.md` from global + ops. Called by refine after each apply; can also be run standalone.
+- **cache.py**: File-based cache for API requests (used by collect).
+- **improved/llm.py**: LLM client for Anthropic Claude. Structured output support.
 
 ---
 
 ## Prompts
 
-- **refine_ops_cleanup.txt**: Prompt for refine_ops_cleanup. Global modification notes (batched later) + new_op (template, field details, specifics in op). Const for methodName; $ref only for enums.
-- Legacy prompts (notes from pairs, apply notes) are in `archive/prompts_legacy/`.
+- **prompts/notes_from_pair.txt**: Notes step — analyze pair against current docs, produce actionable notes.
+- **prompts/apply_notes.txt**: Apply step — apply batched notes to produce updated op md + global md.
 
 ---
 
-## Models and limits
+## Models
 
-- **Refine**: claude-haiku-4-5. Per op: `{global_modification_notes, new_op, raisePossibleIssueToHuman}`. Batch: `{global_md}`.
-- **Cost**: ~$3.84 per full run (31 ops). ~39 min wall time.
+- **Notes step**: claude-haiku-4-5 (fast, cheap; notes are concise).
+- **Apply step**: claude-haiku-4-5 (can be upgraded per `config/refine.json`).
+- Claude only. Anthropic exclusively. No OpenAI.
 
 ---
 
 ## Routing
 
-- **Standard**: `https://www.sobranie.mk/Routing/MakePostRequest` — POST, body includes methodName.
+- **Standard**: `https://www.sobranie.mk/Routing/MakePostRequest` — POST with `methodName`.
 - **ASMX**: `GetCustomEventsCalendar`, `GetOfficialVisitsForUser` — different URLs, wrapped model.
 - **Infrastructure**: `LoadLanguage` — `Infrastructure/LoadLanguage`, empty body.
 
@@ -118,14 +102,15 @@ One-time migration script `split_api_md.py` is in `archive/scripts/` if needed.
 - **docs/API.md**: Regenerated by build_api_md from global + ops.
 - **collected/{operation}/**: req_001.json, resp_001.json, etc.
 - **collected/manifest.json**: Links req ↔ resp per run.
-- **collected/pairs.json**: Flattened pairs (from gather_pairs); refine does not use this.
 - **errors/{operation}/**: Failed requests.
-- **logs/collect/**, **logs/gather_pairs/**, **logs/refine_ops_cleanup/**: Run logs; refine also writes `issues_for_review.md`.
-- **config/refine.json**: Model for refine.
+- **logs/collect/**: Collection run logs.
+- **logs/refine/**: Refine run logs (refine.log, notes/, concerns.md, state.json).
+- **config/refine.json**: Model and batch settings.
+- **config/generators.json**: Request generators.
 - **prompts/**: LLM prompt templates.
 
 ---
 
 ## Archive
 
-Obsolete scripts, logs, caches, legacy docs, and schema-inference artifacts live in `archive/`. Structure preserved; new obsolete items are added, not reorganized.
+Obsolete scripts (baseline md-only refine, gather_pairs), legacy prompts, old logs, caches, and schema-inference artifacts live in `archive/`. Structure preserved.

@@ -60,17 +60,6 @@ def complete_json(
     return json.loads(text)
 
 
-# JSON schema for apply step: {new_global: string, new_op: string}
-APPLY_OUTPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "new_global": {"type": "string", "description": "Full updated global.md content"},
-        "new_op": {"type": "string", "description": "Full updated per-operation .md content"},
-    },
-    "required": ["new_global", "new_op"],
-    "additionalProperties": False,
-}
-
 
 def complete_structured(
     prompt: str,

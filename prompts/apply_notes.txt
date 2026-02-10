@@ -1,0 +1,33 @@
+Apply these analyst notes to produce updated Sobranie.mk API documentation.
+
+RULES:
+- PRESERVE all existing content. No information loss. Only refine.
+- Only WIDEN: never remove enum values, never make optional→required, never drop anyOf branches.
+- Improving = more accurate, not necessarily longer. Simplify where notes say to. Don't add unnecessary verbosity.
+- Enum definitions go in global $defs only; op docs reference via $ref.
+- Op doc template: ## OperationName, ### Request Schema (JSON Schema), ### Response Schema (JSON Schema), ### Notes.
+- Use const for single fixed values, not single-element enum.
+- One keyword per property: $ref OR type, not both.
+- If all notes say "No changes needed", return current docs unchanged.
+
+---
+
+## Current global.md
+
+{global_md}
+
+---
+
+## Current per-operation doc: {operation}
+
+{op_md}
+
+---
+
+## Notes to apply
+
+{notes}
+
+---
+
+Produce newOperationMd (full updated op .md), newGlobalMd (full updated global.md), seriousConcerns (any breaking changes or serious issues to flag; empty string if none).

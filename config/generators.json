@@ -1,41 +1,196 @@
 {
-  "sample_size_default": 4,
-  "operations": {
-    "GetAllApplicationTypes": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllApplicationTypes"}, "languageId": {"generator": "constant", "value": 1}}},
-    "GetAllCommitteesForFilter": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllCommitteesForFilter"}, "languageId": {"generator": "constant", "value": 1}, "structureId": {"generator": "current_structure"}}},
-    "GetAllCouncils": {"type": "listing", "fields": {"methodName": {"generator": "constant", "value": "GetAllCouncils"}, "languageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}}},
-    "GetAllGenders": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllGenders"}, "languageId": {"generator": "constant", "value": 1}}},
-    "GetAllInstitutionsForFilter": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllInstitutionsForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
-    "GetAllMPsClubsByStructure": {"type": "listing", "fields": {"MethodName": {"generator": "constant", "value": "GetAllMPsClubsByStructure"}, "LanguageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}}},
-    "GetAllMaterialStatusesForFilter": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllMaterialStatusesForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
-    "GetAllMaterialTypesForFilter": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllMaterialTypesForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
-    "GetAllMaterialsForPublicPortal": {"type": "listing", "fields": {"MethodName": {"generator": "constant", "value": "GetAllMaterialsForPublicPortal"}, "LanguageId": {"generator": "constant", "value": 1}, "ItemsPerPage": {"generator": "range", "min": 10, "max": 50}, "CurrentPage": {"generator": "range", "min": 1, "max": 3}, "StructureId": {"generator": "current_structure"}}},
-    "GetAllParliamentaryGroups": {"type": "listing", "fields": {"methodName": {"generator": "constant", "value": "GetAllParliamentaryGroups"}, "languageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}}},
-    "GetAllPoliticalParties": {"type": "listing", "fields": {"methodName": {"generator": "constant", "value": "GetAllPoliticalParties"}, "languageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}}},
-    "GetAllProcedureTypes": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllProcedureTypes"}, "languageId": {"generator": "constant", "value": 1}}},
-    "GetAllQuestionStatuses": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllQuestionStatuses"}, "LanguageId": {"generator": "constant", "value": 1}}},
-    "GetAllQuestions": {"type": "listing", "fields": {"methodName": {"generator": "constant", "value": "GetAllQuestions"}, "LanguageId": {"generator": "constant", "value": 1}, "CurrentPage": {"generator": "range", "min": 1, "max": 3}, "Page": {"generator": "range", "min": 1, "max": 3}, "Rows": {"generator": "range", "min": 10, "max": 50}, "StructureId": {"generator": "current_structure"}}},
-    "GetAllSittingStatuses": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllSittingStatuses"}, "LanguageId": {"generator": "constant", "value": 1}}},
-    "GetAllSittings": {"type": "listing", "fields": {"methodName": {"generator": "constant", "value": "GetAllSittings"}, "Page": {"generator": "range", "min": 1, "max": 3}, "Rows": {"generator": "range", "min": 10, "max": 50}, "LanguageId": {"generator": "constant", "value": 1}, "TypeId": {"generator": "range", "min": 1, "max": 2}, "StructureId": {"generator": "current_structure"}}},
-    "GetAllStructuresForFilter": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetAllStructuresForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
-    "GetAmendmentDetails": {"type": "detail", "id_source": {"operation": "GetMaterialDetails", "field": "amendmentId"}, "fields": {"methodName": {"generator": "constant", "value": "/GetAmendmentDetails"}, "languageId": {"generator": "constant", "value": 1}, "amendmentId": {"generator": "uuid_from_listing"}}},
-    "GetCommitteeDetails": {"type": "detail", "id_source": {"operation": "GetAllCommitteesForFilter", "field": "Id"}, "fields": {"methodName": {"generator": "constant", "value": "GetCommitteeDetails"}, "languageId": {"generator": "constant", "value": 1}, "committeeId": {"generator": "uuid_from_listing"}}},
-    "GetCouncilDetails": {"type": "detail", "id_source": {"operation": "GetAllCouncils", "field": "Id"}, "fields": {"methodName": {"generator": "constant", "value": "GetCouncilDetails"}, "languageId": {"generator": "constant", "value": 1}, "committeeId": {"generator": "uuid_from_listing"}}},
-    "GetCustomEventsCalendar": {"type": "other", "url": "https://www.sobranie.mk/Moldova/services/CalendarService.asmx/GetCustomEventsCalendar", "fields": {"model": {"generator": "object", "properties": {"Language": {"generator": "constant", "value": 1}, "Month": {"generator": "range", "min": 1, "max": 12}, "Year": {"generator": "current_structure_year"}}}}},
-    "GetMPsClubDetails": {"type": "detail", "id_source": {"operation": "GetAllMPsClubsByStructure", "field": "Id"}, "fields": {"methodName": {"generator": "constant", "value": "GetMPsClubDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "mpsClubId": {"generator": "uuid_from_listing"}}},
-    "GetMaterialDetails": {"type": "detail", "id_source": {"operation": "GetAllMaterialsForPublicPortal", "field": "Id"}, "fields": {"methodName": {"generator": "constant", "value": "GetMaterialDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "MaterialId": {"generator": "uuid_from_listing"}, "AmendmentsPage": {"generator": "range", "min": 1, "max": 3}, "AmendmentsRows": {"generator": "range", "min": 10, "max": 50}}},
-    "GetMonthlyAgenda": {"type": "listing", "fields": {"methodName": {"generator": "constant", "value": "GetMonthlyAgenda"}, "LanguageId": {"generator": "constant", "value": 1}, "Month": {"generator": "range", "min": 1, "max": 12}, "Year": {"generator": "current_structure_year"}}},
-    "GetOfficialVisitsForUser": {"type": "other", "url": "https://www.sobranie.mk/Moldova/services/OfficialVisits.asmx/GetOfficialVisitsForUser", "sample_size": 2, "fields": {"model": {"generator": "catalog", "source": "GetParliamentMPsNoImage", "field": "UserId"}}},
-    "GetParliamentMPsNoImage": {"type": "listing", "fields": {"methodName": {"generator": "constant", "value": "GetParliamentMPsNoImage"}, "languageId": {"generator": "constant", "value": 1}, "page": {"generator": "range", "min": 1, "max": 3}, "rows": {"generator": "range", "min": 10, "max": 50}, "StructureId": {"generator": "current_structure"}}},
-    "GetParliamentaryGroupDetails": {"type": "detail", "id_source": {"operation": "GetAllParliamentaryGroups", "field": "Id"}, "fields": {"methodName": {"generator": "constant", "value": "GetParliamentaryGroupDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "parliamentaryGroupId": {"generator": "uuid_from_listing"}}},
-    "GetPoliticalPartyDetails": {"type": "detail", "id_source": {"operation": "GetAllPoliticalParties", "field": "Id"}, "fields": {"methodName": {"generator": "constant", "value": "GetPoliticalPartyDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "politicalPartyId": {"generator": "uuid_from_listing"}}},
-    "GetProposerTypes": {"type": "other", "sample_size": 1, "fields": {"methodName": {"generator": "constant", "value": "GetProposerTypes"}, "languageId": {"generator": "constant", "value": 1}}},
-    "GetQuestionDetails": {"type": "detail", "id_source": {"operation": "GetAllQuestions", "field": "Id"}, "fields": {"methodName": {"generator": "constant", "value": "/GetQuestionDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "QuestionId": {"generator": "uuid_from_listing"}}},
-    "GetSittingDetails": {"type": "detail", "id_source": {"operation": "GetAllSittings", "field": "Id"}, "fields": {"MethodName": {"generator": "constant", "value": "GetSittingDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "SittingId": {"generator": "uuid_from_listing"}}},
-    "GetUserDetailsByStructure": {"type": "detail", "id_source": {"operation": "GetParliamentMPsNoImage", "field": "UserId"}, "fields": {"methodName": {"generator": "constant", "value": "GetUserDetailsByStructure"}, "languageId": {"generator": "constant", "value": 1}, "userId": {"generator": "uuid_from_listing"}, "structureId": {"generator": "current_structure"}}},
-    "GetVotingResultsForAgendaItem": {"type": "detail", "id_source": {"operation": "GetSittingDetails", "field": "VotingDefinitionId"}, "fields": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForAgendaItem"}, "LanguageId": {"generator": "constant", "value": 1}, "VotingDefinitionId": {"generator": "uuid_from_listing"}, "AgendaItemId": {"generator": "constant", "value": "1"}}},
-    "GetVotingResultsForAgendaItemReportDocument": {"type": "detail", "id_source": {"operation": "GetSittingDetails", "field": "VotingDefinitionId"}, "fields": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForAgendaItemReportDocument"}, "LanguageId": {"generator": "constant", "value": 1}, "VotingDefinitionId": {"generator": "uuid_from_listing"}, "AgendaItemId": {"generator": "constant", "value": "1"}}},
-    "GetVotingResultsForSitting": {"type": "detail", "id_source": {"operation": "GetSittingDetails", "field": "VotingDefinitionId"}, "fields": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForSitting"}, "languageId": {"generator": "constant", "value": 1}, "votingDefinitionId": {"generator": "uuid_from_listing"}, "sittingId": {"generator": "catalog", "source": "GetAllSittings", "field": "Id"}}},
-    "LoadLanguage": {"type": "other", "sample_size": 1, "url": "https://www.sobranie.mk/Infrastructure/LoadLanguage", "fields": {}}
-  }
+  "pipelines": [
+    {
+      "name": "catalogs",
+      "stages": [
+        {"operation": "GetAllStructuresForFilter", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllStructuresForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllApplicationTypes", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllApplicationTypes"}, "languageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllGenders", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllGenders"}, "languageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllMaterialStatusesForFilter", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllMaterialStatusesForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllMaterialTypesForFilter", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllMaterialTypesForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllProcedureTypes", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllProcedureTypes"}, "languageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllQuestionStatuses", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllQuestionStatuses"}, "LanguageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllSittingStatuses", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllSittingStatuses"}, "LanguageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetAllInstitutionsForFilter", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetAllInstitutionsForFilter"}, "languageId": {"generator": "constant", "value": 1}}},
+        {"operation": "GetProposerTypes", "calls": 1, "params": {"methodName": {"generator": "constant", "value": "GetProposerTypes"}, "languageId": {"generator": "constant", "value": 1}}},
+        {"operation": "LoadLanguage", "calls": 1, "url": "https://www.sobranie.mk/Infrastructure/LoadLanguage", "params": {}}
+      ]
+    },
+    {
+      "name": "sittings_and_voting",
+      "stages": [
+        {
+          "operation": "GetAllSittings", "calls": 6,
+          "params": {"methodName": {"generator": "constant", "value": "GetAllSittings"}, "Page": {"generator": "range", "min": 1, "max": 3}, "Rows": {"generator": "range", "min": 10, "max": 50}, "LanguageId": {"generator": "constant", "value": 1}, "TypeId": {"generator": "range", "min": 1, "max": 2}, "StructureId": {"generator": "current_structure"}},
+          "extract": {"sittingId": "$.Items[*].Id"}
+        },
+        {
+          "operation": "GetSittingDetails", "calls": 8,
+          "params": {"MethodName": {"generator": "constant", "value": "GetSittingDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "SittingId": {"source": "sittingId"}},
+          "extract": {
+            "votingPair": {
+              "from": "$..children[?VotingDefinitions[0]]",
+              "pick": {
+                "votingDefId": "$.VotingDefinitions[0].Id",
+                "agendaItemId": "$.id"
+              }
+            }
+          }
+        },
+        {
+          "operation": "GetVotingResultsForAgendaItem", "calls": 4,
+          "params": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForAgendaItem"}, "LanguageId": {"generator": "constant", "value": 1}, "VotingDefinitionId": {"source": "votingPair.votingDefId"}, "AgendaItemId": {"source": "votingPair.agendaItemId"}}
+        },
+        {
+          "operation": "GetVotingResultsForAgendaItemReportDocument", "calls": 4,
+          "params": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForAgendaItemReportDocument"}, "LanguageId": {"generator": "constant", "value": 1}, "VotingDefinitionId": {"source": "votingPair.votingDefId"}, "AgendaItemId": {"source": "votingPair.agendaItemId"}}
+        },
+        {
+          "operation": "GetVotingResultsForSitting", "calls": 4,
+          "params": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForSitting"}, "languageId": {"generator": "constant", "value": 1}, "votingDefinitionId": {"source": "votingPair.votingDefId"}, "sittingId": {"source": "sittingId"}}
+        }
+      ]
+    },
+    {
+      "name": "materials_and_amendments",
+      "stages": [
+        {
+          "operation": "GetAllMaterialsForPublicPortal", "calls": 4,
+          "params": {"MethodName": {"generator": "constant", "value": "GetAllMaterialsForPublicPortal"}, "LanguageId": {"generator": "constant", "value": 1}, "ItemsPerPage": {"generator": "range", "min": 10, "max": 50}, "CurrentPage": {"generator": "range", "min": 1, "max": 3}, "StructureId": {"generator": "current_structure"}},
+          "extract": {"materialId": "$.Items[*].Id"}
+        },
+        {
+          "operation": "GetMaterialDetails", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetMaterialDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "MaterialId": {"source": "materialId"}, "AmendmentsPage": {"generator": "range", "min": 1, "max": 3}, "AmendmentsRows": {"generator": "range", "min": 10, "max": 50}},
+          "extract": {"amendmentId": "$..FirstReadingAmendments[*].Id"}
+        },
+        {
+          "operation": "GetAmendmentDetails", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "/GetAmendmentDetails"}, "languageId": {"generator": "constant", "value": 1}, "amendmentId": {"source": "amendmentId"}}
+        }
+      ]
+    },
+    {
+      "name": "questions",
+      "stages": [
+        {
+          "operation": "GetAllQuestions", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetAllQuestions"}, "LanguageId": {"generator": "constant", "value": 1}, "CurrentPage": {"generator": "range", "min": 1, "max": 3}, "Page": {"generator": "range", "min": 1, "max": 3}, "Rows": {"generator": "range", "min": 10, "max": 50}, "StructureId": {"generator": "current_structure"}},
+          "extract": {"questionId": "$.Items[*].Id"}
+        },
+        {
+          "operation": "GetQuestionDetails", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "/GetQuestionDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "QuestionId": {"source": "questionId"}}
+        }
+      ]
+    },
+    {
+      "name": "committees",
+      "stages": [
+        {
+          "operation": "GetAllCommitteesForFilter", "calls": 1,
+          "params": {"methodName": {"generator": "constant", "value": "GetAllCommitteesForFilter"}, "languageId": {"generator": "constant", "value": 1}, "structureId": {"generator": "current_structure"}},
+          "extract": {"committeeId": "$[*].Id"}
+        },
+        {
+          "operation": "GetCommitteeDetails", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetCommitteeDetails"}, "languageId": {"generator": "constant", "value": 1}, "committeeId": {"source": "committeeId"}}
+        }
+      ]
+    },
+    {
+      "name": "councils",
+      "stages": [
+        {
+          "operation": "GetAllCouncils", "calls": 1,
+          "params": {"methodName": {"generator": "constant", "value": "GetAllCouncils"}, "languageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}},
+          "extract": {"councilId": "$[*].Id"}
+        },
+        {
+          "operation": "GetCouncilDetails", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetCouncilDetails"}, "languageId": {"generator": "constant", "value": 1}, "committeeId": {"source": "councilId"}}
+        }
+      ]
+    },
+    {
+      "name": "mps_clubs",
+      "stages": [
+        {
+          "operation": "GetAllMPsClubsByStructure", "calls": 1,
+          "params": {"MethodName": {"generator": "constant", "value": "GetAllMPsClubsByStructure"}, "LanguageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}},
+          "extract": {"mpsClubId": "$[*].Id"}
+        },
+        {
+          "operation": "GetMPsClubDetails", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetMPsClubDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "mpsClubId": {"source": "mpsClubId"}}
+        }
+      ]
+    },
+    {
+      "name": "parliamentary_groups",
+      "stages": [
+        {
+          "operation": "GetAllParliamentaryGroups", "calls": 1,
+          "params": {"methodName": {"generator": "constant", "value": "GetAllParliamentaryGroups"}, "languageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}},
+          "extract": {"parlGroupId": "$[*].Id"}
+        },
+        {
+          "operation": "GetParliamentaryGroupDetails", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetParliamentaryGroupDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "parliamentaryGroupId": {"source": "parlGroupId"}}
+        }
+      ]
+    },
+    {
+      "name": "political_parties",
+      "stages": [
+        {
+          "operation": "GetAllPoliticalParties", "calls": 1,
+          "params": {"methodName": {"generator": "constant", "value": "GetAllPoliticalParties"}, "languageId": {"generator": "constant", "value": 1}, "StructureId": {"generator": "current_structure"}},
+          "extract": {"partyId": "$[*].Id"}
+        },
+        {
+          "operation": "GetPoliticalPartyDetails", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetPoliticalPartyDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "politicalPartyId": {"source": "partyId"}}
+        }
+      ]
+    },
+    {
+      "name": "mps_and_visits",
+      "stages": [
+        {
+          "operation": "GetParliamentMPsNoImage", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetParliamentMPsNoImage"}, "languageId": {"generator": "constant", "value": 1}, "page": {"generator": "range", "min": 1, "max": 3}, "rows": {"generator": "range", "min": 10, "max": 50}, "StructureId": {"generator": "current_structure"}},
+          "extract": {"userId": "$.MembersOfParliament[*].UserId"}
+        },
+        {
+          "operation": "GetUserDetailsByStructure", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetUserDetailsByStructure"}, "languageId": {"generator": "constant", "value": 1}, "userId": {"source": "userId"}, "structureId": {"generator": "current_structure"}}
+        },
+        {
+          "operation": "GetOfficialVisitsForUser", "calls": 2,
+          "url": "https://www.sobranie.mk/Moldova/services/OfficialVisits.asmx/GetOfficialVisitsForUser",
+          "params": {"model": {"source": "userId"}}
+        }
+      ]
+    },
+    {
+      "name": "calendar",
+      "stages": [
+        {
+          "operation": "GetCustomEventsCalendar", "calls": 4,
+          "url": "https://www.sobranie.mk/Moldova/services/CalendarService.asmx/GetCustomEventsCalendar",
+          "params": {"model": {"generator": "object", "properties": {"Language": {"generator": "constant", "value": 1}, "Month": {"generator": "range", "min": 1, "max": 12}, "Year": {"generator": "current_structure_year"}}}}
+        }
+      ]
+    },
+    {
+      "name": "monthly_agenda",
+      "stages": [
+        {
+          "operation": "GetMonthlyAgenda", "calls": 4,
+          "params": {"methodName": {"generator": "constant", "value": "GetMonthlyAgenda"}, "LanguageId": {"generator": "constant", "value": 1}, "Month": {"generator": "range", "min": 1, "max": 12}, "Year": {"generator": "current_structure_year"}}
+        }
+      ]
+    }
+  ]
 }

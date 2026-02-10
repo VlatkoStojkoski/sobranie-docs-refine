@@ -1,6 +1,6 @@
 # Sobranie.mk API
 
-Macedonian Parliament (Собрание) API documentation. LLM-driven refinement of `docs/global.md` and `docs/ops/<Operation>.md`. Collect fetches live request/response pairs; refine uses only existing markdown.
+Macedonian Parliament (Собрание) API documentation, procedurally improved by analyzing real request/response pairs with an LLM.
 
 ## The API
 
@@ -25,36 +25,30 @@ Dates use AspDate format (`/Date(ms)/`). Pagination via `Page`/`Rows` or `Curren
 
 ## What this repo does
 
-1. **Collect** — Send requests using `config/generators.json`, save pairs to `collected/`.
-2. **Gather** — Flatten manifest into `collected/pairs.json` (optional; refine does not use pairs).
-3. **Refine** — One LLM call per op: produce global_modification_notes + new_op. After all ops, apply notes in one batch to get final global.md. Writes each op doc as it goes; writes global once at the end. Issues to `issues_for_review.md`.
-4. **Build** — Regenerate `docs/API.md` from global + ops (refine runs this automatically at the end).
-
-Initial docs (`global.md`, `ops/*.md`) and `config/generators.json` are provided.
+1. **Collect** — Generate requests from `config/generators.json`, send to the live API, save req/res pairs to `collected/`.
+2. **Refine** — For each pair: LLM produces notes on what the docs should update. Every N notes: LLM applies them to produce updated docs. `docs/API.md` rebuilt after each batch.
 
 ## Usage
 
 ```bash
-# 1. Collect new pairs
+# 1. Collect req/res pairs
 python scripts/collect.py
 python scripts/collect.py --no-cache
 
-# 2. Gather pairs into collected/pairs.json (optional)
-python scripts/gather_pairs.py
-python scripts/gather_pairs.py --generate-more --no-cache
+# 2. Refine docs from pairs
+python scripts/refine.py
+python scripts/refine.py --batch-size 5 --op GetAllSittings
+python scripts/refine.py --resume <run_id>
+python scripts/refine.py --dry-run
 
-# 3. Refine global + per-op docs (per-op notes, then batch global apply)
-python scripts/refine_ops_cleanup.py
-python scripts/refine_ops_cleanup.py --limit 5 --dry-run
-
-# Regenerate API.md manually (refine does this automatically at the end)
+# Rebuild API.md manually (refine does this automatically)
 python scripts/build_api_md.py
 ```
 
-**Refine options:** `--model`, `--limit N`, `--dry-run`
-
-**During a run:** Each `docs/ops/<Op>.md` is written after its op; `docs/global.md` is written once at the end (batch apply). `tail -f logs/refine_ops_cleanup/<run_id>/issues_for_review.md` to watch issues. `docs/API.md` is regenerated at the end.
-
 **Env:** `ANTHROPIC_API_KEY` required for refine (not for collect).
 
-See **`CONTRIBUTING.md`** for step-by-step: refining docs vs generating new pairs. See `docs/API.md` for the full API reference. See `DECISIONS.md` for rationale and details.
+**Resumable:** Refine tracks progress in `logs/refine/<run_id>/state.json`. Stop anytime; `--resume <run_id>` to continue.
+
+**Monitor:** `tail -f logs/refine/<run_id>/refine.log` for live progress. Check `notes/` for individual pair analysis and `concerns.md` for flagged issues.
+
+See **`CONTRIBUTING.md`** for step-by-step. See `docs/API.md` for the full API reference. See `DECISIONS.md` for rationale.

@@ -8,6 +8,7 @@ venv/
 # Collected data and cache
 collected/
 .api_cache/
+.llm_cache/
 listing_cache/
 logs/
 schema_inference.json

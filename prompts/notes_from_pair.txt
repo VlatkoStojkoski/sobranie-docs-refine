@@ -1,0 +1,46 @@
+You are given current API documentation (global conventions + per-operation doc) and one real request/response pair from the Sobranie.mk parliament API. Analyze the pair against the docs and produce concise notes.
+
+WHAT TO NOTE:
+- New fields not in the schema → add as optional properties
+- Field values that reveal new enum values → note for global $defs
+- Fields that can be null but aren't marked nullable → note anyOf with null
+- Fields with different types than documented → note union type
+- Inaccurate descriptions → note correction with evidence from the pair
+- Unnecessary verbosity in docs that can be simplified → note simplification
+- Behavior the pair reveals that isn't documented (e.g. empty array vs null, language fallback, date format quirks)
+
+RULES:
+- Only WIDEN, never narrow. Don't remove enum values, don't make optional fields required, don't drop anyOf branches.
+- Enum values belong in global $defs; op docs use $ref.
+- Operation-specific details go in op doc, not global.
+- Global has only: conventions, $defs, patterns common to many operations.
+- Be precise and actionable. Each note should say exactly what to change and where.
+- If the pair adds nothing new beyond what's already documented: output exactly "No changes needed."
+
+---
+
+## Global docs
+
+{global_md}
+
+---
+
+## Per-operation doc: {operation}
+
+{op_md}
+
+---
+
+## Request
+```json
+{request_json}
+```
+
+## Response
+```json
+{response_json}
+```
+
+---
+
+Output concise notes as a numbered list. If no changes needed, output "No changes needed."
