@@ -61,7 +61,7 @@ def is_error(resp) -> bool:
 def jp_extract(data, path: str) -> list:
     """Extract values from data using a jsonpath expression."""
     expr = jp_parse(path)
-    return [m.value for m in expr.find(data) if m.value]
+    return [m.value for m in expr.find(data) if m.value is not None and m.value != ""]
 
 
 # --- Param generation ---
@@ -137,7 +137,7 @@ def bootstrap_structure(use_cache, cache_get, cache_set, log) -> dict:
         log.warning("Bootstrap: GetAllStructuresForFilter failed or unexpected format")
         return globals_
     for item in resp:
-        if isinstance(item, dict) and item.get("IsCurrent") and item.get("Id"):
+        if isinstance(item, dict) and item.get("IsCurrent") and item.get("Id") is not None:
             globals_["current_structure"] = item["Id"]
             y_from = _aspdate_to_year(item.get("DateFrom") or "")
             y_to = _aspdate_to_year(item.get("DateTo") or "")
@@ -147,7 +147,7 @@ def bootstrap_structure(use_cache, cache_get, cache_set, log) -> dict:
             break
     if "current_structure" not in globals_ and resp:
         first = resp[0]
-        if isinstance(first, dict) and first.get("Id"):
+        if isinstance(first, dict) and first.get("Id") is not None:
             globals_["current_structure"] = first["Id"]
     log.info(f"Bootstrap: structure={globals_.get('current_structure', '?')}")
     return globals_
@@ -205,7 +205,7 @@ def main():
         errors_manifest = json.loads((COLLECTED / "errors_manifest.json").read_text(encoding="utf-8"))
 
     op_counters: dict[str, int] = {}
-    for op_dir in COLLECTED.iterdir():
+    for op_dir in (COLLECTED.iterdir() if COLLECTED.exists() else []):
         if op_dir.is_dir():
             for f in op_dir.glob("req_*.json"):
                 try:
@@ -315,15 +315,21 @@ def main():
                     elif isinstance(extractor, dict) and "from" in extractor:
                         parent_expr = jp_parse(extractor["from"])
                         pick = extractor.get("pick", {})
+                        inject_req = extractor.get("inject_request", {})
                         for match in parent_expr.find(resp):
                             obj = match.value
                             row = {}
                             for field_key, sub_path in pick.items():
                                 sub_expr = jp_parse(sub_path)
                                 sub_matches = sub_expr.find(obj)
-                                if sub_matches and sub_matches[0].value:
+                                if sub_matches and sub_matches[0].value is not None and sub_matches[0].value != "":
                                     row[field_key] = sub_matches[0].value
-                            if len(row) == len(pick):
+                            # Inject fields from the request body into extracted rows
+                            for field_key, req_param in inject_req.items():
+                                val = body.get(req_param)
+                                if val is not None:
+                                    row[field_key] = val
+                            if len(row) == len(pick) + len(inject_req):
                                 store.setdefault(store_key, []).append(row)
 
                 if op == "GetAllStructuresForFilter" and "current_structure" not in globals_:
@@ -369,7 +375,7 @@ def main():
             downstream_needs = set()
             for later in stages[i + 1:]:
                 downstream_needs |= _needs_from_store(later)
-            if not (downstream_needs & produced):
+            if not (downstream_needs & set(empty_keys)):
                 continue
 
             # Retry: re-run this stage's feeder chain (stages 0..i) with x2 calls
@@ -393,6 +399,7 @@ def main():
     log.info(f"Done: {len(run_pairs)} pairs saved, {err_count} errors, {elapsed:.1f}s")
 
     manifest["runs"].append({"run_id": run_id, "pairs": run_pairs})
+    COLLECTED.mkdir(parents=True, exist_ok=True)
     (COLLECTED / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     (COLLECTED / "errors_manifest.json").write_text(json.dumps(errors_manifest, indent=2), encoding="utf-8")
 

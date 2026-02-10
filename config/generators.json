@@ -33,6 +33,9 @@
               "pick": {
                 "votingDefId": "$.VotingDefinitions[0].Id",
                 "agendaItemId": "$.id"
+              },
+              "inject_request": {
+                "sittingId": "SittingId"
               }
             }
           }
@@ -47,7 +50,7 @@
         },
         {
           "operation": "GetVotingResultsForSitting", "calls": 4,
-          "params": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForSitting"}, "languageId": {"generator": "constant", "value": 1}, "votingDefinitionId": {"source": "votingPair.votingDefId"}, "sittingId": {"source": "sittingId"}}
+          "params": {"MethodName": {"generator": "constant", "value": "GetVotingResultsForSitting"}, "languageId": {"generator": "constant", "value": 1}, "votingDefinitionId": {"source": "votingPair.votingDefId"}, "sittingId": {"source": "votingPair.sittingId"}}
         }
       ]
     },
@@ -66,7 +69,7 @@
         },
         {
           "operation": "GetAmendmentDetails", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "/GetAmendmentDetails"}, "languageId": {"generator": "constant", "value": 1}, "amendmentId": {"source": "amendmentId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetAmendmentDetails"}, "languageId": {"generator": "constant", "value": 1}, "amendmentId": {"source": "amendmentId"}}
         }
       ]
     },
@@ -75,12 +78,12 @@
       "stages": [
         {
           "operation": "GetAllQuestions", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "GetAllQuestions"}, "LanguageId": {"generator": "constant", "value": 1}, "CurrentPage": {"generator": "range", "min": 1, "max": 3}, "Page": {"generator": "range", "min": 1, "max": 3}, "Rows": {"generator": "range", "min": 10, "max": 50}, "StructureId": {"generator": "current_structure"}},
+          "params": {"methodName": {"generator": "constant", "value": "GetAllQuestions"}, "LanguageId": {"generator": "constant", "value": 1}, "Page": {"generator": "range", "min": 1, "max": 3}, "Rows": {"generator": "range", "min": 10, "max": 50}, "StructureId": {"generator": "current_structure"}},
           "extract": {"questionId": "$.Items[*].Id"}
         },
         {
           "operation": "GetQuestionDetails", "calls": 4,
-          "params": {"methodName": {"generator": "constant", "value": "/GetQuestionDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "QuestionId": {"source": "questionId"}}
+          "params": {"methodName": {"generator": "constant", "value": "GetQuestionDetails"}, "LanguageId": {"generator": "constant", "value": 1}, "QuestionId": {"source": "questionId"}}
         }
       ]
     },
