@@ -1,0 +1,32 @@
+{
+  "method": "GetAllCouncils",
+  "samples": [
+    {
+      "request": {
+        "methodName": "GetAllCouncils",
+        "languageId": 1,
+        "StructureId": "5e00dbd6-ca3c-4d97-b748-f792b2fa3473"
+      },
+      "response": [
+        {
+          "Id": "d596538c-f3d4-4440-8ae7-6e25ea094c6a",
+          "Name": "Буџетски совет на Собранието на Република Северна Македонија",
+          "TypeId": 1,
+          "TypeTitle": "Постојана"
+        },
+        {
+          "Id": "2b9df53a-33ea-4286-af71-d0f707e9ccf8",
+          "Name": "Национален совет за евроинтеграции",
+          "TypeId": 1,
+          "TypeTitle": "Постојана"
+        },
+        {
+          "Id": "046dec8f-7875-49bc-97a7-ec4b618e7c21",
+          "Name": "Совет на Собранискиот канал",
+          "TypeId": 1,
+          "TypeTitle": "Постојана"
+        }
+      ]
+    }
+  ]
+}

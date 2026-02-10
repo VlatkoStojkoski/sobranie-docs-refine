@@ -1,0 +1,1 @@
+{"reasoning": "This is a static HTML calendar component file from a third-party library (Moldova calendar). It's a reusable UI component, not parliament-specific data or an API endpoint. Falls under static assets category.", "answer": "NO"}

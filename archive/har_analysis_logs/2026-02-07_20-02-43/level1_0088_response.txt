@@ -1,0 +1,1 @@
+{"reasoning": "This is an API endpoint that loads language resources for the parliament website. It's a POST request to a server-side infrastructure endpoint that likely returns localization data or language settings, which is functional parliament website data rather than static assets or tracking.", "answer": "YES"}

@@ -1,0 +1,1 @@
+{"reasoning": "This is a request to a third-party accessibility widget service (equally.ai) for configuration settings, not an API endpoint of sobranie.mk or related to parliament data. It's a support service similar to analytics or tracking.", "answer": "NO"}

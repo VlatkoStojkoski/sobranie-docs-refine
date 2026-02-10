@@ -1,0 +1,23 @@
+Analyze this HTTP request from a sobranie.mk HAR capture. Document everything useful for API discovery.
+
+## Request
+- URL: https://www.sobranie.mk/Infrastructure/LoadLanguage
+- Method: POST
+- Path: /Infrastructure/LoadLanguage
+- Query: (none)
+
+## Request body (sanitized)
+```
+(none)
+```
+
+## Response
+- Status: 200
+- Content-Type: application/json
+
+## Response body (sanitized)
+```
+(empty)
+```
+
+Fill each field: route_type, method_name, parameters, response_structure, documentation_notes, other. Be thorough.

@@ -1,0 +1,29 @@
+{
+  "method": "GetAllQuestionStatuses",
+  "samples": [
+    {
+      "request": {
+        "methodName": "GetAllQuestionStatuses",
+        "languageId": 1
+      },
+      "response": [
+        {
+          "Id": 17,
+          "Title": "Доставено"
+        },
+        {
+          "Id": 19,
+          "Title": "Одговорено"
+        },
+        {
+          "Id": 20,
+          "Title": "Таен одговор"
+        },
+        {
+          "Id": 21,
+          "Title": "Писмен одговор"
+        }
+      ]
+    }
+  ]
+}

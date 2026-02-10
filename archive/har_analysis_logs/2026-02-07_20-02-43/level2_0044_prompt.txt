@@ -1,0 +1,29 @@
+Analyze this HTTP request from a sobranie.mk HAR capture. Document everything useful for API discovery.
+
+## Request
+- URL: https://www.sobranie.mk/Moldova/services/CalendarService.asmx/GetCustomEventsCalendar
+- Method: POST
+- Path: /Moldova/services/CalendarService.asmx/GetCustomEventsCalendar
+- Query: (none)
+
+## Request body (sanitized)
+```
+{
+  "model": {
+    "Language": 1,
+    "Month": 12,
+    "Year": 2025
+  }
+}
+```
+
+## Response
+- Status: 200
+- Content-Type: application/json
+
+## Response body (sanitized)
+```
+(empty)
+```
+
+Fill each field: route_type, method_name, parameters, response_structure, documentation_notes, other. Be thorough.

@@ -1,0 +1,1 @@
+{"reasoning": "This is a static HTML calendar component file served from a Scripts directory. It's part of a third-party calendar library (Moldova calendar) used for UI functionality, not a parliament data API or document endpoint.", "answer": "NO"}

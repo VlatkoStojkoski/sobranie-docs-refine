@@ -1,0 +1,28 @@
+{
+  "method": "GetProposerTypes",
+  "samples": [
+    {
+      "request": {
+        "methodName": "GetProposerTypes",
+        "languageId": 1
+      },
+      "response": [
+        {
+          "Id": 1,
+          "Title": "Пратеник",
+          "Order": 1
+        },
+        {
+          "Id": 2,
+          "Title": "Влада на Република Северна Македонија",
+          "Order": 2
+        },
+        {
+          "Id": 4,
+          "Title": "Група избирачи",
+          "Order": 4
+        }
+      ]
+    }
+  ]
+}

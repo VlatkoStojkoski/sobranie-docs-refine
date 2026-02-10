@@ -1,0 +1,70 @@
+{
+  "AspDate": {
+    "type": "string",
+    "pattern": "^/Date\\(\\d+\\)/$",
+    "description": "ASP.NET date format: milliseconds since Unix epoch"
+  },
+  "UUID": {
+    "type": "string",
+    "format": "uuid",
+    "description": "Standard UUID v4"
+  },
+  "LanguageId": {
+    "type": "integer",
+    "enum": [1, 2, 3],
+    "description": "1=Macedonian, 2=Albanian, 3=Turkish"
+  },
+  "GenderId": {
+    "type": "integer",
+    "enum": [1, 2],
+    "description": "1=Male (Машки), 2=Female (Женски)"
+  },
+  "SittingStatusId": {
+    "type": "integer",
+    "enum": [1, 2, 3, 4, 5, 6],
+    "description": "1=Scheduled, 2=Started, 3=Completed, 4=Incomplete, 5=Closed, 6=Postponed"
+  },
+  "AgendaItemTypeId": {
+    "type": "integer",
+    "enum": [1, 2],
+    "description": "1=Plenary, 2=Committee"
+  },
+  "QuestionStatusId": {
+    "type": "integer",
+    "enum": [17, 19, 20, 21],
+    "description": "17=Delivered, 19=Answered, 20=Secret answer, 21=Written answer"
+  },
+  "MaterialStatusId": {
+    "type": "integer",
+    "enum": [0, 6, 9, 10, 11, 12, 24, 64],
+    "description": "0=Plenary/unknown, 6=Delivered to MPs, 9=First reading, 10=Second, 11=Third, 12=Closed, 24=Rejected, 64=Committee processing"
+  },
+  "ProposerTypeId": {
+    "type": "integer",
+    "enum": [1, 2, 4],
+    "description": "1=MP, 2=Government, 4=Voter group"
+  },
+  "ProcedureTypeId": {
+    "type": "integer",
+    "enum": [1, 2, 3],
+    "description": "1=Regular, 2=Shortened, 3=Urgent"
+  },
+  "NullableLanguageId": {
+    "anyOf": [
+      { "$ref": "#/$defs/LanguageId" },
+      { "type": "null" }
+    ]
+  },
+  "NullableUUID": {
+    "anyOf": [
+      { "$ref": "#/$defs/UUID" },
+      { "type": "null" }
+    ]
+  },
+  "NullableAspDate": {
+    "anyOf": [
+      { "$ref": "#/$defs/AspDate" },
+      { "type": "null" }
+    ]
+  }
+}

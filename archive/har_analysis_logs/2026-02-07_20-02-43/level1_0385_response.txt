@@ -1,0 +1,1 @@
+{"reasoning": "This is a third-party accessibility widget API call (equally.ai) used for website accessibility features, not a sobranie.mk parliamentary data API or document resource. It falls under the category of third-party services similar to analytics/tracking.", "answer": "NO"}

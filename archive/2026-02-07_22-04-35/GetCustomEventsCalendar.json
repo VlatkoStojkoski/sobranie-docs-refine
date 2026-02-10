@@ -1,0 +1,217 @@
+{
+  "method": "GetCustomEventsCalendar",
+  "samples": [
+    {
+      "request": {
+        "model": {
+          "Language": 1,
+          "Month": 1,
+          "Year": 2026
+        }
+      },
+      "response": {
+        "d": [
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "c46c450b-c40f-433e-b733-042cedfb3140",
+            "EventDescription": "Прес-конференција за медиуми",
+            "EventLink": "pres-konferencija-za-mediumi-2312026",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1769174100000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "8de612fa-9add-4f58-a8ea-16d4fe0bc5ee",
+            "EventDescription": "НЕФОРМАЛНА СРЕДБА НА ПРЕТСЕДАТЕЛОТ ГАШИ СО ПРЕТСТАВНИЦИ НА МЕДИУМИТЕ",
+            "EventLink": "neformalna-sredba-na-pretsedatelot-gasi-so-pretstavnici-na-mediumite-2912026",
+            "EventLocation": "Сала на Уставна комисија",
+            "EventDate": "/Date(1769677200000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "a867fa73-c9df-4674-96f6-2d94e264847d",
+            "EventDescription": "Прес-конференција за медиуми",
+            "EventLink": "pres-konferencija-za-mediumi-2812026",
+            "EventLocation": "Прес-центар",
+            "EventDate": "/Date(1769599800000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "712f7c1b-f509-4455-ad7a-2da216aead6e",
+            "EventDescription": "Давање свечена изјава",
+            "EventLink": "davane-svecena-izjava-2612026",
+            "EventLocation": "Охридска сала ",
+            "EventDate": "/Date(1769416200000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "ebf22ec0-1af4-44da-93b4-35498e6dfa5a",
+            "EventDescription": "Прес-конференција за медиуми",
+            "EventLink": "pres-konferencija-za-mediumi-13012026",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1768302000000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "1b82a0f2-881d-4bfb-8b78-3f70208ef3b2",
+            "EventDescription": "Прес-конференција за медиуми",
+            "EventLink": "pres-konferencija-za-mediumi-12126",
+            "EventLocation": "Прес-центар",
+            "EventDate": "/Date(1768211100000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "614f8b16-354f-46e7-a8c1-41b36ee7b789",
+            "EventDescription": "Посета на кинеската амбасадорка, Џианг Сиаојан",
+            "EventLink": "poseta-na-kineskata-ambasadorka-diang-siaojan-2812026",
+            "EventLocation": "Стар кабинет",
+            "EventDate": "/Date(1769607000000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "c0508abb-3bfd-4a74-a261-4c541f8fdf25",
+            "EventDescription": "Прес-конференција за медиуми",
+            "EventLink": "pres-konferencija-za-mediumi-2012026",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1768906800000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "7037f66e-b923-4fc4-a0b8-4d977bede62f",
+            "EventDescription": "Посета на австрискиот амбасадор Мартин Памер ",
+            "EventLink": "poseta-na-avstriskiot-ambasador-martin-pamer-2912026",
+            "EventLocation": "Стар кабинет",
+            "EventDate": "/Date(1769695200000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "75f62cea-c6b7-40ac-9fd1-5802a21a14ee",
+            "EventDescription": "Прес-конференција за медиуми",
+            "EventLink": "pres-konferencija-za-mediumi-23120261420",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1769174400000)/",
+            "EventType": 5
+          },
+          {
+            "_truncated": 12
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "model": {
+          "Language": 1,
+          "Month": 6,
+          "Year": 2025
+        }
+      },
+      "response": {
+        "d": [
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "04da6852-ed88-4d91-b59a-08422ac4a253",
+            "EventDescription": "Прес-конференција за медиуми ",
+            "EventLink": "pres-konferencija-za-mediumi-2306",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1750678200000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "186c250b-c584-49a2-83d1-1824b31645bc",
+            "EventDescription": "Прес-конференција за медиуми ",
+            "EventLink": "pres-konferencija-za-mediumi-236",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1750669200000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "a4471f1a-fb2b-46fa-aee8-19b04085e55c",
+            "EventDescription": "Посета на министерката за европски прашања на Данска, Мари Бјер ",
+            "EventLink": "poseta-na-ministerkata-za-evropski-prasana-na-danska-mari-bjer-1862025",
+            "EventLocation": "Сала на Уставна комисија",
+            "EventDate": "/Date(1750239000000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "32e71062-5b80-4230-aad1-1a75d7029712",
+            "EventDescription": "Прес-конференција за медиуми ",
+            "EventLink": "pres-konferencija-za-mediumi-206",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1750410000000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "91550601-b0f0-4b8b-a137-246f33c99458",
+            "EventDescription": "Прес-конференција за медиуми ",
+            "EventLink": "pres-konferencija-za-mediumi-1115",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1750842900000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "34f35ae5-9c91-4b1b-bfe0-2bbb4aa1afa5",
+            "EventDescription": "Прес-конференција за медиуми ",
+            "EventLink": "pres-konferencija-za-mediumi-1230",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1750847400000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "56b5964a-284a-436e-9dd5-2f429ee2c65a",
+            "EventDescription": "Прес-конференција за медиуми ",
+            "EventLink": "pres-konferencija-za-mediumi-256",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1750842000000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "249bbced-75dc-4e62-9e5d-33057060c8c2",
+            "EventDescription": "Прес-конференција за медиуми",
+            "EventLink": "pres-konferencija-za-mediumi-4625",
+            "EventLocation": "Прес-центар",
+            "EventDate": "/Date(1749031200000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "fc5f884a-4204-4254-8b0c-3fbb07984457",
+            "EventDescription": "Прес-конференција за медиуми",
+            "EventLink": "pres-konferencija-za-mediumi-262025",
+            "EventLocation": "Прес-центар ",
+            "EventDate": "/Date(1748851200000)/",
+            "EventType": 5
+          },
+          {
+            "__type": "moldova.controls.Models.CalendarViewModel",
+            "Id": "1cec7f11-ec2e-43e4-a951-42958065e196",
+            "EventDescription": "Прес-конференција за медиуми",
+            "EventLink": "pres-konferencija-za-mediumi-462025",
+            "EventLocation": "Прес-центар",
+            "EventDate": "/Date(1749027600000)/",
+            "EventType": 5
+          },
+          {
+            "_truncated": 26
+          }
+        ]
+      }
+    }
+  ]
+}

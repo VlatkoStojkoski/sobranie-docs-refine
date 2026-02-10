@@ -1,0 +1,1 @@
+{"reasoning": "This is a POST request to the sobranie.mk API endpoint 'MakePostRequest' calling the method 'GetUserDetailsByStructure' with a userId parameter. This matches the relevance criteria for parliament API data fetches that retrieve structured information about users/members.", "answer": "YES"}

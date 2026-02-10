@@ -1,0 +1,13 @@
+{
+  "method": "GetOfficialVisitsForUser",
+  "samples": [
+    {
+      "request": {
+        "model": "914bff80-4c19-4675-ace4-cb0c7a08f688"
+      },
+      "response": {
+        "d": []
+      }
+    }
+  ]
+}

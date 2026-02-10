@@ -1,0 +1,1 @@
+{"reasoning": "This is a request for a calendar HTML file from a third-party directory structure (Moldova), which appears to be a static HTML template or component rather than parliament data or an API endpoint. It does not match any of the relevant criteria such as sobranie.mk APIs, document/PDF URLs, or parliament data fetches.", "answer": "NO"}

@@ -1,0 +1,1 @@
+{"reasoning": "This is a static HTML file for a calendar component located in a third-party scripts directory (Moldova). It's a UI component asset, not a data API or parliament-specific content endpoint.", "answer": "NO"}

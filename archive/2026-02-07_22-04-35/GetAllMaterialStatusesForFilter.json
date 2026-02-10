@@ -1,0 +1,41 @@
+{
+  "method": "GetAllMaterialStatusesForFilter",
+  "samples": [
+    {
+      "request": {
+        "methodName": "GetAllMaterialStatusesForFilter",
+        "languageId": 1
+      },
+      "response": [
+        {
+          "Id": 6,
+          "Title": "Доставен до пратеници"
+        },
+        {
+          "Id": 9,
+          "Title": "Прво читање"
+        },
+        {
+          "Id": 10,
+          "Title": "Второ читање"
+        },
+        {
+          "Id": 11,
+          "Title": "Трето читање"
+        },
+        {
+          "Id": 12,
+          "Title": "Затворен"
+        },
+        {
+          "Id": 24,
+          "Title": "Одбиен"
+        },
+        {
+          "Id": 64,
+          "Title": "Обработка кај комисија"
+        }
+      ]
+    }
+  ]
+}
