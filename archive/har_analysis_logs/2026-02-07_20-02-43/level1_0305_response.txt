@@ -1,1 +1,0 @@
-{"reasoning": "This is an HTML template file (.min.html) used for rendering news content, which is a static asset rather than a parliament data fetch or API endpoint. It does not match the criteria for API calls, document URLs, or data fetches.", "answer": "NO"}

@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to the sobranie.mk API endpoint '/Routing/MakePostRequest' calling the method 'GetVotingResultsForSitting' with a votingDefinitionId parameter. This clearly fetches parliament voting results data, which is core legislative information.", "answer": "YES"}

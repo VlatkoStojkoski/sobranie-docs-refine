@@ -1,1 +1,0 @@
-{"reasoning": "This is an API endpoint for loading language resources, which is part of the parliament website's infrastructure for internationalization. It's a POST request to a sobranie.mk endpoint that returns JSON data, fitting the criteria for relevant API calls that help understand the site's data structure and functionality.", "answer": "YES"}

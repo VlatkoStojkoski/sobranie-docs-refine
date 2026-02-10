@@ -1,1 +1,0 @@
-{"reasoning": "This is a static HTML calendar widget file located in a third-party Scripts/Moldova directory. It's a UI component asset, not a data API or parliament-specific resource that would provide legislative information.", "answer": "NO"}

@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to an ASMX web service endpoint (GetCustomEventsCalendar) that appears to fetch parliamentary calendar/event data for January 2026. This is a legitimate API call retrieving parliament-related information, not a static asset or tracking request.", "answer": "YES"}

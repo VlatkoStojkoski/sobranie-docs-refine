@@ -1,1 +1,0 @@
-{"reasoning": "This is a LoadLanguage endpoint that likely fetches language/localization data for the parliament website. It's an API endpoint on sobranie.mk that returns JSON data, which could contain relevant parliamentary content or interface translations.", "answer": "YES"}

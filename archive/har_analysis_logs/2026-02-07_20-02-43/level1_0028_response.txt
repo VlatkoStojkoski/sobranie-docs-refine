@@ -1,1 +1,0 @@
-{"reasoning": "This is an HTML template file under /Scripts/Moldova/questions/details/ which appears to be a static resource used for rendering question details, not a data fetch or API call. It's a template artifact rather than parliament data or a meaningful route.", "answer": "NO"}

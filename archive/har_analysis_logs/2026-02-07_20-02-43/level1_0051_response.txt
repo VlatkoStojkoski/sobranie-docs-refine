@@ -1,1 +1,0 @@
-{"reasoning": "This is a request to a third-party accessibility widget service (equally.ai) that provides keyboard navigation and other accessibility features. It is not a sobranie.mk API, not fetching parliament data, and not a document or media URL from the parliament's domain.", "answer": "NO"}

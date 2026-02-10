@@ -1,1 +1,0 @@
-{"reasoning": "This request is for an HTML file from a third-party calendar component (Moldova directory), which appears to be a static resource used for date-picking functionality in the UI rather than parliament data or an API endpoint.", "answer": "NO"}

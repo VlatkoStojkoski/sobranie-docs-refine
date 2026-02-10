@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to the sobranie.mk API endpoint 'MakePostRequest' with method 'GetCouncilDetails' to fetch parliament committee/council data. This matches the criteria for parliament data fetches and API calls.", "answer": "YES"}

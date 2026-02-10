@@ -21,8 +21,8 @@ logs/
 errors/
 schema_inference.json
 
-# Archive (optional; uncomment to ignore)
-# archive/
+# Archive
+archive/
 
 # OS and editor
 .DS_Store

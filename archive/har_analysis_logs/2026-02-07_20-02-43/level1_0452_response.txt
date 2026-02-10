@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to LoadLanguage endpoint which appears to be a language/localization API call for the parliament website. It's fetching configuration data related to language settings, which qualifies as a parliament data fetch and API endpoint.", "answer": "YES"}

@@ -1,1 +1,0 @@
-{"reasoning": "This is a request to a third-party accessibility widget service (equally.ai), not the sobranie.mk parliament API or data infrastructure. It's configuring an external accessibility tool overlay, similar to analytics or tracking services.", "answer": "NO"}

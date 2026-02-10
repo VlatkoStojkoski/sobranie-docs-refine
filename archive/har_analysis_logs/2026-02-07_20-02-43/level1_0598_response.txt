@@ -1,1 +1,0 @@
-{"reasoning": "This is a third-party accessibility widget API call to equally.ai, not a sobranie.mk API. It's an external service for website accessibility features, similar to analytics or tracking services.", "answer": "NO"}

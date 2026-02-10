@@ -1,1 +1,0 @@
-{"reasoning": "This is a third-party accessibility widget API request (equally.ai) for configuring keyboard navigation and widget alignment. It is not related to parliament data, documents, or core functionality of sobranie.mk.", "answer": "NO"}

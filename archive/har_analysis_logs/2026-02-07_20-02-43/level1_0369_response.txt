@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to a .asmx web service endpoint (CalendarService) fetching parliament calendar events for January 2026. It matches the criteria for relevant API calls that retrieve parliament data.", "answer": "YES"}

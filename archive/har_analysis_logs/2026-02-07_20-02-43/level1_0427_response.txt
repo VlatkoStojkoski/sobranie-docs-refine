@@ -1,1 +1,0 @@
-{"reasoning": "This is an API call to GetMonthlyAgenda endpoint on sobranie.mk's MakePostRequest route, fetching parliamentary agenda data for January 2026. This is core parliament data retrieval functionality.", "answer": "YES"}

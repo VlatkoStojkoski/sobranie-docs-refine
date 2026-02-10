@@ -1,1 +1,0 @@
-{"reasoning": "This is an API endpoint for loading language data from the parliament website's infrastructure. It returns JSON and represents a data fetch operation for parliament website functionality, not a static asset or tracking request.", "answer": "YES"}

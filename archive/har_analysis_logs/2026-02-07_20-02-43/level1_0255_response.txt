@@ -1,1 +1,0 @@
-{"reasoning": "This is an API endpoint at sobranie.mk that loads language data via POST request and returns JSON. It appears to be a parliament website API call for retrieving localization/language information, which qualifies as a parliament data fetch.", "answer": "YES"}

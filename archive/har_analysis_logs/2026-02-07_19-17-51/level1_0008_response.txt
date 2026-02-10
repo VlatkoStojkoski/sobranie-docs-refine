@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to the sobranie.mk API endpoint '/Routing/MakePostRequest' calling the method 'GetAllQuestionStatuses' to fetch parliament question status data. This matches the RELEVANT criteria for parliament data fetches via the API.", "answer": "YES"}

@@ -1,1 +1,0 @@
-{"reasoning": "This is a POST request to LoadLanguage endpoint that returns JSON data. It appears to be an API call to load language/localization data for the parliament website, which is part of the core functionality and data fetching mechanisms of sobranie.mk.", "answer": "YES"}

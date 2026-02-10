@@ -1,1 +1,0 @@
-{"reasoning": "This is an API endpoint that loads language-related data for the parliament website, which is likely used to fetch localized content or manage the multilingual interface of sobranie.mk. It matches the criteria for parliament data fetches and represents a functional API call.", "answer": "YES"}
