@@ -152,8 +152,8 @@
             "type": "string"
           },
           "RoleId": {
-            "type": "integer",
-            "description": "Role within parliamentary group (e.g. 26=Coordinator of political party, 72=Deputy coordinator)"
+            "$ref": "#/$defs/RoleId",
+            "description": "Role within parliamentary group (see $defs/RoleId for values)"
           },
           "RoleTitle": {
             "type": "string",
@@ -215,9 +215,7 @@
 
 **Response Language:** All localized text fields (Name, StatusTitle, RoleTitle, etc.) are returned in the language specified by the `LanguageId` request parameter.
 
-**Member Roles:** Members include role information via `RoleId`. Observed role IDs in parliamentary group context:
-- `26` = Coordinator of political party (Координатор/Координаторка на политичка партија)
-- `72` = Deputy coordinator of political party (Заменик координатор/координаторка на политичка партија)
+**Member Roles:** Members include role information via `RoleId`. See `$defs/RoleId` in global documentation for enumerated role values and meanings. In parliamentary group context, observed role IDs include 26 (Coordinator of political party) and 72 (Deputy coordinator of political party).
 
 Each member object includes aggregated activity counts (`MaterialsCount`, `AmendmentsCount`, `QuestionsCount`) showing their legislative contributions within this parliamentary group context.
 

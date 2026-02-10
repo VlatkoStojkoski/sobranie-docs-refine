@@ -35,13 +35,53 @@
     "ResponsibleProposer": { "type": "string" },
     "RegistrationNumber": { "type": "string" },
     "ResponsibleInstitution": { "type": ["string", "null"] },
-    "Sittings": { "type": "array", "items": { "type": "object" } },
-    "Documents": { "type": "array", "items": { "type": "object" } },
-    "Authors": { "type": "array", "items": { "type": "object" } }
+    "Sittings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID" },
+          "SittingTypeId": { "$ref": "#/$defs/SittingTypeId" },
+          "SittingTypeTitle": { "type": "string" },
+          "SittingDate": { "$ref": "#/$defs/AspDate" },
+          "CommitteeTitle": { "type": "string" },
+          "VotingResults": { "type": "array" }
+        }
+      }
+    },
+    "Documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID" },
+          "Title": { "type": "string" },
+          "Url": { "type": "string" },
+          "FileName": { "type": ["string", "null"] },
+          "DocumentTypeId": { "type": "integer" },
+          "DocumentTypeTitle": { "type": ["string", "null"] },
+          "IsExported": { "type": "boolean" }
+        }
+      }
+    },
+    "Authors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID" },
+          "FirstName": { "type": "string" },
+          "LastName": { "type": "string" }
+        }
+      }
+    }
   }
 }
 ```
 
 ### Notes
-- Method-based (MakePostRequest). Amendment details for a given amendmentId; parent material and documents included.
-- Refine from collected pairs to complete request/response schema and notes.
+- Method-based (MakePostRequest). Amendment details for a given amendmentId; parent material, sittings, documents, and authors included.
+- Documents.DocumentTypeId may be 0 (no type/unknown) or reference the DocumentTypeId enum values.
+- Documents.DocumentTypeTitle and FileName may be null.
+- Sittings array includes sitting metadata (Id, date, type, committee context) and associated voting results.
+- Authors array includes amendment proposers and co-signatories with full name components.

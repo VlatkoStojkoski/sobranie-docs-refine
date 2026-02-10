@@ -137,12 +137,13 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "MaterialTypeId": {
     "type": "integer",
-    "description": "Material type identifier (non-consecutive; IDs 12 and 25 absent). Common values: 1=Law proposal, 28=Report/Analysis. Full list from GetAllMaterialTypesForFilter."
+    "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
+    "description": "1=Law proposal (Предлог закон), 2=Interpellation, 3=Government election, 4=Authentic interpretation of law, 5=Consolidated law text, 6=Budget, 7=Rules of procedure (Деловник), 8=Declaration/resolution/decision/recommendation, 9=Consent to statutes and other general acts, 10=Ratification of international treaties, 11=Citizens' initiative, 13=Proposal to establish responsibility of President, 14=Confidence in Government, 15=Government resignation, 16=Dismissal of government member, 17=Termination and revocation of MP mandate, 18=Strategy proposal, 19=Spatial plan proposal, 20=Resignation of public/other office holder, 21=Election of working bodies/permanent delegations/friendship groups, 22=Elections/appointments/dismissals of public/other functions, 23=Question of confidence in Government, 24=Other, 26=Corrections, 27=Amendment proposal, 28=Analysis/report/information/other material, 29=Proposal for constitutional amendment, 30=Determination of draft constitutional amendments, 31=Decision on establishment of permanent working bodies, 32=Budget final account, 33=Proposed constitutional law for implementing amendments, 34=Determination of proposed constitutional amendments, 35=Adoption of constitutional amendments, 36=Proclamation of constitutional amendments, 37=Appointment of government member. IDs 12 and 25 are absent."
   },
   "ProposerTypeId": {
     "type": "integer",
-    "enum": [1, 2, 4],
-    "description": "1=MP, 2=Government, 4=Voter group"
+    "enum": [1, 2, 4, 5],
+    "description": "1=MP, 2=Government, 4=Voter group, 5=Друга институција (Other institution)"
   },
   "ProcedureTypeId": {
     "type": "integer",
@@ -156,8 +157,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "DocumentTypeId": {
     "type": "integer",
-    "enum": [1, 7, 8, 9, 19, 20, 26, 28, 30, 40, 42, 43, 46, 52, 65],
-    "description": "1=Document, 7=Full text of material, 8=Adopted act, 9=Notification to MPs, 19=Решение за свикување седница (Decision to convene), 20=Convocation notice, 26=Question document, 28=Answer document, 30=Committee report without approval, 40=Notice of sitting rescheduling, 42=Notice of sitting continuation, 43=Notice of agenda supplement, 46=Legal-Legislative Committee report, 52=Report/Committee report, 65=Supplemented draft law"
+    "enum": [0, 1, 7, 8, 9, 19, 20, 26, 28, 30, 40, 42, 43, 46, 52, 57, 59, 65],
+    "description": "0=No type/Unknown, 1=Document, 7=Full text of material, 8=Adopted act, 9=Notification to MPs, 19=Решение за свикување седница (Decision to convene), 20=Convocation notice, 26=Question document, 28=Answer document, 30=Committee report without approval, 40=Notice of sitting rescheduling, 42=Notice of sitting continuation, 43=Notice of agenda supplement, 46=Legal-Legislative Committee report, 52=Report/Committee report, 57=Стенограм (Stenographic notes/transcript), 59=Записник (Minutes/record of proceedings), 65=Supplemented draft law"
   },
   "EventTypeId": {
     "type": "integer",
@@ -167,7 +168,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   "MPsClubRoleId": {
     "type": "integer",
     "enum": [77, 78, 79, 81],
-    "description": "77=Član/Članка (Member of friendship group), 78=President, 79=Vice-President, 81=Member"
+    "description": "77=Член/Членка (Member of friendship group), 78=President, 79=Vice-President, 81=Member"
   },
   "CommitteeRoleId": {
     "type": "integer",
@@ -176,8 +177,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "RoleId": {
     "type": "integer",
-    "enum": [1, 27],
-    "description": "1=MP (Пратеник/Пратеничка), 27=Member of political party (Член/Членка на политичка партија). Other role IDs may exist."
+    "enum": [1, 27, 72],
+    "description": "1=MP (Пратеник/Пратеничка), 27=Member of political party (Член/Членка на политичка партија), 72=Deputy coordinator of political party (Заменик координатор/координаторка на политичка партија). Other role IDs may exist."
   },
   "CouncilTypeId": {
     "type": "integer",
@@ -191,13 +192,27 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "AgendaItemStatusId": {
     "type": "integer",
-    "enum": [50, 60, 69],
-    "description": "50=Reviewed, 60=Other status, 69=New"
+    "enum": [50, 51, 60, 62, 63, 69],
+    "description": "50=Reviewed, 51=Status variant, 60=Other status, 62=Status variant, 63=Withdrawn (Повлечена), 69=New"
   },
   "AgendaObjectTypeId": {
     "type": "integer",
     "enum": [0, 1, 4],
     "description": "0=None, 1=Material, 4=Questions/other"
+  },
+  "VotingOptionId": {
+    "type": "string",
+    "format": "uuid",
+    "description": "Voting option identifier"
+  },
+  "VotingTypeId": {
+    "type": "string",
+    "description": "Voting type (e.g. 'Јавно'=Public voting; localized text; other types may exist)"
+  },
+  "VotingOutcomeId": {
+    "type": "string",
+    "enum": ["Усвоен"],
+    "description": "Voting outcome/result: Усвоен=Adopted. Other values may exist."
   }
 }
 ```
@@ -207,7 +222,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 ### Catalogs (reference data)
 
 | Operation | Method-based | Description |
-|-----------|--------------|-------------|
+|-----------|--------------|----------|
 | GetAllGenders | ✓ | Gender options (1=Male, 2=Female) |
 | GetAllStructuresForFilter | ✓ | Parliamentary terms (StructureId) |
 | GetAllCommitteesForFilter | ✓ | Committees per structure |
@@ -223,7 +238,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 ### Listings (paginated / filterable)
 
 | Operation | Method-based | Description |
-|-----------|--------------|-------------|
+|-----------|--------------|----------|
 | GetAllSittings | ✓ | Sittings. Filter: TypeId, CommitteeId, StatusId, dates. May include truncation marker in Items array. |
 | GetAllQuestions | ✓ | Parliamentary questions. Filter: SearchText, RegistrationNumber, StatusId, CommitteeId, dates. StructureId: null = cross-term. May include truncation marker in Items array. |
 | GetAllMaterialsForPublicPortal | ✓ | Materials. Many filters. Uses ItemsPerPage/CurrentPage |
@@ -255,7 +270,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 ### Non-standard
 
 | Operation | Endpoint | Format |
-|-----------|----------|--------|
+|-----------|----------|----------|
 | GetCustomEventsCalendar | Moldova/services/CalendarService.asmx/GetCustomEventsCalendar | ASMX, model: {Language, Month, Year}. Response: d array |
 | LoadLanguage | Infrastructure/LoadLanguage | POST, empty body. Returns Code, Items (Key/Value localization) |
 | GetOfficialVisitsForUser | Moldova/services/OfficialVisits.asmx/GetOfficialVisitsForUser | ASMX, model: user UUID. Response: {"d": []} |

@@ -137,12 +137,13 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "MaterialTypeId": {
     "type": "integer",
-    "description": "Material type identifier (non-consecutive; IDs 12 and 25 absent). Common values: 1=Law proposal, 28=Report/Analysis. Full list from GetAllMaterialTypesForFilter."
+    "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
+    "description": "1=Law proposal (Предлог закон), 2=Interpellation, 3=Government election, 4=Authentic interpretation of law, 5=Consolidated law text, 6=Budget, 7=Rules of procedure (Деловник), 8=Declaration/resolution/decision/recommendation, 9=Consent to statutes and other general acts, 10=Ratification of international treaties, 11=Citizens' initiative, 13=Proposal to establish responsibility of President, 14=Confidence in Government, 15=Government resignation, 16=Dismissal of government member, 17=Termination and revocation of MP mandate, 18=Strategy proposal, 19=Spatial plan proposal, 20=Resignation of public/other office holder, 21=Election of working bodies/permanent delegations/friendship groups, 22=Elections/appointments/dismissals of public/other functions, 23=Question of confidence in Government, 24=Other, 26=Corrections, 27=Amendment proposal, 28=Analysis/report/information/other material, 29=Proposal for constitutional amendment, 30=Determination of draft constitutional amendments, 31=Decision on establishment of permanent working bodies, 32=Budget final account, 33=Proposed constitutional law for implementing amendments, 34=Determination of proposed constitutional amendments, 35=Adoption of constitutional amendments, 36=Proclamation of constitutional amendments, 37=Appointment of government member. IDs 12 and 25 are absent."
   },
   "ProposerTypeId": {
     "type": "integer",
-    "enum": [1, 2, 4],
-    "description": "1=MP, 2=Government, 4=Voter group"
+    "enum": [1, 2, 4, 5],
+    "description": "1=MP, 2=Government, 4=Voter group, 5=Друга институција (Other institution)"
   },
   "ProcedureTypeId": {
     "type": "integer",
@@ -156,8 +157,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "DocumentTypeId": {
     "type": "integer",
-    "enum": [1, 7, 8, 9, 19, 20, 26, 28, 30, 40, 42, 43, 46, 52, 65],
-    "description": "1=Document, 7=Full text of material, 8=Adopted act, 9=Notification to MPs, 19=Решение за свикување седница (Decision to convene), 20=Convocation notice, 26=Question document, 28=Answer document, 30=Committee report without approval, 40=Notice of sitting rescheduling, 42=Notice of sitting continuation, 43=Notice of agenda supplement, 46=Legal-Legislative Committee report, 52=Report/Committee report, 65=Supplemented draft law"
+    "enum": [0, 1, 7, 8, 9, 19, 20, 26, 28, 30, 40, 42, 43, 46, 52, 57, 59, 65],
+    "description": "0=No type/Unknown, 1=Document, 7=Full text of material, 8=Adopted act, 9=Notification to MPs, 19=Решение за свикување седница (Decision to convene), 20=Convocation notice, 26=Question document, 28=Answer document, 30=Committee report without approval, 40=Notice of sitting rescheduling, 42=Notice of sitting continuation, 43=Notice of agenda supplement, 46=Legal-Legislative Committee report, 52=Report/Committee report, 57=Стенограм (Stenographic notes/transcript), 59=Записник (Minutes/record of proceedings), 65=Supplemented draft law"
   },
   "EventTypeId": {
     "type": "integer",
@@ -167,7 +168,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   "MPsClubRoleId": {
     "type": "integer",
     "enum": [77, 78, 79, 81],
-    "description": "77=Član/Članка (Member of friendship group), 78=President, 79=Vice-President, 81=Member"
+    "description": "77=Член/Членка (Member of friendship group), 78=President, 79=Vice-President, 81=Member"
   },
   "CommitteeRoleId": {
     "type": "integer",
@@ -176,8 +177,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "RoleId": {
     "type": "integer",
-    "enum": [1, 27],
-    "description": "1=MP (Пратеник/Пратеничка), 27=Member of political party (Член/Членка на политичка партија). Other role IDs may exist."
+    "enum": [1, 27, 72],
+    "description": "1=MP (Пратеник/Пратеничка), 27=Member of political party (Член/Членка на политичка партија), 72=Deputy coordinator of political party (Заменик координатор/координаторка на политичка партија). Other role IDs may exist."
   },
   "CouncilTypeId": {
     "type": "integer",
@@ -191,13 +192,27 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "AgendaItemStatusId": {
     "type": "integer",
-    "enum": [50, 60, 69],
-    "description": "50=Reviewed, 60=Other status, 69=New"
+    "enum": [50, 51, 60, 62, 63, 69],
+    "description": "50=Reviewed, 51=Status variant, 60=Other status, 62=Status variant, 63=Withdrawn (Повлечена), 69=New"
   },
   "AgendaObjectTypeId": {
     "type": "integer",
     "enum": [0, 1, 4],
     "description": "0=None, 1=Material, 4=Questions/other"
+  },
+  "VotingOptionId": {
+    "type": "string",
+    "format": "uuid",
+    "description": "Voting option identifier"
+  },
+  "VotingTypeId": {
+    "type": "string",
+    "description": "Voting type (e.g. 'Јавно'=Public voting; localized text; other types may exist)"
+  },
+  "VotingOutcomeId": {
+    "type": "string",
+    "enum": ["Усвоен"],
+    "description": "Voting outcome/result: Усвоен=Adopted. Other values may exist."
   }
 }
 ```
@@ -207,7 +222,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 ### Catalogs (reference data)
 
 | Operation | Method-based | Description |
-|-----------|--------------|-------------|
+|-----------|--------------|----------|
 | GetAllGenders | ✓ | Gender options (1=Male, 2=Female) |
 | GetAllStructuresForFilter | ✓ | Parliamentary terms (StructureId) |
 | GetAllCommitteesForFilter | ✓ | Committees per structure |
@@ -223,7 +238,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 ### Listings (paginated / filterable)
 
 | Operation | Method-based | Description |
-|-----------|--------------|-------------|
+|-----------|--------------|----------|
 | GetAllSittings | ✓ | Sittings. Filter: TypeId, CommitteeId, StatusId, dates. May include truncation marker in Items array. |
 | GetAllQuestions | ✓ | Parliamentary questions. Filter: SearchText, RegistrationNumber, StatusId, CommitteeId, dates. StructureId: null = cross-term. May include truncation marker in Items array. |
 | GetAllMaterialsForPublicPortal | ✓ | Materials. Many filters. Uses ItemsPerPage/CurrentPage |
@@ -255,7 +270,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 ### Non-standard
 
 | Operation | Endpoint | Format |
-|-----------|----------|--------|
+|-----------|----------|----------|
 | GetCustomEventsCalendar | Moldova/services/CalendarService.asmx/GetCustomEventsCalendar | ASMX, model: {Language, Month, Year}. Response: d array |
 | LoadLanguage | Infrastructure/LoadLanguage | POST, empty body. Returns Code, Items (Key/Value localization) |
 | GetOfficialVisitsForUser | Moldova/services/OfficialVisits.asmx/GetOfficialVisitsForUser | ASMX, model: user UUID. Response: {"d": []} |
@@ -707,7 +722,7 @@ Returns all MPs clubs (inter-party parliamentary groups) for a specified parliam
     },
     "required": ["Id", "Title"]
   },
-  "description": "Flat array of 37 material types covering legislative materials (laws, amendments, budget), procedural items (elections, appointments, resignations), oversight mechanisms (interpellations, reports), and constitutional procedures (amendments, interpretations)."
+  "description": "Flat array of 35 material types covering legislative materials (laws, amendments, budget), procedural items (elections, appointments, resignations), oversight mechanisms (interpellations, reports), and constitutional procedures (amendments, interpretations). IDs are non-consecutive; 12 and 25 are absent."
 }
 ```
 
@@ -717,6 +732,7 @@ Returns all MPs clubs (inter-party parliamentary groups) for a specified parliam
 - **Localization:** Response titles are localized in the requested `languageId` (1=Macedonian, 2=Albanian, 3=Turkish).
 - **Data quality:** Title values may contain leading/trailing whitespace characters (`\r`, `\n`, spaces) that should be trimmed for display. See global data quality notes.
 - **Non-sequential IDs:** Material type IDs are not consecutive; IDs 12 and 25 are absent from the enumeration.
+- **Material types:** See global $defs MaterialTypeId enum for complete list of all 35 material types and their meanings.
 - **Usage:** Material type IDs returned here are used as `MaterialTypeId` filter values in `GetAllMaterialsForPublicPortal` and appear in material detail responses (GetMaterialDetails).
 - **Returns:** Flat array of all material types (not paginated); no null check needed.
 
@@ -889,7 +905,7 @@ Returns all MPs clubs (inter-party parliamentary groups) for a specified parliam
               },
               "ProposerTypeTitle": {
                 "type": "string",
-                "description": "Human-readable proposer type in requested language (e.g. 'Пратеник', 'Влада...', 'Работно тело'). May have leading whitespace (\\r, \\n); trim for display."
+                "description": "Human-readable proposer type in requested language (e.g. 'Пратеник', 'Влада...', 'Работно тело', 'Друга институција'). May have leading whitespace (\\r, \\n); trim for display."
               },
               "ResponsibleCommittee": {
                 "type": "string",
@@ -928,6 +944,8 @@ Returns all MPs clubs (inter-party parliamentary groups) for a specified parliam
 **Filters:** StatusGroupId, MaterialTypeId, ResponsibleCommitteeId, ProcedureTypeId, InitiatorTypeId all support null (include all). StatusGroupId maps to MaterialStatusId enum values in global $defs. MaterialTypeId full list from GetAllMaterialTypesForFilter catalog.
 
 **Institutional authors:** Government/institution materials have `Authors[0].Id = "00000000-0000-0000-0000-000000000000"` with full title/name in `FirstName`, empty `LastName`. See global Institutional Authors section.
+
+**ProposerTypeTitle:** Can include 'Друга институција' (Other institution) for non-government institutional authors such as Macedonian Radio-Television, universities, etc. See global $defs ProposerTypeId enum for full list of types.
 
 **ResponsibleAuthor:** Can be `null`. Government materials show full Cyrillic institutional title even when LanguageId requests Albanian/Turkish; other fields respect requested language.
 
@@ -1773,6 +1791,97 @@ Unlike most listing operations that require `StructureId`, this operation accept
 - **No pagination:** Response is not paginated; returns the complete list of all structures
 - **No Title field:** Unlike most catalog operations, structures are identified only by UUID and date range; no Title or Name field is present
 - **Usage pattern:** Call once per session to obtain the current `StructureId` for use in subsequent filter operations
+
+
+---
+
+## GetAmendmentDetails
+
+### Request Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "methodName": {
+      "type": "string",
+      "description": "Operation name (e.g. GetAmendmentDetails or /GetAmendmentDetails); casing may vary"
+    },
+    "languageId": {
+      "$ref": "#/$defs/LanguageId"
+    },
+    "amendmentId": {
+      "$ref": "#/$defs/UUID",
+      "description": "Amendment identifier from GetMaterialDetails"
+    }
+  },
+  "required": ["methodName", "languageId", "amendmentId"]
+}
+```
+
+### Response Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "Title": { "type": "string" },
+    "ParentMaterialId": { "$ref": "#/$defs/UUID" },
+    "ParentMaterialTitle": { "type": "string" },
+    "TypeTitle": { "type": "string" },
+    "StatusTitle": { "type": "string" },
+    "ProposerTypeTitle": { "type": "string" },
+    "ResponsibleProposer": { "type": "string" },
+    "RegistrationNumber": { "type": "string" },
+    "ResponsibleInstitution": { "type": ["string", "null"] },
+    "Sittings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID" },
+          "SittingTypeId": { "$ref": "#/$defs/SittingTypeId" },
+          "SittingTypeTitle": { "type": "string" },
+          "SittingDate": { "$ref": "#/$defs/AspDate" },
+          "CommitteeTitle": { "type": "string" },
+          "VotingResults": { "type": "array" }
+        }
+      }
+    },
+    "Documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID" },
+          "Title": { "type": "string" },
+          "Url": { "type": "string" },
+          "FileName": { "type": ["string", "null"] },
+          "DocumentTypeId": { "type": "integer" },
+          "DocumentTypeTitle": { "type": ["string", "null"] },
+          "IsExported": { "type": "boolean" }
+        }
+      }
+    },
+    "Authors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID" },
+          "FirstName": { "type": "string" },
+          "LastName": { "type": "string" }
+        }
+      }
+    }
+  }
+}
+```
+
+### Notes
+- Method-based (MakePostRequest). Amendment details for a given amendmentId; parent material, sittings, documents, and authors included.
+- Documents.DocumentTypeId may be 0 (no type/unknown) or reference the DocumentTypeId enum values.
+- Documents.DocumentTypeTitle and FileName may be null.
+- Sittings array includes sitting metadata (Id, date, type, committee context) and associated voting results.
+- Authors array includes amendment proposers and co-signatories with full name components.
 
 
 ---
@@ -3388,8 +3497,8 @@ The operation uses camelCase for most parameters (`methodName`, `languageId`, `g
             "type": "string"
           },
           "RoleId": {
-            "type": "integer",
-            "description": "Role within parliamentary group (e.g. 26=Coordinator of political party, 72=Deputy coordinator)"
+            "$ref": "#/$defs/RoleId",
+            "description": "Role within parliamentary group (see $defs/RoleId for values)"
           },
           "RoleTitle": {
             "type": "string",
@@ -3451,16 +3560,13 @@ The operation uses camelCase for most parameters (`methodName`, `languageId`, `g
 
 **Response Language:** All localized text fields (Name, StatusTitle, RoleTitle, etc.) are returned in the language specified by the `LanguageId` request parameter.
 
-**Member Roles:** Members include role information via `RoleId`. Observed role IDs in parliamentary group context:
-- `26` = Coordinator of political party (Координатор/Координаторка на политичка партија)
-- `72` = Deputy coordinator of political party (Заменик координатор/координаторка на политичка партија)
+**Member Roles:** Members include role information via `RoleId`. See `$defs/RoleId` in global documentation for enumerated role values and meanings. In parliamentary group context, observed role IDs include 26 (Coordinator of political party) and 72 (Deputy coordinator of political party).
 
 Each member object includes aggregated activity counts (`MaterialsCount`, `AmendmentsCount`, `QuestionsCount`) showing their legislative contributions within this parliamentary group context.
 
 **Questions Field:** The `DateAnswered` field is `null` for questions that have not yet been answered (when `StatusId=17`, Delivered). For answered questions, this field contains an AspDate timestamp.
 
 **StructureId:** Identifies the parliamentary term to which this parliamentary group belongs. Typically `5e00dbd6-ca3c-4d97-b748-f792b2fa3473` for the current parliamentary term. See global "StructureId" concept.
-
 
 ---
 
@@ -3993,7 +4099,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
         },
         "required": ["Id", "Title", "Url", "DocumentTypeId", "DocumentTypeTitle", "IsExported"]
       },
-      "description": "Sitting-level documents (e.g. convocation notices). Empty array when none. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length. Multiple documents may share same DocumentTypeId."
+      "description": "Sitting-level documents (e.g. convocation notices). Empty array when none. Multiple documents may share the same DocumentTypeId (e.g., multiple continuation notices with DocumentTypeId: 42, or multiple stenograms with DocumentTypeId: 57). May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Continuations": {
       "type": "array",
@@ -4008,14 +4114,14 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
               {"type": "integer"},
               {"type": "null"}
             ],
-            "description": "Continuation session number (0, 1, or higher)"
+            "description": "Continuation session number (0, 1, or higher). May be null even for closed continuations."
           },
           "StatusId": {
             "anyOf": [
               {"type": "integer"},
               {"type": "null"}
             ],
-            "description": "Continuation sitting status"
+            "description": "Continuation sitting status. Typically null even when StatusTitle indicates closure (e.g., 'Затворена')."
           },
           "StatusTitle": {
             "type": "string",
@@ -4067,7 +4173,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
     "Votings": {
       "type": "array",
       "items": {},
-      "description": "Voting records at sitting level. Empty array for scheduled sittings or when no top-level votes occur. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
+      "description": "Sitting-level voting records (may contain multiple records for different proposals, amendments, or materials voted on). Empty array for scheduled sittings or when no top-level votes occur. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Agenda": {
       "type": "object",
@@ -4098,7 +4204,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
         },
         "status": {
           "type": "integer",
-          "description": "0 for ROOT node. For LEAF items: see AgendaItemStatusId (50=reviewed, 69=new, 60=other)"
+          "description": "0 for ROOT node. For LEAF items: see AgendaItemStatusId (50=reviewed, 51=status variant, 62=status variant, 63=withdrawn, 69=new, 60=other)"
         },
         "statusTitle": {
           "anyOf": [
@@ -4198,7 +4304,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
               },
               "OverallResult": {
                 "type": "string",
-                "description": "Overall voting result (e.g. 'Усвоен' for adopted/passed)"
+                "description": "Overall voting result (e.g. 'Усвоен' for adopted/passed, 'Одбиен' for rejected)"
               }
             },
             "required": ["Id", "Title", "VotingType", "OverallResult"]
@@ -4265,7 +4371,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
               },
               "status": {
                 "type": "integer",
-                "description": "See AgendaItemStatusId (50=reviewed, 69=new, 60=other statuses)"
+                "description": "See AgendaItemStatusId (50=reviewed, 51=status variant, 62=status variant, 63=withdrawn, 69=new, 60=other statuses)"
               },
               "statusTitle": {
                 "type": "string"
@@ -4339,7 +4445,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
                     "Title": {"type": "string"},
                     "Description": {"type": "string"},
                     "VotingType": {"type": "string"},
-                    "OverallResult": {"type": "string"}
+                    "OverallResult": {"type": "string", "description": "e.g. 'Усвоен' (adopted), 'Одбиен' (rejected)"}
                   },
                   "required": ["Id", "Title", "VotingType", "OverallResult"]
                 },
@@ -4405,12 +4511,13 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
 - Each LEAF node has `objectTypeId` indicating linked item type (1=Material, 4=Questions, 0=None)
 - Leaf nodes with `objectTypeId: 1` have `objectId` = material UUID; pass to `GetMaterialDetails`
 - Tree may be nested to arbitrary depth; LEAF nodes representing materials may contain nested children for amendments
-- Nested amendment nodes may have `agendaItemType: 8`, `status: 60`, and `objectSubTypeId: null`
+- Nested amendment nodes may have `agendaItemType: 8`, and status values including 50, 51, 60, 62, 63, or 69; `objectSubTypeId` may be null
 
 **Voting definitions:**
 - Each agenda item can have zero or more voting definitions
 - Use `VotingDefinitions[].Id` as `VotingDefinitionId` parameter in `GetVotingResultsForAgendaItem` to retrieve detailed voting tallies
-- `OverallResult` shows high-level outcome (e.g. 'Усвоен' = passed)
+- `OverallResult` shows high-level outcome (e.g. 'Усвоен' = adopted/passed, 'Одбиен' = rejected)
+- Sitting-level `Votings` array may contain multiple voting records for different proposals, amendments, or materials voted on within the same sitting
 
 **Document types:**
 - `DocumentTypeId: 19` = Решение за свикување седница (Decision to convene sitting)
@@ -4418,16 +4525,19 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
 - `DocumentTypeId: 40` = Известување за презакажување на седница (Notice of sitting rescheduling)
 - `DocumentTypeId: 42` = Известување за продолжување на седница (Notice of sitting continuation)
 - `DocumentTypeId: 43` = Известување за дополнување на дневен ред (Notice of agenda supplement)
+- `DocumentTypeId: 57` = Стенограм (Stenographic notes/transcript)
+- `DocumentTypeId: 59` = Записник (Minutes/record of proceedings)
 - `DocumentTypeId: 7` = Full text of material
 - `DocumentTypeId: 46` = Legislative committee report
 - `DocumentTypeId: 52` = Committee report
-- Multiple documents may have the same type
+- Multiple documents may have the same DocumentTypeId (e.g., multiple continuation notices with DocumentTypeId: 42, or multiple stenograms with DocumentTypeId: 57)
 - Documents array may be truncated with _truncated marker
 
 **Continuations:**
 - Empty array when sitting completes in single session
 - Multiple continuation objects when sitting spans multiple days/sessions
-- Each continuation has its own date, location, status, and number (which may be 0, 1, or higher, and may be null)
+- Each continuation has its own date, location, status, and number (which may be 0, 1, or higher, and may be null even for closed continuations)
+- `StatusId` may be null even when `StatusTitle` indicates a status (e.g., 'Затворена')
 
 **Absents array:**
 - Lists MPs who did not attend
@@ -4440,7 +4550,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
 - May be truncated with `_truncated` marker
 
 **Votings array:**
-- Sitting-level voting records
+- Sitting-level voting records; may contain multiple voting records for different proposals/amendments
 - May be truncated with `_truncated` marker
 
 **Truncation behavior:**
@@ -4963,3 +5073,267 @@ Response fields such as RoleTitle, PoliticalPartyTitle, CommitteeTitle, StatusTi
 
 **StructureId behavior:**  
 When `structureId` is null, results may be empty or cross-term; use current structure UUID from GetAllStructuresForFilter for standard MP profile retrieval.
+
+---
+
+## GetVotingResultsForAgendaItem
+
+### Request Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "MethodName": { "type": "string", "const": "GetVotingResultsForAgendaItem" },
+    "LanguageId": { "$ref": "#/$defs/LanguageId" },
+    "VotingDefinitionId": { "$ref": "#/$defs/UUID", "description": "From GetSittingDetails agenda VotingDefinitions" },
+    "AgendaItemId": { "$ref": "#/$defs/UUID", "description": "Agenda item id from GetSittingDetails agenda" }
+  },
+  "required": ["MethodName", "LanguageId", "VotingDefinitionId", "AgendaItemId"]
+}
+```
+
+### Response Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "votingOptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID", "description": "Voting option identifier" },
+          "VotingDefinitionId": { "$ref": "#/$defs/UUID" },
+          "Title": { "type": "string", "description": "Localized option title (e.g. 'За'=For, 'Против'=Against, 'Не гласал'=Did not vote, 'Воздржан'=Abstain)" },
+          "Order": { "type": "integer" }
+        }
+      }
+    },
+    "agendaItem": {
+      "type": "object",
+      "properties": {
+        "Id": { "$ref": "#/$defs/UUID" },
+        "Title": { "type": "string" },
+        "AgendaItemType": { "type": "string", "description": "Localized material type title (e.g. 'Избори, именување и разрешување на јавни и други функции'); not a numeric ID" },
+        "SittingDate": { "$ref": "#/$defs/AspDate" },
+        "Number": { "type": "integer", "description": "Sitting number" },
+        "Continuation": { "type": "integer", "description": "Continuation count" },
+        "RegistrationNumber": { "type": "string" },
+        "VotingTitle": { "type": "string" }
+      }
+    },
+    "summaryResult": {
+      "type": "object",
+      "properties": {
+        "Present": { "type": "integer", "description": "MPs present" },
+        "Yes": { "type": "integer", "description": "Votes for" },
+        "No": { "type": "integer", "description": "Votes against" },
+        "NotVoted": { "type": "integer", "description": "MPs not voted" },
+        "VotingType": { "type": "string", "description": "Voting type (e.g. 'Јавно'=Public)" },
+        "VotingOutcome": { "type": "string", "description": "Voting outcome (e.g. 'Усвоен'=Adopted)" }
+      }
+    },
+    "votingResultsByUser": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID", "description": "MP user ID" },
+          "FirstName": { "type": "string" },
+          "LastName": { "type": "string" },
+          "PoliticalParty": { "type": ["string", "null"] },
+          "PoliticalPartyImage": { "type": ["string", "null"], "description": "Empty string or null if no party" },
+          "PoliticalPartyId": { "$ref": "#/$defs/UUID", "description": "All-zeros UUID if independent" },
+          "Registered": { "type": "boolean" },
+          "Present": { "type": "boolean" },
+          "Yes": { "type": "boolean" },
+          "No": { "type": "boolean" },
+          "NotVoted": { "type": "boolean" }
+        }
+      }
+    },
+    "votingResultsByFaction": {
+      "type": "array",
+      "items": { "type": "object" },
+      "description": "Voting results aggregated by faction/political group (may be empty)"
+    }
+  }
+}
+```
+
+### Notes
+- Method-based (MakePostRequest). Voting results for a specific agenda item; IDs from GetSittingDetails agenda.
+- `votingOptions` array contains all voting choices available for the vote (e.g. For, Against, Did not vote, Abstain); values vary by voting definition.
+- `agendaItem.AgendaItemType` is a localized text string (not a numeric ID), containing the material type title as displayed in the parliament system.
+- `summaryResult.VotingType` describes the voting mechanism (e.g. 'Јавно' = public/open voting).
+- `summaryResult.VotingOutcome` contains the final outcome (e.g. 'Усвоен' = adopted).
+- `votingResultsByUser` contains individual MP voting records; `PoliticalParty`, `PoliticalPartyImage`, and `PoliticalPartyId` are `null` or all-zeros UUID for independent MPs.
+- `PoliticalPartyImage` may be empty string even when party is present.
+
+---
+
+## GetVotingResultsForAgendaItemReportDocument
+
+### Request Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "MethodName": { "type": "string", "const": "GetVotingResultsForAgendaItemReportDocument" },
+    "LanguageId": { "$ref": "#/$defs/LanguageId" },
+    "VotingDefinitionId": { "$ref": "#/$defs/UUID" },
+    "AgendaItemId": { "$ref": "#/$defs/UUID" }
+  },
+  "required": ["MethodName", "LanguageId", "VotingDefinitionId", "AgendaItemId"]
+}
+```
+
+### Response Schema
+```json
+{
+  "type": "array",
+  "items": { "type": "integer" },
+  "description": "Document bytes (e.g. PDF); array of byte values"
+}
+```
+
+### Notes
+- Method-based (MakePostRequest). Returns a report document (e.g. PDF) as array of bytes for the given voting/agenda item.
+- Refine from collected pairs to confirm response shape and notes.
+
+
+---
+
+## GetVotingResultsForSitting
+
+### Request Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "MethodName": { "type": "string", "const": "GetVotingResultsForSitting" },
+    "languageId": { "$ref": "#/$defs/LanguageId" },
+    "votingDefinitionId": { "$ref": "#/$defs/UUID" },
+    "sittingId": { "$ref": "#/$defs/UUID" }
+  },
+  "required": ["MethodName", "languageId", "votingDefinitionId", "sittingId"]
+}
+```
+
+### Response Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "votingOptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID" },
+          "VotingDefinitionId": { "$ref": "#/$defs/UUID" },
+          "Title": { "type": "string", "description": "Vote option title (e.g., 'За'=For, 'Не гласал'=Did not vote); localized" },
+          "Order": { "type": "integer" }
+        }
+      },
+      "description": "Available vote options for this voting definition"
+    },
+    "sittingItem": {
+      "type": "object",
+      "properties": {
+        "Id": { "$ref": "#/$defs/UUID" },
+        "Number": { "type": "integer" },
+        "Continuation": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Continuation marker or null" },
+        "Title": { "type": "string" },
+        "SittingDate": { "$ref": "#/$defs/AspDate" },
+        "AgendaItemType": { "type": "string", "description": "Agenda item type text (e.g., 'Гласање на седница'=Voting at sitting); localized" }
+      },
+      "description": "Sitting context for the voting"
+    },
+    "summaryResult": {
+      "type": "object",
+      "properties": {
+        "Present": { "type": "integer", "description": "Count of MPs present" },
+        "Yes": { "type": "integer", "description": "Count of Yes votes" },
+        "No": { "type": "integer", "description": "Count of No votes" },
+        "NotVoted": { "type": "integer", "description": "Count of MPs who did not vote" },
+        "VotingType": { "type": "string", "description": "Voting type (e.g., 'Јавно'=Public voting)" },
+        "VotingOutcome": { "$ref": "#/$defs/VotingOutcomeId", "description": "Voting outcome/result" }
+      },
+      "description": "Aggregate voting summary"
+    },
+    "votingResultsByUser": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": { "$ref": "#/$defs/UUID" },
+          "FirstName": { "type": "string" },
+          "LastName": { "type": "string" },
+          "PoliticalParty": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Party name or null for independents" },
+          "PoliticalPartyImage": { "anyOf": [{ "type": "string" }, { "type": "null" }], "description": "Party logo URL or empty string; null for independents" },
+          "PoliticalPartyId": { "$ref": "#/$defs/UUID", "description": "Party UUID or null-UUID (00000000-0000-0000-0000-000000000000) for MPs without party" },
+          "Registered": { "type": "boolean" },
+          "Present": { "type": "boolean" },
+          "Yes": { "type": "boolean" },
+          "No": { "type": "boolean" },
+          "NotVoted": { "type": "boolean" }
+        },
+        "description": "Per-MP voting detail"
+      },
+      "description": "Voting results by individual MP"
+    },
+    "votingResultsByFaction": {
+      "type": "array",
+      "items": { "type": "object" },
+      "description": "Voting results aggregated by faction (observed empty)"
+    }
+  }
+}
+```
+
+### Notes
+- Method-based (MakePostRequest). Voting results for a sitting-level vote; votingDefinitionId and sittingId from GetSittingDetails.
+- Response includes per-MP voting breakdown with political party affiliation and boolean flags for Registered/Present/Yes/No/NotVoted.
+- summaryResult aggregates counts and voting outcome (e.g., 'Усвоен'=Adopted).
+- votingOptions shows available vote option titles (e.g., 'За', 'Не гласал'), localized per languageId.
+- sittingItem.AgendaItemType is localized text string, distinct from the integer AgendaItemTypeId enum in global defs.
+- PoliticalPartyId is null-UUID (00000000-0000-0000-0000-000000000000) or null for MPs without party affiliation; PoliticalParty and PoliticalPartyImage are also null in such cases.
+
+---
+
+## LoadLanguage
+
+### Request Schema
+```json
+{
+  "type": "object",
+  "properties": {},
+  "description": "Empty body or no body"
+}
+```
+
+### Response Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "Code": { "type": "string", "description": "Language code (e.g. mk-MK)" },
+    "Items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Key": { "type": "string" },
+          "Value": { "type": "string" }
+        }
+      },
+      "description": "Key-value localization strings"
+    }
+  }
+}
+```
+
+### Notes
+- Infrastructure endpoint (Infrastructure/LoadLanguage). POST, often empty body. Returns localization strings for a language.
+- Refine from collected pairs to complete request/response schema and notes.

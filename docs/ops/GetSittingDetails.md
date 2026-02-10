@@ -135,7 +135,7 @@
         },
         "required": ["Id", "Title", "Url", "DocumentTypeId", "DocumentTypeTitle", "IsExported"]
       },
-      "description": "Sitting-level documents (e.g. convocation notices). Empty array when none. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length. Multiple documents may share same DocumentTypeId."
+      "description": "Sitting-level documents (e.g. convocation notices). Empty array when none. Multiple documents may share the same DocumentTypeId (e.g., multiple continuation notices with DocumentTypeId: 42, or multiple stenograms with DocumentTypeId: 57). May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Continuations": {
       "type": "array",
@@ -150,14 +150,14 @@
               {"type": "integer"},
               {"type": "null"}
             ],
-            "description": "Continuation session number (0, 1, or higher)"
+            "description": "Continuation session number (0, 1, or higher). May be null even for closed continuations."
           },
           "StatusId": {
             "anyOf": [
               {"type": "integer"},
               {"type": "null"}
             ],
-            "description": "Continuation sitting status"
+            "description": "Continuation sitting status. Typically null even when StatusTitle indicates closure (e.g., 'Затворена')."
           },
           "StatusTitle": {
             "type": "string",
@@ -209,7 +209,7 @@
     "Votings": {
       "type": "array",
       "items": {},
-      "description": "Voting records at sitting level. Empty array for scheduled sittings or when no top-level votes occur. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
+      "description": "Sitting-level voting records (may contain multiple records for different proposals, amendments, or materials voted on). Empty array for scheduled sittings or when no top-level votes occur. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Agenda": {
       "type": "object",
@@ -240,7 +240,7 @@
         },
         "status": {
           "type": "integer",
-          "description": "0 for ROOT node. For LEAF items: see AgendaItemStatusId (50=reviewed, 69=new, 60=other)"
+          "description": "0 for ROOT node. For LEAF items: see AgendaItemStatusId (50=reviewed, 51=status variant, 62=status variant, 63=withdrawn, 69=new, 60=other)"
         },
         "statusTitle": {
           "anyOf": [
@@ -340,7 +340,7 @@
               },
               "OverallResult": {
                 "type": "string",
-                "description": "Overall voting result (e.g. 'Усвоен' for adopted/passed)"
+                "description": "Overall voting result (e.g. 'Усвоен' for adopted/passed, 'Одбиен' for rejected)"
               }
             },
             "required": ["Id", "Title", "VotingType", "OverallResult"]
@@ -407,7 +407,7 @@
               },
               "status": {
                 "type": "integer",
-                "description": "See AgendaItemStatusId (50=reviewed, 69=new, 60=other statuses)"
+                "description": "See AgendaItemStatusId (50=reviewed, 51=status variant, 62=status variant, 63=withdrawn, 69=new, 60=other statuses)"
               },
               "statusTitle": {
                 "type": "string"
@@ -481,7 +481,7 @@
                     "Title": {"type": "string"},
                     "Description": {"type": "string"},
                     "VotingType": {"type": "string"},
-                    "OverallResult": {"type": "string"}
+                    "OverallResult": {"type": "string", "description": "e.g. 'Усвоен' (adopted), 'Одбиен' (rejected)"}
                   },
                   "required": ["Id", "Title", "VotingType", "OverallResult"]
                 },
@@ -547,12 +547,13 @@
 - Each LEAF node has `objectTypeId` indicating linked item type (1=Material, 4=Questions, 0=None)
 - Leaf nodes with `objectTypeId: 1` have `objectId` = material UUID; pass to `GetMaterialDetails`
 - Tree may be nested to arbitrary depth; LEAF nodes representing materials may contain nested children for amendments
-- Nested amendment nodes may have `agendaItemType: 8`, `status: 60`, and `objectSubTypeId: null`
+- Nested amendment nodes may have `agendaItemType: 8`, and status values including 50, 51, 60, 62, 63, or 69; `objectSubTypeId` may be null
 
 **Voting definitions:**
 - Each agenda item can have zero or more voting definitions
 - Use `VotingDefinitions[].Id` as `VotingDefinitionId` parameter in `GetVotingResultsForAgendaItem` to retrieve detailed voting tallies
-- `OverallResult` shows high-level outcome (e.g. 'Усвоен' = passed)
+- `OverallResult` shows high-level outcome (e.g. 'Усвоен' = adopted/passed, 'Одбиен' = rejected)
+- Sitting-level `Votings` array may contain multiple voting records for different proposals, amendments, or materials voted on within the same sitting
 
 **Document types:**
 - `DocumentTypeId: 19` = Решение за свикување седница (Decision to convene sitting)
@@ -560,16 +561,19 @@
 - `DocumentTypeId: 40` = Известување за презакажување на седница (Notice of sitting rescheduling)
 - `DocumentTypeId: 42` = Известување за продолжување на седница (Notice of sitting continuation)
 - `DocumentTypeId: 43` = Известување за дополнување на дневен ред (Notice of agenda supplement)
+- `DocumentTypeId: 57` = Стенограм (Stenographic notes/transcript)
+- `DocumentTypeId: 59` = Записник (Minutes/record of proceedings)
 - `DocumentTypeId: 7` = Full text of material
 - `DocumentTypeId: 46` = Legislative committee report
 - `DocumentTypeId: 52` = Committee report
-- Multiple documents may have the same type
+- Multiple documents may have the same DocumentTypeId (e.g., multiple continuation notices with DocumentTypeId: 42, or multiple stenograms with DocumentTypeId: 57)
 - Documents array may be truncated with _truncated marker
 
 **Continuations:**
 - Empty array when sitting completes in single session
 - Multiple continuation objects when sitting spans multiple days/sessions
-- Each continuation has its own date, location, status, and number (which may be 0, 1, or higher, and may be null)
+- Each continuation has its own date, location, status, and number (which may be 0, 1, or higher, and may be null even for closed continuations)
+- `StatusId` may be null even when `StatusTitle` indicates a status (e.g., 'Затворена')
 
 **Absents array:**
 - Lists MPs who did not attend
@@ -582,7 +586,7 @@
 - May be truncated with `_truncated` marker
 
 **Votings array:**
-- Sitting-level voting records
+- Sitting-level voting records; may contain multiple voting records for different proposals/amendments
 - May be truncated with `_truncated` marker
 
 **Truncation behavior:**

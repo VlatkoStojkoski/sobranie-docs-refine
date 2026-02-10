@@ -165,7 +165,7 @@
               },
               "ProposerTypeTitle": {
                 "type": "string",
-                "description": "Human-readable proposer type in requested language (e.g. 'Пратеник', 'Влада...', 'Работно тело'). May have leading whitespace (\\r, \\n); trim for display."
+                "description": "Human-readable proposer type in requested language (e.g. 'Пратеник', 'Влада...', 'Работно тело', 'Друга институција'). May have leading whitespace (\\r, \\n); trim for display."
               },
               "ResponsibleCommittee": {
                 "type": "string",
@@ -204,6 +204,8 @@
 **Filters:** StatusGroupId, MaterialTypeId, ResponsibleCommitteeId, ProcedureTypeId, InitiatorTypeId all support null (include all). StatusGroupId maps to MaterialStatusId enum values in global $defs. MaterialTypeId full list from GetAllMaterialTypesForFilter catalog.
 
 **Institutional authors:** Government/institution materials have `Authors[0].Id = "00000000-0000-0000-0000-000000000000"` with full title/name in `FirstName`, empty `LastName`. See global Institutional Authors section.
+
+**ProposerTypeTitle:** Can include 'Друга институција' (Other institution) for non-government institutional authors such as Macedonian Radio-Television, universities, etc. See global $defs ProposerTypeId enum for full list of types.
 
 **ResponsibleAuthor:** Can be `null`. Government materials show full Cyrillic institutional title even when LanguageId requests Albanian/Turkish; other fields respect requested language.
 

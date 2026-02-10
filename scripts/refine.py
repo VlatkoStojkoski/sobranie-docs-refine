@@ -129,6 +129,8 @@ def _get_at_path(data, path):
 
 
 def _replace_at_path(data, path, value):
+    if len(path) == 0:
+        return value  # replace root (e.g. response is a top-level array)
     if len(path) == 1:
         if isinstance(data, list):
             copy = list(data)
