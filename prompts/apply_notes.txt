@@ -4,29 +4,30 @@ RULES:
 - PRESERVE all existing content. No information loss. Only refine.
 - Only WIDEN: never remove enum values, never make optional→required, never drop anyOf branches.
 - Improving = more accurate, not necessarily longer. Simplify where notes say to. Don't add unnecessary verbosity.
-- Enum definitions go in global $defs only; op docs reference via $ref.
+- Enum definitions go in global $defs only; op docs reference via $ref. When adding or updating enums: merge new values into the existing enum array; extend the description with new value=meaning. Do not replace the existing enum list—only add. If a $def has no enum yet, add an enum array with all known values and a description.
 - Op doc template: ## OperationName, ### Request Schema (JSON Schema), ### Response Schema (JSON Schema), ### Notes.
 - Use const for single fixed values, not single-element enum.
 - One keyword per property: $ref OR type, not both.
+- If a note says to remove incorrect _truncated schema (documentation artifact): remove the anyOf branch or schema that describes only {"_truncated": N} for that array; do not document the truncation marker as a response shape for that endpoint unless global/conventions already describe it for this endpoint.
 - If all notes say "No changes needed", return current docs unchanged.
 
 ---
 
 ## Current global.md
 
-{global_md}
+<<<global_md>>>
 
 ---
 
-## Current per-operation doc: {operation}
+## Current per-operation doc: <<<operation>>>
 
-{op_md}
+<<<op_md>>>
 
 ---
 
 ## Notes to apply
 
-{notes}
+<<<notes>>>
 
 ---
 

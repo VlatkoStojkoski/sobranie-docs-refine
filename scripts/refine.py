@@ -83,7 +83,110 @@ SYSTEM_APPLY = (
     "Preserve all existing information; only refine and improve accuracy."
 )
 
+# Notes step input budget (tokens). Response gets the remainder after template + global + op + request.
+NOTES_INPUT_BUDGET = 15_000
+# Value truncation: max chars per string (and similar limits) before budget-based array capping.
+MAX_STR_LENGTH = 200
+# Max tokens for request body so huge requests don't blow total prompt size.
+REQUEST_MAX_TOKENS = 2000
+
 # --- Helpers ---
+
+
+def _estimate_tokens(s: str) -> int:
+    """Rough token count for prompt text (Claude/GPT ~4 chars per token)."""
+    return max(1, len(s) // 4)
+
+
+def _truncate_values(data, max_str: int = MAX_STR_LENGTH):
+    """Truncate string (and other value) lengths only; do not cap array sizes."""
+    if isinstance(data, list):
+        return [_truncate_values(item, max_str) for item in data]
+    if isinstance(data, dict):
+        return {k: _truncate_values(v, max_str) for k, v in data.items()}
+    if isinstance(data, str) and len(data) > max_str:
+        return data[:max_str] + f"... ({len(data)} chars)"
+    return data
+
+
+def _find_largest_lists(data, path=()):
+    """Return list of (path_tuple, length) for every list in the tree."""
+    out = []
+    if isinstance(data, list):
+        out.append((path, len(data)))
+        for i, item in enumerate(data):
+            out.extend(_find_largest_lists(item, path + (i,)))
+    elif isinstance(data, dict):
+        for k, v in data.items():
+            out.extend(_find_largest_lists(v, path + (k,)))
+    return out
+
+
+def _get_at_path(data, path):
+    for key in path:
+        data = data[key]
+    return data
+
+
+def _replace_at_path(data, path, value):
+    if len(path) == 1:
+        if isinstance(data, list):
+            copy = list(data)
+            copy[path[0]] = value
+            return copy
+        copy = dict(data)
+        copy[path[0]] = value
+        return copy
+    if isinstance(data, list):
+        copy = list(data)
+        copy[path[0]] = _replace_at_path(copy[path[0]], path[1:], value)
+        return copy
+    copy = dict(data)
+    copy[path[0]] = _replace_at_path(copy[path[0]], path[1:], value)
+    return copy
+
+
+def _shrink_largest_array(data):
+    """Shrink the largest array (by item count) by half; add _truncated for the rest. Return new data."""
+    candidates = _find_largest_lists(data)
+    if not candidates:
+        return data
+    path, length = max(candidates, key=lambda x: x[1])
+    if length <= 1:
+        return data
+    lst = _get_at_path(data, path)
+    n = (length + 1) // 2
+    new_list = list(lst[:n]) + [{"_truncated": length - n}]
+    return _replace_at_path(data, path, new_list)
+
+
+def _fit_response_to_budget(data, budget_tokens: int) -> object:
+    """Cap arrays so that json.dumps(data) fits in budget_tokens (value truncation already applied)."""
+    while True:
+        current_tokens = _estimate_tokens(json.dumps(data, ensure_ascii=False))
+        if current_tokens <= budget_tokens:
+            break
+        new_data = _shrink_largest_array(data)
+        if _estimate_tokens(json.dumps(new_data, ensure_ascii=False)) >= current_tokens:
+            break  # no progress (e.g. all arrays length <= 1)
+        data = new_data
+    return data
+
+
+def _substitute(template: str, **kwargs) -> str:
+    """Replace <<<key>>> placeholders; safe when values contain { or } (e.g. JSON)."""
+    out = template
+    for k, v in kwargs.items():
+        out = out.replace("<<<" + k + ">>>", str(v))
+    return out
+
+
+def _cap_request_json(req_json: str) -> str:
+    """Cap request JSON length so prefix stays manageable (soft target)."""
+    budget_chars = REQUEST_MAX_TOKENS * 4
+    if len(req_json) <= budget_chars:
+        return req_json
+    return req_json[:budget_chars] + "\n  ... (request truncated for prompt size)"
 
 
 def _setup_logging(log_dir: Path) -> logging.Logger:
@@ -105,20 +208,6 @@ def _setup_logging(log_dir: Path) -> logging.Logger:
     llm_log.addHandler(fh)
     llm_log.addHandler(ch)
     return log
-
-
-def _truncate_response(data, max_items=2, max_str=200):
-    """Truncate large arrays and long strings to keep prompts manageable."""
-    if isinstance(data, list):
-        truncated = [_truncate_response(item, max_items, max_str) for item in data[:max_items]]
-        if len(data) > max_items:
-            truncated.append({"_truncated": len(data) - max_items})
-        return truncated
-    if isinstance(data, dict):
-        return {k: _truncate_response(v, max_items, max_str) for k, v in data.items()}
-    if isinstance(data, str) and len(data) > max_str:
-        return data[:max_str] + f"... ({len(data)} chars)"
-    return data
 
 
 def _llm_cache_key(prompt: str, schema: dict, system: str) -> str:
@@ -211,6 +300,8 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=None, help="Process at most N pairs total")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be processed")
     parser.add_argument("--no-llm-cache", action="store_true", help="Skip LLM response cache")
+    parser.add_argument("--save-prompts", action="store_true",
+                        help="Write prompt and full LLM response per pair to logs/refine/<run_id>/notes/")
     parser.add_argument("--collect-run", type=str, default="latest", metavar="RUN_ID",
                         help="Which collect run to use: 'latest' (default), 'all', or a specific run ID")
     args = parser.parse_args()
@@ -307,16 +398,25 @@ def main() -> int:
             global_md = GLOBAL_MD.read_text(encoding="utf-8")
             op_md = op_path.read_text(encoding="utf-8")
 
-            # Load and truncate pair
+            # Load pair; truncate request and response for notes step budget
             req_data = json.loads((COLLECTED / pair["req"]).read_text(encoding="utf-8"))
             resp_data = json.loads((COLLECTED / pair["resp"]).read_text(encoding="utf-8"))
-            resp_truncated = _truncate_response(resp_data)
-            req_json = json.dumps(req_data, ensure_ascii=False, indent=2)
+            req_truncated = _truncate_values(req_data, max_str=MAX_STR_LENGTH)
+            req_json = _cap_request_json(json.dumps(req_truncated, ensure_ascii=False, indent=2))
+            prefix = _substitute(
+                notes_template,
+                global_md=global_md, op_md=op_md, operation=op,
+                request_json=req_json, response_json="",
+            )
+            response_budget = max(500, NOTES_INPUT_BUDGET - _estimate_tokens(prefix))
+            value_truncated = _truncate_values(resp_data, max_str=MAX_STR_LENGTH)
+            resp_truncated = _fit_response_to_budget(value_truncated, response_budget)
             resp_json = json.dumps(resp_truncated, ensure_ascii=False, indent=2)
 
             # --- Notes step ---
             log.info(f"  [{i+1}/{len(pairs)}] Notes: {pair['req']}")
-            prompt = notes_template.format(
+            prompt = _substitute(
+                notes_template,
                 global_md=global_md, op_md=op_md, operation=op,
                 request_json=req_json, response_json=resp_json,
             )
@@ -333,6 +433,11 @@ def main() -> int:
             # Save notes to log
             safe_name = pair["req"].replace("/", "_").replace(".json", "")
             (notes_dir / f"{safe_name}.txt").write_text(notes, encoding="utf-8")
+            if getattr(args, "save_prompts", False):
+                (notes_dir / f"{safe_name}_prompt.txt").write_text(prompt, encoding="utf-8")
+                (notes_dir / f"{safe_name}_response.json").write_text(
+                    json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
+                )
 
             is_last = (i == len(pairs) - 1)
             no_changes = notes.strip().lower() in ("no changes needed.", "no changes needed")
@@ -357,7 +462,8 @@ def main() -> int:
                 )
 
                 log.info(f"  Apply: {len(notes_batch)} notes")
-                prompt = apply_template.format(
+                prompt = _substitute(
+                    apply_template,
                     global_md=global_md, op_md=op_md,
                     operation=op, notes=notes_text,
                 )

@@ -66,11 +66,15 @@
           "StatusTitle": {
             "type": "string",
             "description": "Human-readable status label in requested language"
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "Truncation marker: indicates N additional items omitted from array"
           }
         },
         "required": ["Id", "Title", "RegistrationDate", "RegistrationNumber", "StatusId", "StatusTitle"]
       },
-      "description": "Materials (legislative proposals, amendments) submitted by this political party. Empty array when party has no materials."
+      "description": "Materials (legislative proposals, amendments) submitted by this political party. Empty array when party has no materials. May include truncation marker object {\"_truncated\": N} as standalone item within array, counting toward array length and indicating N additional items omitted."
     },
     "Amendments": {
       "type": "array",
@@ -166,7 +170,7 @@
 - **politicalPartyId source**: Obtain from GetAllPoliticalParties response.
 - **LanguageId**: Controls language of all text fields (Name, StatusTitle, RoleTitle, etc.). See global LanguageId enum (1=Macedonian, 2=Albanian, 3=Turkish).
 - **Response structure**: Comprehensive party details including name, member count, associated legislative materials/amendments/questions, and full member roster.
-- **Materials array**: All legislative materials (proposals) submitted by the party, with registration dates and current status. Empty when party has no submissions. StatusId references MaterialStatusId enum in global $defs.
+- **Materials array**: All legislative materials (proposals) submitted by the party, with registration dates and current status. Empty when party has no submissions. StatusId references MaterialStatusId enum in global $defs. May include truncation marker object `{"_truncated": N}` as standalone item within array, counting toward array length and indicating N additional items omitted.
 - **Amendments and Questions arrays**: Separate from Materials; may be empty depending on party activity.
 - **Members array**: Lists all MPs currently affiliated with the party. All members have RoleId `27` (member of political party). The *Count fields (MaterialsCount, AmendmentsCount, QuestionsCount) are always `null` in this endpoint response; they are not populated. Use dedicated per-MP endpoints if per-member activity counts are needed.
 - **Description field**: May contain placeholder value like `"-"` if party has no biography text set.

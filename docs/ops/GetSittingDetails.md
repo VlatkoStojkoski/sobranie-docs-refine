@@ -49,7 +49,7 @@
     },
     "TypeTitle": {
       "type": "string",
-      "description": "Localized sitting type (e.g. 'Комисіska седница' for committee, 'Пленарна седница' for plenary). Trim whitespace for display."
+      "description": "Localized sitting type (e.g. 'Комисіska седница' for committee, 'Пленарна седница' for plenary). Trim whitespace for display. May contain spelling variations or typos."
     },
     "TypeId": {
       "$ref": "#/$defs/SittingTypeId"
@@ -69,12 +69,18 @@
       "description": "Committee name in requested language. Null for plenary sittings. Trim whitespace for display."
     },
     "DescriptionTypeId": {
-      "type": "integer",
-      "description": "Sitting description type; e.g. 1 for committee sitting"
+      "anyOf": [
+        {"type": "integer"},
+        {"type": "null"}
+      ],
+      "description": "Sitting description type; e.g. 1 for committee sitting. Null for plenary sittings."
     },
     "DescriptionTypeTitle": {
-      "type": "string",
-      "description": "Localized description type label (e.g. 'Комисiska седница', 'Јавна расправа' for public discussion). Trim whitespace for display."
+      "anyOf": [
+        {"type": "string"},
+        {"type": "null"}
+      ],
+      "description": "Localized description type label (e.g. 'Комисiska седница', 'Јавна расправа' for public discussion). Null for plenary sittings. Trim whitespace for display."
     },
     "Structure": {
       "type": "string",
@@ -85,7 +91,7 @@
         {"type": "number"},
         {"type": "null"}
       ],
-      "description": "Duration in hours. Null for scheduled/incomplete sittings; populated after sitting completes"
+      "description": "Duration in hours. Null for scheduled sittings or even after completion; may remain unpopulated for closed sittings"
     },
     "MediaLinks": {
       "type": "array",
@@ -129,7 +135,7 @@
         },
         "required": ["Id", "Title", "Url", "DocumentTypeId", "DocumentTypeTitle", "IsExported"]
       },
-      "description": "Sitting-level documents (e.g. convocation notices). Empty array when none. Multiple documents may share same DocumentTypeId."
+      "description": "Sitting-level documents (e.g. convocation notices). Empty array when none. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length. Multiple documents may share same DocumentTypeId."
     },
     "Continuations": {
       "type": "array",
@@ -140,8 +146,11 @@
             "$ref": "#/$defs/UUID"
           },
           "Number": {
-            "type": "integer",
-            "description": "May be 0 for continuation sessions"
+            "anyOf": [
+              {"type": "integer"},
+              {"type": "null"}
+            ],
+            "description": "Continuation session number (0, 1, or higher)"
           },
           "StatusId": {
             "anyOf": [
@@ -185,22 +194,22 @@
               {"type": "string"},
               {"type": "null"}
             ],
-            "description": "Political party name, or null for independents. Large lists may be truncated with _truncated object as final item."
+            "description": "Political party name, or null for independents"
           }
         },
         "required": ["Id", "Fullname"]
       },
-      "description": "MPs absent from the sitting. Available for scheduled sittings. May be truncated in response with _truncated indicator on last item."
+      "description": "MPs absent from the sitting. Available for scheduled sittings. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Attendances": {
       "type": "array",
       "items": {},
-      "description": "Attendance records. Empty array for scheduled/future sittings; populated after sitting occurs"
+      "description": "Attendance records. Empty array for scheduled/future sittings; populated after sitting occurs. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Votings": {
       "type": "array",
       "items": {},
-      "description": "Voting records at sitting level. Empty array for scheduled sittings or when no top-level votes occur"
+      "description": "Voting records at sitting level. Empty array for scheduled sittings or when no top-level votes occur. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Agenda": {
       "type": "object",
@@ -231,7 +240,7 @@
         },
         "status": {
           "type": "integer",
-          "description": "0 for ROOT node. For LEAF items: see AgendaItemStatusId (50=reviewed, 69=new)"
+          "description": "0 for ROOT node. For LEAF items: see AgendaItemStatusId (50=reviewed, 69=new, 60=other)"
         },
         "statusTitle": {
           "anyOf": [
@@ -250,7 +259,7 @@
             {"type": "integer"},
             {"type": "null"}
           ],
-          "description": "See AgendaItemTypeId (1=Plenary, 2=Committee). Null for ROOT nodes."
+          "description": "See AgendaItemTypeId (1=Plenary, 2=Committee, 8=Amendment, other values may exist). Null for ROOT nodes."
         },
         "isActive": {
           "type": "boolean"
@@ -293,8 +302,11 @@
           "description": "Material status when objectTypeId: 1. See MaterialStatusId. 0 for ROOT"
         },
         "objectSubTypeId": {
-          "type": "integer",
-          "description": "Material subtype (e.g. 1=law proposal, 28=reports). 0 for ROOT"
+          "anyOf": [
+            {"type": "integer"},
+            {"type": "null"}
+          ],
+          "description": "Material subtype (e.g. 1=law proposal, 28=reports). 0 for ROOT. Null in some contexts (e.g. nested amendments)."
         },
         "manyAmendments": {
           "type": "boolean",
@@ -395,7 +407,7 @@
               },
               "status": {
                 "type": "integer",
-                "description": "See AgendaItemStatusId (50=reviewed, 69=new)"
+                "description": "See AgendaItemStatusId (50=reviewed, 69=new, 60=other statuses)"
               },
               "statusTitle": {
                 "type": "string"
@@ -408,7 +420,7 @@
               },
               "agendaItemType": {
                 "type": "integer",
-                "description": "See AgendaItemTypeId (1=Plenary, 2=Committee)"
+                "description": "See AgendaItemTypeId (1=Plenary, 2=Committee, 8=Amendment, other values may exist)"
               },
               "isActive": {
                 "type": "boolean"
@@ -447,8 +459,11 @@
                 "description": "Material status"
               },
               "objectSubTypeId": {
-                "type": "integer",
-                "description": "Material subtype"
+                "anyOf": [
+                  {"type": "integer"},
+                  {"type": "null"}
+                ],
+                "description": "Material subtype. Null in some contexts (e.g. nested amendments)."
               },
               "manyAmendments": {
                 "type": "boolean"
@@ -491,19 +506,19 @@
               "children": {
                 "type": "array",
                 "items": {},
-                "description": "Nested children; typically empty for LEAF items"
+                "description": "Nested children (e.g. amendments within materials); typically empty for LEAF items representing plain agenda items. LEAF nodes representing materials (objectTypeId: 1) may contain nested children for amendments, each with its own objectId, agendaItemType, status, and objectSubTypeId (which may be null)."
               }
             },
             "required": ["id", "type", "text", "status", "agendaItemType", "isActive", "order", "euCompatible", "objectTypeId", "objectStatusId", "objectSubTypeId", "manyAmendments", "mediaItems", "VotingDefinitions", "Documents", "children"]
           },
-          "description": "Agenda items (LEAF nodes) within the sitting. Root node (type: ROOT) contains this children array."
+          "description": "Agenda items (LEAF nodes) within the sitting. Root node (type: ROOT) contains this children array. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
         }
       },
       "required": ["id", "type", "text", "status", "isActive", "order", "euCompatible", "objectTypeId", "objectStatusId", "objectSubTypeId", "manyAmendments", "mediaItems", "VotingDefinitions", "Documents", "children"],
       "description": "Hierarchical tree structure of sitting agenda. Root node has type: ROOT with children array of agenda items (type: LEAF)."
     }
   },
-  "required": ["StatusId", "StatusTitle", "Location", "Number", "SittingDate", "TypeTitle", "TypeId", "DescriptionTypeId", "DescriptionTypeTitle", "Structure", "MediaLinks", "Documents", "Continuations", "Absents", "Attendances", "Votings", "Agenda"]
+  "required": ["StatusId", "StatusTitle", "Location", "Number", "SittingDate", "TypeTitle", "TypeId", "Structure", "MediaLinks", "Documents", "Continuations", "Absents", "Attendances", "Votings", "Agenda"]
 }
 ```
 
@@ -514,21 +529,25 @@
 - Do not use lowercase variants (`methodName`, `languageId`, `sittingId`)
 
 **Sitting types:**
-- **Plenary sitting** (`TypeId: 1`): `CommitteeId` and `CommitteeTitle` are null. `DescriptionTypeTitle` typically 'Пленарна седница'
+- **Plenary sitting** (`TypeId: 1`): `CommitteeId` and `CommitteeTitle` are null. `DescriptionTypeTitle` and `DescriptionTypeId` are null.
 - **Committee sitting** (`TypeId: 2`): `CommitteeId` and `CommitteeTitle` are populated. `DescriptionTypeTitle` may be 'Комисiska седница' or other committee-specific type
 - **Public hearing**: May appear as `TypeId: 2` with `DescriptionTypeTitle: 'Јавна расправа'`
 
 **Status and timing:**
 - **Scheduled sitting** (`StatusId: 1`): `Absents` is pre-populated; `Attendances`, `Votings`, `SittingDuration` are empty/null
-- **Started/completed sitting** (`StatusId: 2, 3`): All fields populated; `SittingDuration` contains hours
-- **Closed sitting** (`StatusId: 5`): Similar to completed
+- **Started/in progress** (`StatusId: 2`): Fields populating as sitting progresses
+- **Completed sitting** (`StatusId: 3`): All fields populated; `SittingDuration` may contain hours or may be null
+- **Incomplete sitting** (`StatusId: 4`): Similar to started, may be suspended
+- **Closed sitting** (`StatusId: 5`): Similar to completed; `SittingDuration` may remain null even after closure
+- **Postponed sitting** (`StatusId: 6`): Rescheduled; `Absents` pre-populated
 
 **Agenda structure:**
 - Root node always has `type: 'ROOT'`, `objectTypeId: 0`, `status: 0`, `objectId: null`
 - `children` array contains LEAF nodes representing actual agenda items
 - Each LEAF node has `objectTypeId` indicating linked item type (1=Material, 4=Questions, 0=None)
 - Leaf nodes with `objectTypeId: 1` have `objectId` = material UUID; pass to `GetMaterialDetails`
-- Tree may be nested to arbitrary depth
+- Tree may be nested to arbitrary depth; LEAF nodes representing materials may contain nested children for amendments
+- Nested amendment nodes may have `agendaItemType: 8`, `status: 60`, and `objectSubTypeId: null`
 
 **Voting definitions:**
 - Each agenda item can have zero or more voting definitions
@@ -536,22 +555,38 @@
 - `OverallResult` shows high-level outcome (e.g. 'Усвоен' = passed)
 
 **Document types:**
+- `DocumentTypeId: 19` = Решение за свикување седница (Decision to convene sitting)
 - `DocumentTypeId: 20` = Convocation notice (Известување за свикување)
+- `DocumentTypeId: 40` = Известување за презакажување на седница (Notice of sitting rescheduling)
+- `DocumentTypeId: 42` = Известување за продолжување на седница (Notice of sitting continuation)
+- `DocumentTypeId: 43` = Известување за дополнување на дневен ред (Notice of agenda supplement)
 - `DocumentTypeId: 7` = Full text of material
 - `DocumentTypeId: 46` = Legislative committee report
 - `DocumentTypeId: 52` = Committee report
 - Multiple documents may have the same type
+- Documents array may be truncated with _truncated marker
 
 **Continuations:**
 - Empty array when sitting completes in single session
 - Multiple continuation objects when sitting spans multiple days/sessions
-- Each continuation has its own date, location, status
+- Each continuation has its own date, location, status, and number (which may be 0, 1, or higher, and may be null)
 
 **Absents array:**
 - Lists MPs who did not attend
 - `PoliticalParty` may be null for independents or when affiliation not recorded
-- Large lists may be truncated with `_truncated` object as final item indicating number of additional records omitted
+- May be truncated with `_truncated` object as final item indicating number of additional records omitted
 - Empty array if all expected members attended
+
+**Attendances array:**
+- Populated only after sitting has started or completed
+- May be truncated with `_truncated` marker
+
+**Votings array:**
+- Sitting-level voting records
+- May be truncated with `_truncated` marker
+
+**Truncation behavior:**
+- `Documents`, `Continuations`, `Absents`, `Attendances`, `Votings`, and `Agenda.children` arrays may include a standalone `_truncated` object as an element within the array, indicating the number of additional items omitted and counting toward the array length
 
 **Language support:**
 - `LanguageId: 1` = Macedonian (default)
@@ -563,4 +598,4 @@
 **Data quality:**
 - Localized titles may contain leading/trailing whitespace; trim for display
 - HTML in `data` fields should be parsed appropriately for client display
-- Handle `null` and empty array values consistently in client code"
+- Handle `null` and empty array values consistently in client code

@@ -53,14 +53,15 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 - **Whitespace in catalog fields:** Material type titles and other catalog entries may contain leading/trailing whitespace (`\r`, `\n`, spaces). Trim for display.
 - **Language fallback:** Some catalog operations (e.g. `GetAllProcedureTypes`) may return Macedonian text regardless of the requested `languageId`. Test with different language IDs to confirm behavior per endpoint.
 - **Institutional author text:** Even when requesting non-Macedonian languages, `ResponsibleAuthor` for government-proposed materials may contain Cyrillic text (Macedonian). Other fields respect the requested language.
+- **Spelling variations in TypeTitle:** Fields like `TypeTitle` in detail endpoints (e.g., GetCouncilDetails Meetings array, GetCommitteeDetails, GetSittingDetails) may contain spelling variations, typos, or inconsistencies. Normalize for display if needed.
 
 ## Common Patterns
 
 - **Pagination:** Two styles — (1) `Page` (1-based) and `Rows`; (2) `CurrentPage` and `ItemsPerPage`. When `TotalItems: 0`, `Items` may be `null` rather than `[]`. Check per-operation docs.
-- **Array truncation:** Large arrays may include `"_truncated": N` indicating N additional items omitted. In detail endpoints, `_truncated` typically appears on the last item of a truncated array when present.
+- **Array truncation:** Large arrays in listing endpoints may include a truncation marker. In listing endpoints (e.g., GetAllSittings, GetAllQuestions), `_truncated` appears as a standalone minimal object `{"_truncated": N}` within the array at any position, counting toward array length and indicating N additional items omitted. In detail endpoints (e.g., GetSittingDetails, GetCouncilDetails, GetCommitteeDetails), `_truncated` may appear as a standalone object within member/item arrays (CompositionMembers, SecretariatMembers, Documents, Absents, Attendances, Votings, Agenda.children, etc.), also counting toward array length. In ASMX endpoints (e.g., GetCustomEventsCalendar), `_truncated` may appear as a standalone object within the response array, counting toward array length. Detail endpoints such as GetPoliticalPartyDetails and GetUserDetailsByStructure may also include `_truncated` within related arrays (Materials, Amendments, Acts, Committees, Delegations, FriendshipGroups, etc.), appearing as standalone objects counting toward array length. Check per-operation docs for endpoint-specific truncation behavior.
 - **Multi-language:** Operations like GetAllMaterialsForPublicPortal and GetAllQuestions return localized text (TypeTitle, StatusGroupTitle, etc.) based on `LanguageId`.
 - **Reading stages:** `FirstReadingSittings`, `SecondReadingSittings`, `ThirdReadingSittings` track material progress. Each contains sitting objects with `SittingTypeId` (1=plenary, 2=committee), `StatusGroupId`, `ObjectStatusId`.
-- **Agenda tree:** GetSittingDetails agenda uses hierarchical tree with `type: "ROOT"` and `type: "LEAF"`; leaf nodes may reference materials via `objectId`/`objectTypeId`. Some fields (e.g. `afterText`) may contain XML-like language tags (`<MK>...</><AL>...</>`).
+- **Agenda tree:** GetSittingDetails agenda uses hierarchical tree with `type: "ROOT"` and `type: "LEAF"`; leaf nodes may reference materials via `objectId`/`objectTypeId`. Some fields (e.g. `afterText`) may contain XML-like language tags (`<MK>...</><AL>...</>`). Nested children may include amendments with `agendaItemType: 8`.
 - **HTML content:** Fields like Description in GetCommitteeDetails/GetCouncilDetails contain HTML-formatted text.
 - **Parliamentary group contact:** `Email` and `Phone` for parliamentary groups are typically `null`; contact is via individual members. List endpoint (GetAllParliamentaryGroups) does not include these fields; they appear in GetParliamentaryGroupDetails.
 
@@ -78,7 +79,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 - **Items:** Array of results (or null when TotalItems is 0).
 - **d:** ASMX responses often wrap the payload in a `d` property.
 - **CompositionMembers, SecretariatMembers:** Arrays of role-based personnel (in council/committee detail responses); role membership via `CommitteeRoleId`.
-- **Materials:** Array in detail responses (empty `[]` when absent, not `null`).
+- **Materials:** Array in detail responses (empty `[]` when absent, not `null`). May include truncation marker.
 - **Meetings:** Array in reverse chronological order.
 
 ## $defs
@@ -111,8 +112,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "AgendaItemTypeId": {
     "type": "integer",
-    "enum": [1, 2],
-    "description": "1=Plenary, 2=Committee"
+    "enum": [1, 2, 8],
+    "description": "1=Plenary, 2=Committee, 8=Amendment, other values may exist"
   },
   "SittingTypeId": {
     "type": "integer",
@@ -131,8 +132,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "StatusGroupId": {
     "type": "integer",
-    "enum": [6, 9, 10, 11, 12, 24, 64],
-    "description": "6=Delivered to MPs, 9=First reading, 10=Second reading, 11=Third reading, 12=Closed, 24=Rejected, 64=Committee processing"
+    "enum": [0, 6, 9, 10, 11, 12, 24, 64],
+    "description": "0=No specific reading stage, 6=Delivered to MPs, 9=First reading, 10=Second reading, 11=Third reading, 12=Closed, 24=Rejected, 64=Committee processing"
   },
   "MaterialTypeId": {
     "type": "integer",
@@ -155,18 +156,18 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "DocumentTypeId": {
     "type": "integer",
-    "enum": [1, 7, 8, 9, 20, 26, 30, 46, 52, 65],
-    "description": "1=Document, 7=Full text of material, 8=Adopted act, 9=Notification to MPs, 20=Convocation notice, 26=Question document, 30=Committee report without approval, 46=Legal-Legislative Committee report, 52=Report/Committee report, 65=Supplemented draft law"
+    "enum": [1, 7, 8, 9, 19, 20, 26, 28, 30, 40, 42, 43, 46, 52, 65],
+    "description": "1=Document, 7=Full text of material, 8=Adopted act, 9=Notification to MPs, 19=Решение за свикување седница (Decision to convene), 20=Convocation notice, 26=Question document, 28=Answer document, 30=Committee report without approval, 40=Notice of sitting rescheduling, 42=Notice of sitting continuation, 43=Notice of agenda supplement, 46=Legal-Legislative Committee report, 52=Report/Committee report, 65=Supplemented draft law"
   },
   "EventTypeId": {
     "type": "integer",
     "enum": [5],
-    "description": "5=Press conference/visit/general event (other types may exist)"
+    "description": "5=Press conference/visit/working session/commemoration/public event (other types may exist)"
   },
   "MPsClubRoleId": {
     "type": "integer",
-    "enum": [78, 79, 81],
-    "description": "78=President, 79=Vice-President, 81=Member"
+    "enum": [77, 78, 79, 81],
+    "description": "77=Član/Članка (Member of friendship group), 78=President, 79=Vice-President, 81=Member"
   },
   "CommitteeRoleId": {
     "type": "integer",
@@ -175,8 +176,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "RoleId": {
     "type": "integer",
-    "enum": [1],
-    "description": "1=MP (Пратеник/Пратеничка). Other role IDs may exist."
+    "enum": [1, 27],
+    "description": "1=MP (Пратеник/Пратеничка), 27=Member of political party (Член/Членка на политичка партија). Other role IDs may exist."
   },
   "CouncilTypeId": {
     "type": "integer",
@@ -190,8 +191,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "AgendaItemStatusId": {
     "type": "integer",
-    "enum": [50, 69],
-    "description": "50=Reviewed, 69=New"
+    "enum": [50, 60, 69],
+    "description": "50=Reviewed, 60=Other status, 69=New"
   },
   "AgendaObjectTypeId": {
     "type": "integer",
@@ -223,8 +224,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 
 | Operation | Method-based | Description |
 |-----------|--------------|-------------|
-| GetAllSittings | ✓ | Sittings. Filter: TypeId, CommitteeId, StatusId, dates |
-| GetAllQuestions | ✓ | Parliamentary questions. Filter: SearchText, RegistrationNumber, StatusId, CommitteeId, dates. StructureId: null = cross-term |
+| GetAllSittings | ✓ | Sittings. Filter: TypeId, CommitteeId, StatusId, dates. May include truncation marker in Items array. |
+| GetAllQuestions | ✓ | Parliamentary questions. Filter: SearchText, RegistrationNumber, StatusId, CommitteeId, dates. StructureId: null = cross-term. May include truncation marker in Items array. |
 | GetAllMaterialsForPublicPortal | ✓ | Materials. Many filters. Uses ItemsPerPage/CurrentPage |
 | GetParliamentMPsNoImage | ✓ | MPs. Filter: gender, party, search, coalition, constituency. Contains UserImg despite name |
 | GetMonthlyAgenda | ✓ | Agenda for month/year |

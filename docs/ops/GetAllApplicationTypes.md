@@ -32,11 +32,15 @@
       "ApplicationTitle": {
         "type": "string",
         "description": "Localized title of the application type in the requested language"
+      },
+      "_truncated": {
+        "type": "integer",
+        "description": "Number of additional items omitted from array (present only on last item when truncation occurs)"
       }
     },
     "required": ["Id", "ApplicationTitle"]
   },
-  "description": "Flat array of application types; not paginated"
+  "description": "Flat array of application types; not paginated. May be truncated; check for _truncated field on last item indicating N additional items omitted."
 }
 ```
 
@@ -48,3 +52,4 @@
 - `Id` values are 1, 2, 3 (see ApplicationTypeId in global $defs).
 - Use these IDs in filters and request bodies for application-related operations.
 - Typical use: populate dropdowns or application type filters.
+- **Array truncation:** When truncation occurs, the array contains at least one complete object (Id + ApplicationTitle) before the truncation marker. Check the last item for the optional `_truncated` field indicating additional items omitted.

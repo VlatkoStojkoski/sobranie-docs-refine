@@ -53,14 +53,15 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 - **Whitespace in catalog fields:** Material type titles and other catalog entries may contain leading/trailing whitespace (`\r`, `\n`, spaces). Trim for display.
 - **Language fallback:** Some catalog operations (e.g. `GetAllProcedureTypes`) may return Macedonian text regardless of the requested `languageId`. Test with different language IDs to confirm behavior per endpoint.
 - **Institutional author text:** Even when requesting non-Macedonian languages, `ResponsibleAuthor` for government-proposed materials may contain Cyrillic text (Macedonian). Other fields respect the requested language.
+- **Spelling variations in TypeTitle:** Fields like `TypeTitle` in detail endpoints (e.g., GetCouncilDetails Meetings array, GetCommitteeDetails, GetSittingDetails) may contain spelling variations, typos, or inconsistencies. Normalize for display if needed.
 
 ## Common Patterns
 
 - **Pagination:** Two styles — (1) `Page` (1-based) and `Rows`; (2) `CurrentPage` and `ItemsPerPage`. When `TotalItems: 0`, `Items` may be `null` rather than `[]`. Check per-operation docs.
-- **Array truncation:** Large arrays may include `"_truncated": N` indicating N additional items omitted. In detail endpoints, `_truncated` typically appears on the last item of a truncated array when present.
+- **Array truncation:** Large arrays in listing endpoints may include a truncation marker. In listing endpoints (e.g., GetAllSittings, GetAllQuestions), `_truncated` appears as a standalone minimal object `{"_truncated": N}` within the array at any position, counting toward array length and indicating N additional items omitted. In detail endpoints (e.g., GetSittingDetails, GetCouncilDetails, GetCommitteeDetails), `_truncated` may appear as a standalone object within member/item arrays (CompositionMembers, SecretariatMembers, Documents, Absents, Attendances, Votings, Agenda.children, etc.), also counting toward array length. In ASMX endpoints (e.g., GetCustomEventsCalendar), `_truncated` may appear as a standalone object within the response array, counting toward array length. Detail endpoints such as GetPoliticalPartyDetails and GetUserDetailsByStructure may also include `_truncated` within related arrays (Materials, Amendments, Acts, Committees, Delegations, FriendshipGroups, etc.), appearing as standalone objects counting toward array length. Check per-operation docs for endpoint-specific truncation behavior.
 - **Multi-language:** Operations like GetAllMaterialsForPublicPortal and GetAllQuestions return localized text (TypeTitle, StatusGroupTitle, etc.) based on `LanguageId`.
 - **Reading stages:** `FirstReadingSittings`, `SecondReadingSittings`, `ThirdReadingSittings` track material progress. Each contains sitting objects with `SittingTypeId` (1=plenary, 2=committee), `StatusGroupId`, `ObjectStatusId`.
-- **Agenda tree:** GetSittingDetails agenda uses hierarchical tree with `type: "ROOT"` and `type: "LEAF"`; leaf nodes may reference materials via `objectId`/`objectTypeId`. Some fields (e.g. `afterText`) may contain XML-like language tags (`<MK>...</><AL>...</>`).
+- **Agenda tree:** GetSittingDetails agenda uses hierarchical tree with `type: "ROOT"` and `type: "LEAF"`; leaf nodes may reference materials via `objectId`/`objectTypeId`. Some fields (e.g. `afterText`) may contain XML-like language tags (`<MK>...</><AL>...</>`). Nested children may include amendments with `agendaItemType: 8`.
 - **HTML content:** Fields like Description in GetCommitteeDetails/GetCouncilDetails contain HTML-formatted text.
 - **Parliamentary group contact:** `Email` and `Phone` for parliamentary groups are typically `null`; contact is via individual members. List endpoint (GetAllParliamentaryGroups) does not include these fields; they appear in GetParliamentaryGroupDetails.
 
@@ -78,7 +79,7 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 - **Items:** Array of results (or null when TotalItems is 0).
 - **d:** ASMX responses often wrap the payload in a `d` property.
 - **CompositionMembers, SecretariatMembers:** Arrays of role-based personnel (in council/committee detail responses); role membership via `CommitteeRoleId`.
-- **Materials:** Array in detail responses (empty `[]` when absent, not `null`).
+- **Materials:** Array in detail responses (empty `[]` when absent, not `null`). May include truncation marker.
 - **Meetings:** Array in reverse chronological order.
 
 ## $defs
@@ -111,8 +112,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "AgendaItemTypeId": {
     "type": "integer",
-    "enum": [1, 2],
-    "description": "1=Plenary, 2=Committee"
+    "enum": [1, 2, 8],
+    "description": "1=Plenary, 2=Committee, 8=Amendment, other values may exist"
   },
   "SittingTypeId": {
     "type": "integer",
@@ -131,8 +132,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "StatusGroupId": {
     "type": "integer",
-    "enum": [6, 9, 10, 11, 12, 24, 64],
-    "description": "6=Delivered to MPs, 9=First reading, 10=Second reading, 11=Third reading, 12=Closed, 24=Rejected, 64=Committee processing"
+    "enum": [0, 6, 9, 10, 11, 12, 24, 64],
+    "description": "0=No specific reading stage, 6=Delivered to MPs, 9=First reading, 10=Second reading, 11=Third reading, 12=Closed, 24=Rejected, 64=Committee processing"
   },
   "MaterialTypeId": {
     "type": "integer",
@@ -155,18 +156,18 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "DocumentTypeId": {
     "type": "integer",
-    "enum": [1, 7, 8, 9, 20, 26, 30, 46, 52, 65],
-    "description": "1=Document, 7=Full text of material, 8=Adopted act, 9=Notification to MPs, 20=Convocation notice, 26=Question document, 30=Committee report without approval, 46=Legal-Legislative Committee report, 52=Report/Committee report, 65=Supplemented draft law"
+    "enum": [1, 7, 8, 9, 19, 20, 26, 28, 30, 40, 42, 43, 46, 52, 65],
+    "description": "1=Document, 7=Full text of material, 8=Adopted act, 9=Notification to MPs, 19=Решение за свикување седница (Decision to convene), 20=Convocation notice, 26=Question document, 28=Answer document, 30=Committee report without approval, 40=Notice of sitting rescheduling, 42=Notice of sitting continuation, 43=Notice of agenda supplement, 46=Legal-Legislative Committee report, 52=Report/Committee report, 65=Supplemented draft law"
   },
   "EventTypeId": {
     "type": "integer",
     "enum": [5],
-    "description": "5=Press conference/visit/general event (other types may exist)"
+    "description": "5=Press conference/visit/working session/commemoration/public event (other types may exist)"
   },
   "MPsClubRoleId": {
     "type": "integer",
-    "enum": [78, 79, 81],
-    "description": "78=President, 79=Vice-President, 81=Member"
+    "enum": [77, 78, 79, 81],
+    "description": "77=Član/Članка (Member of friendship group), 78=President, 79=Vice-President, 81=Member"
   },
   "CommitteeRoleId": {
     "type": "integer",
@@ -175,8 +176,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "RoleId": {
     "type": "integer",
-    "enum": [1],
-    "description": "1=MP (Пратеник/Пратеничка). Other role IDs may exist."
+    "enum": [1, 27],
+    "description": "1=MP (Пратеник/Пратеничка), 27=Member of political party (Член/Членка на политичка партија). Other role IDs may exist."
   },
   "CouncilTypeId": {
     "type": "integer",
@@ -190,8 +191,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
   },
   "AgendaItemStatusId": {
     "type": "integer",
-    "enum": [50, 69],
-    "description": "50=Reviewed, 69=New"
+    "enum": [50, 60, 69],
+    "description": "50=Reviewed, 60=Other status, 69=New"
   },
   "AgendaObjectTypeId": {
     "type": "integer",
@@ -223,8 +224,8 @@ Parliamentary term/structure identifier (UUID). Obtain from `GetAllStructuresFor
 
 | Operation | Method-based | Description |
 |-----------|--------------|-------------|
-| GetAllSittings | ✓ | Sittings. Filter: TypeId, CommitteeId, StatusId, dates |
-| GetAllQuestions | ✓ | Parliamentary questions. Filter: SearchText, RegistrationNumber, StatusId, CommitteeId, dates. StructureId: null = cross-term |
+| GetAllSittings | ✓ | Sittings. Filter: TypeId, CommitteeId, StatusId, dates. May include truncation marker in Items array. |
+| GetAllQuestions | ✓ | Parliamentary questions. Filter: SearchText, RegistrationNumber, StatusId, CommitteeId, dates. StructureId: null = cross-term. May include truncation marker in Items array. |
 | GetAllMaterialsForPublicPortal | ✓ | Materials. Many filters. Uses ItemsPerPage/CurrentPage |
 | GetParliamentMPsNoImage | ✓ | MPs. Filter: gender, party, search, coalition, constituency. Contains UserImg despite name |
 | GetMonthlyAgenda | ✓ | Agenda for month/year |
@@ -273,7 +274,7 @@ See per-operation .md files for detailed request/response schemas and operation-
   "properties": {
     "methodName": {
       "type": "string",
-      "enum": ["GetAllApplicationTypes"]
+      "const": "GetAllApplicationTypes"
     },
     "languageId": {
       "$ref": "#/$defs/LanguageId"
@@ -292,18 +293,20 @@ See per-operation .md files for detailed request/response schemas and operation-
     "type": "object",
     "properties": {
       "Id": {
-        "type": "integer",
-        "$ref": "#/$defs/ApplicationTypeId",
-        "description": "Application type identifier (1=Case report, 2=Participation in public debate, 3=Discussion)"
+        "$ref": "#/$defs/ApplicationTypeId"
       },
       "ApplicationTitle": {
         "type": "string",
         "description": "Localized title of the application type in the requested language"
+      },
+      "_truncated": {
+        "type": "integer",
+        "description": "Number of additional items omitted from array (present only on last item when truncation occurs)"
       }
     },
     "required": ["Id", "ApplicationTitle"]
   },
-  "description": "Flat array of application types; not paginated"
+  "description": "Flat array of application types; not paginated. May be truncated; check for _truncated field on last item indicating N additional items omitted."
 }
 ```
 
@@ -315,6 +318,7 @@ See per-operation .md files for detailed request/response schemas and operation-
 - `Id` values are 1, 2, 3 (see ApplicationTypeId in global $defs).
 - Use these IDs in filters and request bodies for application-related operations.
 - Typical use: populate dropdowns or application type filters.
+- **Array truncation:** When truncation occurs, the array contains at least one complete object (Id + ApplicationTitle) before the truncation marker. Check the last item for the optional `_truncated` field indicating additional items omitted.
 
 ---
 
@@ -406,7 +410,6 @@ See per-operation .md files for detailed request/response schemas and operation-
   "type": "array",
   "items": {
     "type": "object",
-    "required": ["Id", "Name", "TypeId", "TypeTitle"],
     "properties": {
       "Id": {
         "$ref": "#/$defs/UUID",
@@ -422,8 +425,13 @@ See per-operation .md files for detailed request/response schemas and operation-
       "TypeTitle": {
         "type": "string",
         "description": "Localized council type name (e.g. 'Постојана' for permanent)"
+      },
+      "_truncated": {
+        "type": "integer",
+        "description": "When present (final item only), indicates number of additional councils omitted due to truncation"
       }
-    }
+    },
+    "required": ["Id", "Name", "TypeId", "TypeTitle"]
   }
 }
 ```
@@ -431,6 +439,7 @@ See per-operation .md files for detailed request/response schemas and operation-
 ### Notes
 
 - **Response format:** Returns a flat array of councils (not wrapped in TotalItems/Items structure).
+- **Array truncation:** When results exceed available items, the last array element is an object with only `_truncated` field (integer) indicating how many additional councils are omitted.
 - **Council types:** Currently only type 1 (Permanent/Постојана) observed. Other types may exist in different structures or future terms.
 - **Parameter casing:** Uses lowercase `methodName` and `languageId`.
 - **Usage:** Council IDs returned here can be used with `GetCouncilDetails` to retrieve detailed information.
@@ -1225,7 +1234,7 @@ Returns all MPs clubs (inter-party parliamentary groups) for a specified parliam
     "CurrentPage": {
       "type": "integer",
       "minimum": 1,
-      "description": "Appears alongside Page; purpose unclear (possibly legacy/redundant parameter). Recommend setting to same value as Page."
+      "description": "Alternative pagination parameter; may differ from Page. Both parameters accepted by API."
     },
     "SearchText": {
       "type": "string",
@@ -1321,48 +1330,67 @@ Returns all MPs clubs (inter-party parliamentary groups) for a specified parliam
         {
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "Id": {
-                "type": "string",
-                "format": "uuid",
-                "description": "Unique question identifier"
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique question identifier"
+                  },
+                  "Title": {
+                    "type": "string",
+                    "description": "Question text/title in requested language. May be truncated in listing view with '... (N chars)' appended, where N indicates the full title character count. Full text available via GetQuestionDetails."
+                  },
+                  "From": {
+                    "type": "string",
+                    "description": "Name of the MP who submitted the question (questioner)"
+                  },
+                  "To": {
+                    "type": "string",
+                    "description": "Title/position of the recipient (minister or official)"
+                  },
+                  "ToInstitution": {
+                    "type": "string",
+                    "description": "Full name of the institution receiving the question (ministry or government body). May contain placeholder values like '/' in some datasets."
+                  },
+                  "StatusTitle": {
+                    "type": "string",
+                    "description": "Human-readable question status in requested language (e.g. 'Доставено'=Delivered, 'Одговорено'=Answered)"
+                  },
+                  "DateAsked": {
+                    "type": "string",
+                    "pattern": "^/Date\\(\\d+\\)/$",
+                    "description": "Date when question was submitted or scheduled (AspDate format). May contain future dates for scheduled questions."
+                  },
+                  "QuestionTypeTitle": {
+                    "type": "string",
+                    "description": "Type of question in requested language (e.g. 'Писмено прашање'=Written question, 'Усно прашање'=Oral question)"
+                  },
+                  "TotalRows": {
+                    "type": "integer",
+                    "description": "Item-level field observed as 0 in all responses. Purpose unclear (possibly legacy)."
+                  },
+                  "_truncated": {
+                    "type": "integer",
+                    "description": "When present, indicates N additional items omitted from response due to size constraints."
+                  }
+                },
+                "required": ["Id", "Title", "From", "To", "ToInstitution", "StatusTitle", "DateAsked", "QuestionTypeTitle", "TotalRows"]
               },
-              "Title": {
-                "type": "string",
-                "description": "Question text/title in requested language"
-              },
-              "From": {
-                "type": "string",
-                "description": "Name of the MP who submitted the question (questioner)"
-              },
-              "To": {
-                "type": "string",
-                "description": "Title/position of the recipient (minister or official)"
-              },
-              "ToInstitution": {
-                "type": "string",
-                "description": "Full name of the institution receiving the question (ministry or government body). May contain placeholder values like '/' in some datasets."
-              },
-              "StatusTitle": {
-                "type": "string",
-                "description": "Human-readable question status in requested language (e.g. 'Доставено'=Delivered, 'Одговорено'=Answered)"
-              },
-              "DateAsked": {
-                "type": "string",
-                "pattern": "^/Date\\(\\d+\\)/$",
-                "description": "Date when question was submitted (AspDate format)"
-              },
-              "QuestionTypeTitle": {
-                "type": "string",
-                "description": "Type of question in requested language (e.g. 'Писмено прашање'=Written question, 'Усно прашање'=Oral question)"
-              },
-              "TotalRows": {
-                "type": "integer",
-                "description": "Item-level field observed as 0 in all responses. Purpose unclear (possibly legacy)."
+              {
+                "type": "object",
+                "properties": {
+                  "_truncated": {
+                    "type": "integer",
+                    "description": "Standalone truncation marker indicating N additional items omitted"
+                  }
+                },
+                "required": ["_truncated"],
+                "additionalProperties": false
               }
-            },
-            "required": ["Id", "Title", "From", "To", "ToInstitution", "StatusTitle", "DateAsked", "QuestionTypeTitle", "TotalRows"]
+            ]
           }
         },
         {
@@ -1381,6 +1409,9 @@ Returns all MPs clubs (inter-party parliamentary groups) for a specified parliam
 #### Pagination
 Uses standard `Page`/`Rows` pagination pattern (1-based). Response includes `TotalItems` (full result count across all pages) and `Items` (current page subset only). When `TotalItems: 0`, the `Items` field is `null` rather than empty array `[]`.
 
+#### Array Truncation
+When results are truncated due to size constraints, the `Items` array may contain fewer complete items than requested via `Rows`. A truncation marker appears as a standalone minimal object `{"_truncated": N}` within the array, indicating N additional items omitted. This marker counts toward the array length and may not appear at the end of the array (e.g., may appear at position 2 in a 3-element array). The `_truncated` field may also appear as an optional property on the last complete item.
+
 #### LanguageId
 Response content (Title, From, To, StatusTitle, QuestionTypeTitle, ToInstitution) is returned in the requested language. Some fields may contain Cyrillic text or institutional names even for non-Macedonian language requests; see global Language Fallback section.
 
@@ -1388,7 +1419,7 @@ Response content (Title, From, To, StatusTitle, QuestionTypeTitle, ToInstitution
 Uses PascalCase: `LanguageId`, `StructureId`, `CommitteeId`, `RegistrationNumber`, `StatusId`, `DateFrom`, `DateTo`. Method name uses camelCase: `methodName`. Other filters (SearchText, From, To, Page, Rows, CurrentPage) use mixed case.
 
 #### CurrentPage vs Page
-Both parameters present in request; distinction unclear. Recommend setting both to same value. May be legacy or redundant parameter.
+Both parameters present in request; API accepts them with potentially different values. Both parameters are sent in actual requests; the distinction between them remains unclear (may be legacy or redundant parameter).
 
 #### StructureId Nullable
 Unlike most listing operations that require `StructureId`, this operation accepts `null` for cross-term queries of all questions regardless of parliamentary structure. When set to a specific UUID, filters to questions in that parliamentary term only.
@@ -1406,6 +1437,7 @@ Unlike most listing operations that require `StructureId`, this operation accept
 - **QuestionTypeTitle:** Observed types include "Писмено прашање" (Written question) and "Усно прашање" (Oral question). No separate type ID exposed.
 - **ToInstitution:** May contain placeholder values (e.g. `/`) or inconsistent formatting ("Министерството" vs "Министерство"). Handle gracefully in client code.
 - **StatusTitle:** Observed values include "Доставено" (Delivered) and "Одговорено" (Answered) in Macedonian; response localizes per LanguageId.
+- **DateAsked:** May contain future timestamps for scheduled or upcoming questions, not only historical questions.
 
 
 ---
@@ -1562,88 +1594,102 @@ Unlike most listing operations that require `StructureId`, this operation accept
         {
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "Id": {
-                "$ref": "#/$defs/UUID",
-                "description": "Unique identifier of the sitting"
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "$ref": "#/$defs/UUID",
+                    "description": "Unique identifier of the sitting"
+                  },
+                  "Number": {
+                    "anyOf": [
+                      {"type": "integer"},
+                      {"type": "null"}
+                    ],
+                    "description": "Sitting sequence number within committee or plenary context"
+                  },
+                  "SittingDate": {
+                    "$ref": "#/$defs/AspDate",
+                    "description": "Primary sitting date/time"
+                  },
+                  "TypeId": {
+                    "$ref": "#/$defs/AgendaItemTypeId",
+                    "description": "1=Plenary, 2=Committee"
+                  },
+                  "TypeTitle": {
+                    "type": "string",
+                    "description": "Localized sitting type name (e.g. 'Пленарна седница', 'Комисионска седница')"
+                  },
+                  "StatusId": {
+                    "$ref": "#/$defs/SittingStatusId"
+                  },
+                  "StatusTitle": {
+                    "type": "string",
+                    "description": "Localized status name"
+                  },
+                  "Location": {
+                    "anyOf": [
+                      {"type": "string"},
+                      {"type": "null"}
+                    ],
+                    "description": "Physical location/room (e.g. 'Сала 4')"
+                  },
+                  "CommitteeId": {
+                    "anyOf": [
+                      {"$ref": "#/$defs/UUID"},
+                      {"type": "null"}
+                    ],
+                    "description": "UUID of committee. Null for plenary sittings (TypeId: 1). May be omitted from response when null."
+                  },
+                  "CommitteeTitle": {
+                    "anyOf": [
+                      {"type": "string"},
+                      {"type": "null"}
+                    ],
+                    "description": "Localized committee name. Null for plenary (TypeId: 1)."
+                  },
+                  "SittingDescriptionTypeTitle": {
+                    "anyOf": [
+                      {"type": "string"},
+                      {"type": "null"}
+                    ],
+                    "description": "Localized description of sitting subtype/format"
+                  },
+                  "Continuations": {
+                    "type": "array",
+                    "description": "Array of continuation sitting references. Empty in standard responses; likely populated when sitting spans multiple sessions.",
+                    "items": {"type": "object"}
+                  },
+                  "Structure": {
+                    "anyOf": [
+                      {"type": "object"},
+                      {"type": "null"}
+                    ],
+                    "description": "Structural metadata; typically null in list responses"
+                  },
+                  "TotalRows": {
+                    "type": "integer",
+                    "description": "Row count metadata field"
+                  }
+                }
               },
-              "Number": {
-                "anyOf": [
-                  {"type": "integer"},
-                  {"type": "null"}
-                ],
-                "description": "Sitting sequence number within committee or plenary context"
-              },
-              "SittingDate": {
-                "$ref": "#/$defs/AspDate",
-                "description": "Primary sitting date/time"
-              },
-              "TypeId": {
-                "$ref": "#/$defs/AgendaItemTypeId",
-                "description": "1=Plenary, 2=Committee"
-              },
-              "TypeTitle": {
-                "type": "string",
-                "description": "Localized sitting type name (e.g. 'Пленарна седница', 'Комисионска седница')"
-              },
-              "StatusId": {
-                "$ref": "#/$defs/SittingStatusId"
-              },
-              "StatusTitle": {
-                "type": "string",
-                "description": "Localized status name"
-              },
-              "Location": {
-                "anyOf": [
-                  {"type": "string"},
-                  {"type": "null"}
-                ],
-                "description": "Physical location/room (e.g. 'Сала 4')"
-              },
-              "CommitteeId": {
-                "anyOf": [
-                  {"$ref": "#/$defs/UUID"},
-                  {"type": "null"}
-                ],
-                "description": "UUID of committee. Null for plenary sittings (TypeId: 1)."
-              },
-              "CommitteeTitle": {
-                "anyOf": [
-                  {"type": "string"},
-                  {"type": "null"}
-                ],
-                "description": "Localized committee name. Null for plenary (TypeId: 1)."
-              },
-              "SittingDescriptionTypeTitle": {
-                "anyOf": [
-                  {"type": "string"},
-                  {"type": "null"}
-                ],
-                "description": "Localized description of sitting subtype/format"
-              },
-              "Continuations": {
-                "type": "array",
-                "description": "Array of continuation sitting references. Empty in standard responses; likely populated when sitting spans multiple sessions.",
-                "items": {"type": "object"}
-              },
-              "Structure": {
-                "anyOf": [
-                  {"type": "object"},
-                  {"type": "null"}
-                ],
-                "description": "Structural metadata; typically null in list responses"
-              },
-              "TotalRows": {
-                "type": "integer",
-                "description": "Row count metadata field"
+              {
+                "type": "object",
+                "properties": {
+                  "_truncated": {
+                    "type": "integer",
+                    "description": "Truncation marker: N additional items omitted"
+                  }
+                },
+                "required": ["_truncated"]
               }
-            }
+            ]
           }
         },
         {"type": "null"}
       ],
-      "description": "Array of sittings or null when TotalItems is 0"
+      "description": "Array of sittings or null when TotalItems is 0. May include a truncation marker object {\"_truncated\": N} at any position within the array (not as a property on items), indicating N additional items were omitted. The truncation marker counts toward the array length and follows the global listing endpoint truncation pattern."
     }
   },
   "required": ["TotalItems", "Items"]
@@ -1654,13 +1700,13 @@ Unlike most listing operations that require `StructureId`, this operation accept
 
 - **Empty results behavior:** When no sittings match filter criteria, returns `{"TotalItems": 0, "Items": null}` rather than empty array.
 - **Sitting sequence number:** `Number` field represents the sitting sequence number within the specific context: for plenary (`TypeId: 1`), the Nth plenary sitting; for committee (`TypeId: 2`), the Nth committee sitting. Each context maintains its own sequence.
-- **Committee metadata:** `CommitteeId` and `CommitteeTitle` are populated only for committee sittings (`TypeId: 2`); both are null for plenary (`TypeId: 1`).
+- **Committee metadata:** `CommitteeTitle` is populated for committee sittings (`TypeId: 2`) and null for plenary (`TypeId: 1`). `CommitteeId` may be omitted entirely from response objects when null (for plenary sittings) rather than explicitly returned, though the schema permits it as a nullable UUID field.
+- **Array truncation:** In the `Items` array, a standalone object `{"_truncated": N}` may appear at any position (including mid-array), indicating N additional items were omitted. This object counts toward the array length. See global "Array truncation" pattern.
 - **Continuations:** `Continuations` array is empty in standard responses; likely populated when a sitting spans multiple sessions.
 - **Structure field:** Metadata field typically null in list responses.
 - **Cross-structure queries:** When `StructureId` is null, returns sittings from all parliamentary terms/structures; `TotalItems` reflects cross-term total.
 - **Pagination:** Uses `Page` (1-based) and `Rows` pattern. When `TotalItems: 0`, `Items` is null, not an empty array.
 - **Localization:** `TypeTitle`, `StatusTitle`, `CommitteeTitle`, and `SittingDescriptionTypeTitle` are localized according to `LanguageId`.
-
 
 ---
 
@@ -1946,48 +1992,76 @@ Unlike most listing operations that require `StructureId`, this operation accept
     "CompositionMembers": {
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "UserId": {
-            "$ref": "#/$defs/UUID"
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "UserId": {
+                "$ref": "#/$defs/UUID"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "RoleId": {
+                "$ref": "#/$defs/CommitteeRoleId"
+              },
+              "RoleTitle": {
+                "type": "string",
+                "description": "Localized role name (e.g., 'Претседател/Претседателка', 'Член/Членка')"
+              }
+            },
+            "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
           },
-          "FullName": {
-            "type": "string"
-          },
-          "RoleId": {
-            "$ref": "#/$defs/CommitteeRoleId"
-          },
-          "RoleTitle": {
-            "type": "string",
-            "description": "Localized role name (e.g., 'Претседател/Претседателка', 'Член/Членка')"
+          {
+            "type": "object",
+            "properties": {
+              "_truncated": {
+                "type": "integer",
+                "description": "Truncation marker indicating N additional items omitted"
+              }
+            },
+            "required": ["_truncated"]
           }
-        },
-        "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
+        ]
       },
-      "description": "Official council composition members (MPs with voting roles). Typically includes president (RoleId 6), vice-president (82), and members (7). Ordered by role importance."
+      "description": "Official council composition members (MPs with voting roles). Typically includes president (RoleId 6), vice-president (82), and members (7). Ordered by role importance. May include truncation marker as a standalone object within the array."
     },
     "SecretariatMembers": {
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "UserId": {
-            "$ref": "#/$defs/UUID"
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "UserId": {
+                "$ref": "#/$defs/UUID"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "RoleId": {
+                "$ref": "#/$defs/CommitteeRoleId"
+              },
+              "RoleTitle": {
+                "type": "string",
+                "description": "Localized role name (e.g., 'Одобрувач', 'Советник на комисија')"
+              }
+            },
+            "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
           },
-          "FullName": {
-            "type": "string"
-          },
-          "RoleId": {
-            "$ref": "#/$defs/CommitteeRoleId"
-          },
-          "RoleTitle": {
-            "type": "string",
-            "description": "Localized role name (e.g., 'Одобрувач', 'Советник на комисија')"
+          {
+            "type": "object",
+            "properties": {
+              "_truncated": {
+                "type": "integer",
+                "description": "Truncation marker indicating N additional items omitted"
+              }
+            },
+            "required": ["_truncated"]
           }
-        },
-        "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
+        ]
       },
-      "description": "Administrative and advisory staff supporting the council. RoleId typically 10 (Approver) or 11 (Advisor). Note: Same person (UserId) may appear multiple times with different RoleIds when holding multiple roles. This is expected behavior."
+      "description": "Administrative and advisory staff supporting the council. RoleId typically 10 (Approver) or 11 (Advisor). Note: Same person (UserId) may appear multiple times with different RoleIds when holding multiple roles. This is expected behavior. May include truncation marker as a standalone object within the array."
     },
     "Materials": {
       "type": "array",
@@ -2006,7 +2080,7 @@ Unlike most listing operations that require `StructureId`, this operation accept
           },
           "TypeTitle": {
             "type": "string",
-            "description": "Meeting type label (e.g., 'Комисска седница' = Committee sitting)"
+            "description": "Meeting type label (e.g., 'Комисска седница' or similar = Committee sitting). May contain spelling variations or typos; see data quality notes."
           },
           "Date": {
             "$ref": "#/$defs/AspDate"
@@ -2067,6 +2141,8 @@ Unlike most listing operations that require `StructureId`, this operation accept
 - **Meetings ordering**: The Meetings array is ordered by Date in reverse chronological order (most recent first).
 - **HTML content in Description**: Contains rich HTML markup. Parse as HTML when displaying to end users.
 - **Materials**: Returns empty array `[]` when no materials exist (not `null`).
+- **Array truncation**: CompositionMembers and SecretariatMembers may include a truncation marker as a standalone object `{"_truncated": N}` within the array, counting toward array length and indicating N additional items omitted.
+- **Data quality**: TypeTitle in Meetings may contain spelling variations or typos (e.g., 'Комississка' vs 'Комисска'); normalize for display if needed.
 
 
 ---
@@ -2110,43 +2186,57 @@ Unlike most listing operations that require `StructureId`, this operation accept
   "properties": {
     "d": {
       "type": "array",
-      "description": "Array of calendar events for the requested month/year",
+      "description": "Array of calendar events for the requested month/year. May include truncation marker {\"{\\\"_truncated\\\": N}\" as standalone object within array, counting toward array length and indicating N additional items omitted.",
       "items": {
-        "type": "object",
-        "properties": {
-          "__type": {
-            "type": "string",
-            "description": "ASMX type discriminator (e.g., 'moldova.controls.Models.CalendarViewModel')"
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "__type": {
+                "type": "string",
+                "description": "ASMX type discriminator (e.g., 'moldova.controls.Models.CalendarViewModel')"
+              },
+              "Id": {
+                "$ref": "#/$defs/UUID",
+                "description": "Unique event identifier"
+              },
+              "EventDescription": {
+                "type": "string",
+                "description": "Human-readable title/description of the event in the requested language"
+              },
+              "EventLink": {
+                "type": "string",
+                "description": "URL-friendly slug for event detail page"
+              },
+              "EventLocation": {
+                "anyOf": [
+                  {"type": "string"},
+                  {"const": ""}
+                ],
+                "description": "Physical location/venue of event. May be empty string when location not specified or not applicable to event type"
+              },
+              "EventDate": {
+                "$ref": "#/$defs/AspDate",
+                "description": "Scheduled date/time of the event in AspDate format"
+              },
+              "EventType": {
+                "$ref": "#/$defs/EventTypeId",
+                "description": "Type of event (currently 5=press conference/visit/working session/commemoration/public event)"
+              }
+            },
+            "required": ["__type", "Id", "EventDescription", "EventLink", "EventLocation", "EventDate", "EventType"]
           },
-          "Id": {
-            "$ref": "#/$defs/UUID",
-            "description": "Unique event identifier"
-          },
-          "EventDescription": {
-            "type": "string",
-            "description": "Human-readable title/description of the event in the requested language"
-          },
-          "EventLink": {
-            "type": "string",
-            "description": "URL-friendly slug for event detail page"
-          },
-          "EventLocation": {
-            "anyOf": [
-              {"type": "string"},
-              {"const": ""}
-            ],
-            "description": "Physical location/venue of event. May be empty string when location not specified or not applicable to event type"
-          },
-          "EventDate": {
-            "$ref": "#/$defs/AspDate",
-            "description": "Scheduled date/time of the event in AspDate format"
-          },
-          "EventType": {
-            "$ref": "#/$defs/EventTypeId",
-            "description": "Type of event (currently 5=press conference/visit/working session/commemoration/public event)"
+          {
+            "type": "object",
+            "properties": {
+              "_truncated": {
+                "type": "integer",
+                "description": "Truncation marker indicating N additional items omitted from the array"
+              }
+            },
+            "required": ["_truncated"]
           }
-        },
-        "required": ["__type", "Id", "EventDescription", "EventLink", "EventLocation", "EventDate", "EventType"]
+        ]
       }
     }
   },
@@ -2157,6 +2247,7 @@ Unlike most listing operations that require `StructureId`, this operation accept
 ### Notes
 - **ASMX response format:** Endpoint uses ASMX wrapper; results are returned in the `d` property directly as an array (not wrapped in `Items`/`TotalItems` pagination).
 - **Empty results:** Returns empty array `[]` if no events exist for the requested month/year.
+- **Array truncation:** The `d` array may include a truncation marker `{"_truncated": N}` as a standalone object within the array, counting toward array length and indicating N additional items omitted. Clients should handle this marker by checking for the presence of the `_truncated` key and adjusting pagination or display logic accordingly.
 - **Language localization:** `EventDescription` and `EventLocation` are localized based on the `Language` parameter (1=Macedonian, 2=Albanian, 3=Turkish). The same event returns different language text when queried with different `Language` values.
 - **Event location handling:** `EventLocation` may be empty string when location is not specified or not applicable to the event type.
 - **Event types:** All documented sample events have `EventType: 5` (press conferences, official visits, working sessions, commemorations, public events). Other EventType values may exist but are not yet documented.
@@ -2341,12 +2432,15 @@ Unlike most listing operations that require `StructureId`, this operation accept
       "description": "Proposer type in natural language (e.g. \"Пратеник\" = MP, \"Влада на Република Северна Македонија\" = Government)"
     },
     "ResponsibleAuthor": {
-      "type": "string",
-      "description": "Name and title of primary responsible author/proposer. For multi-author materials, represents lead author. May be empty when no responsible author designated. May contain Cyrillic (Macedonian) even if other language requested."
+      "anyOf": [
+        {"type": "string"},
+        {"type": "null"}
+      ],
+      "description": "Name and title of primary responsible author/proposer. For multi-author materials, represents lead author. Null when no responsible author designated (e.g. committee/working body proposer) or for certain material types. May contain Cyrillic (Macedonian) even if other language requested."
     },
     "Institution": {
       "type": "string",
-      "description": "Institution name when material proposed by institutional entity. Empty string when proposer is MPs or not applicable."
+      "description": "Institution name when material proposed by institutional entity (e.g. government). Empty string when proposer is MPs or not applicable."
     },
     "ProposerCommittee": {
       "anyOf": [
@@ -2735,13 +2829,15 @@ Unlike most listing operations that require `StructureId`, this operation accept
 
 - **Multi-author materials:** Authors array can contain multiple MP co-proposers. ResponsibleAuthor typically contains first/primary author name and title.
 
+- **ResponsibleAuthor nullability:** ResponsibleAuthor field is null when no responsible author is designated, which occurs for certain proposer types such as committee/working body proposals (ProposerTypeId=3 or other institutional proposers) or certain material types without designated responsibility.
+
 - **Committee processing:** Materials assigned to multiple committees with different roles. IsResponsible: true identifies lead committee. IsLegislative: true identifies legislative-legal review committee. Each committee may have associated Documents array.
 
-- **Reading stages:** Materials progress through three reading stages. Each reading has corresponding *ReadingSittings array containing plenary (SittingTypeId: 1, CommitteeId: null) and/or committee (SittingTypeId: 2, with populated CommitteeId/CommitteeTitle) sitting records. Empty arrays indicate material not yet reached that stage. In sitting objects, StatusGroupId 9=first reading, 10=second reading, 11=third reading.
+- **Reading stages:** Materials progress through three reading stages. Each reading has corresponding *ReadingSittings array containing plenary (SittingTypeId: 1, CommitteeId: null) and/or committee (SittingTypeId: 2, with populated CommitteeId/CommitteeTitle) sitting records. Empty arrays indicate material not yet reached that stage. In sitting objects, StatusGroupId 9=first reading, 10=second reading, 11=third reading, 0=no specific reading stage (plenary discussion without stage context).
 
 - **Empty arrays:** Amendment and sitting arrays return empty arrays [] when no data exists, not null.
 
-- **Institutional authors:** When ProposerTypeId is 2 (Government), Authors array contains entries with Id as all-zeros UUID, FirstName containing full official title/name (e.g. minister name), and LastName as empty string. ResponsibleAuthor duplicates this information and may contain Cyrillic text (Macedonian) even when other language requested. Institution field contains ministry/institution name.
+- **Government institutional authors:** When ProposerTypeId is 2 (Government), Authors array contains entries with Id as all-zeros UUID, FirstName containing full official title/name (e.g. minister name), and LastName as empty string. ResponsibleAuthor duplicates this information and may contain Cyrillic text (Macedonian) even when other language requested. Institution field contains ministry/institution name. This pattern applies only to government proposals; other non-MP proposer types may differ.
 
 - **Data quality - whitespace:** TypeTitle, DocumentTypeTitle, and other catalog fields may contain leading/trailing whitespace and control characters (\r, \n). Trim as needed for display.
 
@@ -2752,7 +2848,6 @@ Unlike most listing operations that require `StructureId`, this operation accept
 - **Sittings duplicates:** Sittings array may contain multiple entries with same SittingNumber but different Id and SittingDate values. This represents multi-day sessions or continuations of the same formal sitting.
 
 - **Language behavior:** Localized fields (StatusGroupTitle, TypeTitle, ProposerTypeTitle, ProcedureTypeTitle) return text in requested LanguageId (1=Macedonian, 2=Albanian, 3=Turkish). However, ResponsibleAuthor and Institution for government-proposed materials may contain Cyrillic regardless of requested language.
-
 
 ---
 
@@ -3437,11 +3532,15 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
           "StatusTitle": {
             "type": "string",
             "description": "Human-readable status label in requested language"
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "Truncation marker: indicates N additional items omitted from array"
           }
         },
         "required": ["Id", "Title", "RegistrationDate", "RegistrationNumber", "StatusId", "StatusTitle"]
       },
-      "description": "Materials (legislative proposals, amendments) submitted by this political party. Empty array when party has no materials."
+      "description": "Materials (legislative proposals, amendments) submitted by this political party. Empty array when party has no materials. May include truncation marker object {\"_truncated\": N} as standalone item within array, counting toward array length and indicating N additional items omitted."
     },
     "Amendments": {
       "type": "array",
@@ -3537,7 +3636,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
 - **politicalPartyId source**: Obtain from GetAllPoliticalParties response.
 - **LanguageId**: Controls language of all text fields (Name, StatusTitle, RoleTitle, etc.). See global LanguageId enum (1=Macedonian, 2=Albanian, 3=Turkish).
 - **Response structure**: Comprehensive party details including name, member count, associated legislative materials/amendments/questions, and full member roster.
-- **Materials array**: All legislative materials (proposals) submitted by the party, with registration dates and current status. Empty when party has no submissions. StatusId references MaterialStatusId enum in global $defs.
+- **Materials array**: All legislative materials (proposals) submitted by the party, with registration dates and current status. Empty when party has no submissions. StatusId references MaterialStatusId enum in global $defs. May include truncation marker object `{"_truncated": N}` as standalone item within array, counting toward array length and indicating N additional items omitted.
 - **Amendments and Questions arrays**: Separate from Materials; may be empty depending on party activity.
 - **Members array**: Lists all MPs currently affiliated with the party. All members have RoleId `27` (member of political party). The *Count fields (MaterialsCount, AmendmentsCount, QuestionsCount) are always `null` in this endpoint response; they are not populated. Use dedicated per-MP endpoints if per-member activity counts are needed.
 - **Description field**: May contain placeholder value like `"-"` if party has no biography text set.
@@ -3545,7 +3644,6 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
 - **Email/Phone**: Typically `null` for political parties; contact information is directed through individual members rather than the party entity.
 - **Not paginated**: Returns complete party details in a single response (no page/rows parameters).
 - **StructureId**: Implicitly matches the parliamentary term from which politicalPartyId was obtained. Identifies which parliamentary term the party data belongs to.
-
 
 ---
 
@@ -3687,9 +3785,8 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
             "description": "Original filename; often null"
           },
           "DocumentTypeId": {
-            "type": "integer",
-            "const": 26,
-            "description": "26=Question document (Прашање)"
+            "$ref": "#/$defs/DocumentTypeId",
+            "description": "Document type identifier. 26=Question document (Прашање), 28=Answer document (Одговор)"
           },
           "DocumentTypeTitle": {
             "type": "string",
@@ -3752,10 +3849,10 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
 - **Non-localized fields:** The question `Title` and `From` field may retain their original language regardless of LanguageId.
 - **Empty collections:** Both `Documents` and `Sittings` return empty arrays `[]` when no items are present (not null).
 - **Document access:** Document `Url` fields point to SharePoint resources. `IsExported: true` indicates the document is publicly accessible.
+- **Document types:** `DocumentTypeId` 26 identifies question documents (Прашање); 28 identifies answer documents (Одговор). See global $defs/DocumentTypeId for full enum.
 - **StatusTitle mapping:** Corresponds to QuestionStatusId enum values (17=Delivered, 19=Answered, 20=Secret answer, 21=Written answer). See global for QuestionStatusId definition.
 - **Sitting context:** For plenary sittings, `CommitteeTitle` is null and `SittingTypeId` is 1. For committee sittings, `CommitteeTitle` contains the committee name and `SittingTypeId` is 2.
 - **NumberOfDeliveryLetter:** Often null in observed data; used for tracking official delivery correspondence when present.
-
 
 ---
 
@@ -3810,7 +3907,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
     },
     "TypeTitle": {
       "type": "string",
-      "description": "Localized sitting type (e.g. 'Комисіska седница' for committee, 'Пленарна седница' for plenary). Trim whitespace for display."
+      "description": "Localized sitting type (e.g. 'Комисіska седница' for committee, 'Пленарна седница' for plenary). Trim whitespace for display. May contain spelling variations or typos."
     },
     "TypeId": {
       "$ref": "#/$defs/SittingTypeId"
@@ -3830,12 +3927,18 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
       "description": "Committee name in requested language. Null for plenary sittings. Trim whitespace for display."
     },
     "DescriptionTypeId": {
-      "type": "integer",
-      "description": "Sitting description type; e.g. 1 for committee sitting"
+      "anyOf": [
+        {"type": "integer"},
+        {"type": "null"}
+      ],
+      "description": "Sitting description type; e.g. 1 for committee sitting. Null for plenary sittings."
     },
     "DescriptionTypeTitle": {
-      "type": "string",
-      "description": "Localized description type label (e.g. 'Комисiska седница', 'Јавна расправа' for public discussion). Trim whitespace for display."
+      "anyOf": [
+        {"type": "string"},
+        {"type": "null"}
+      ],
+      "description": "Localized description type label (e.g. 'Комисiska седница', 'Јавна расправа' for public discussion). Null for plenary sittings. Trim whitespace for display."
     },
     "Structure": {
       "type": "string",
@@ -3846,7 +3949,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
         {"type": "number"},
         {"type": "null"}
       ],
-      "description": "Duration in hours. Null for scheduled/incomplete sittings; populated after sitting completes"
+      "description": "Duration in hours. Null for scheduled sittings or even after completion; may remain unpopulated for closed sittings"
     },
     "MediaLinks": {
       "type": "array",
@@ -3890,7 +3993,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
         },
         "required": ["Id", "Title", "Url", "DocumentTypeId", "DocumentTypeTitle", "IsExported"]
       },
-      "description": "Sitting-level documents (e.g. convocation notices). Empty array when none. Multiple documents may share same DocumentTypeId."
+      "description": "Sitting-level documents (e.g. convocation notices). Empty array when none. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length. Multiple documents may share same DocumentTypeId."
     },
     "Continuations": {
       "type": "array",
@@ -3901,8 +4004,11 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
             "$ref": "#/$defs/UUID"
           },
           "Number": {
-            "type": "integer",
-            "description": "May be 0 for continuation sessions"
+            "anyOf": [
+              {"type": "integer"},
+              {"type": "null"}
+            ],
+            "description": "Continuation session number (0, 1, or higher)"
           },
           "StatusId": {
             "anyOf": [
@@ -3946,22 +4052,22 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
               {"type": "string"},
               {"type": "null"}
             ],
-            "description": "Political party name, or null for independents. Large lists may be truncated with _truncated object as final item."
+            "description": "Political party name, or null for independents"
           }
         },
         "required": ["Id", "Fullname"]
       },
-      "description": "MPs absent from the sitting. Available for scheduled sittings. May be truncated in response with _truncated indicator on last item."
+      "description": "MPs absent from the sitting. Available for scheduled sittings. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Attendances": {
       "type": "array",
       "items": {},
-      "description": "Attendance records. Empty array for scheduled/future sittings; populated after sitting occurs"
+      "description": "Attendance records. Empty array for scheduled/future sittings; populated after sitting occurs. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Votings": {
       "type": "array",
       "items": {},
-      "description": "Voting records at sitting level. Empty array for scheduled sittings or when no top-level votes occur"
+      "description": "Voting records at sitting level. Empty array for scheduled sittings or when no top-level votes occur. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
     },
     "Agenda": {
       "type": "object",
@@ -3992,7 +4098,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
         },
         "status": {
           "type": "integer",
-          "description": "0 for ROOT node. For LEAF items: see AgendaItemStatusId (50=reviewed, 69=new)"
+          "description": "0 for ROOT node. For LEAF items: see AgendaItemStatusId (50=reviewed, 69=new, 60=other)"
         },
         "statusTitle": {
           "anyOf": [
@@ -4011,7 +4117,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
             {"type": "integer"},
             {"type": "null"}
           ],
-          "description": "See AgendaItemTypeId (1=Plenary, 2=Committee). Null for ROOT nodes."
+          "description": "See AgendaItemTypeId (1=Plenary, 2=Committee, 8=Amendment, other values may exist). Null for ROOT nodes."
         },
         "isActive": {
           "type": "boolean"
@@ -4054,8 +4160,11 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
           "description": "Material status when objectTypeId: 1. See MaterialStatusId. 0 for ROOT"
         },
         "objectSubTypeId": {
-          "type": "integer",
-          "description": "Material subtype (e.g. 1=law proposal, 28=reports). 0 for ROOT"
+          "anyOf": [
+            {"type": "integer"},
+            {"type": "null"}
+          ],
+          "description": "Material subtype (e.g. 1=law proposal, 28=reports). 0 for ROOT. Null in some contexts (e.g. nested amendments)."
         },
         "manyAmendments": {
           "type": "boolean",
@@ -4156,7 +4265,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
               },
               "status": {
                 "type": "integer",
-                "description": "See AgendaItemStatusId (50=reviewed, 69=new)"
+                "description": "See AgendaItemStatusId (50=reviewed, 69=new, 60=other statuses)"
               },
               "statusTitle": {
                 "type": "string"
@@ -4169,7 +4278,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
               },
               "agendaItemType": {
                 "type": "integer",
-                "description": "See AgendaItemTypeId (1=Plenary, 2=Committee)"
+                "description": "See AgendaItemTypeId (1=Plenary, 2=Committee, 8=Amendment, other values may exist)"
               },
               "isActive": {
                 "type": "boolean"
@@ -4208,8 +4317,11 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
                 "description": "Material status"
               },
               "objectSubTypeId": {
-                "type": "integer",
-                "description": "Material subtype"
+                "anyOf": [
+                  {"type": "integer"},
+                  {"type": "null"}
+                ],
+                "description": "Material subtype. Null in some contexts (e.g. nested amendments)."
               },
               "manyAmendments": {
                 "type": "boolean"
@@ -4252,19 +4364,19 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
               "children": {
                 "type": "array",
                 "items": {},
-                "description": "Nested children; typically empty for LEAF items"
+                "description": "Nested children (e.g. amendments within materials); typically empty for LEAF items representing plain agenda items. LEAF nodes representing materials (objectTypeId: 1) may contain nested children for amendments, each with its own objectId, agendaItemType, status, and objectSubTypeId (which may be null)."
               }
             },
             "required": ["id", "type", "text", "status", "agendaItemType", "isActive", "order", "euCompatible", "objectTypeId", "objectStatusId", "objectSubTypeId", "manyAmendments", "mediaItems", "VotingDefinitions", "Documents", "children"]
           },
-          "description": "Agenda items (LEAF nodes) within the sitting. Root node (type: ROOT) contains this children array."
+          "description": "Agenda items (LEAF nodes) within the sitting. Root node (type: ROOT) contains this children array. May include _truncated marker as standalone object within array indicating N additional items omitted, counting toward array length."
         }
       },
       "required": ["id", "type", "text", "status", "isActive", "order", "euCompatible", "objectTypeId", "objectStatusId", "objectSubTypeId", "manyAmendments", "mediaItems", "VotingDefinitions", "Documents", "children"],
       "description": "Hierarchical tree structure of sitting agenda. Root node has type: ROOT with children array of agenda items (type: LEAF)."
     }
   },
-  "required": ["StatusId", "StatusTitle", "Location", "Number", "SittingDate", "TypeTitle", "TypeId", "DescriptionTypeId", "DescriptionTypeTitle", "Structure", "MediaLinks", "Documents", "Continuations", "Absents", "Attendances", "Votings", "Agenda"]
+  "required": ["StatusId", "StatusTitle", "Location", "Number", "SittingDate", "TypeTitle", "TypeId", "Structure", "MediaLinks", "Documents", "Continuations", "Absents", "Attendances", "Votings", "Agenda"]
 }
 ```
 
@@ -4275,21 +4387,25 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
 - Do not use lowercase variants (`methodName`, `languageId`, `sittingId`)
 
 **Sitting types:**
-- **Plenary sitting** (`TypeId: 1`): `CommitteeId` and `CommitteeTitle` are null. `DescriptionTypeTitle` typically 'Пленарна седница'
+- **Plenary sitting** (`TypeId: 1`): `CommitteeId` and `CommitteeTitle` are null. `DescriptionTypeTitle` and `DescriptionTypeId` are null.
 - **Committee sitting** (`TypeId: 2`): `CommitteeId` and `CommitteeTitle` are populated. `DescriptionTypeTitle` may be 'Комисiska седница' or other committee-specific type
 - **Public hearing**: May appear as `TypeId: 2` with `DescriptionTypeTitle: 'Јавна расправа'`
 
 **Status and timing:**
 - **Scheduled sitting** (`StatusId: 1`): `Absents` is pre-populated; `Attendances`, `Votings`, `SittingDuration` are empty/null
-- **Started/completed sitting** (`StatusId: 2, 3`): All fields populated; `SittingDuration` contains hours
-- **Closed sitting** (`StatusId: 5`): Similar to completed
+- **Started/in progress** (`StatusId: 2`): Fields populating as sitting progresses
+- **Completed sitting** (`StatusId: 3`): All fields populated; `SittingDuration` may contain hours or may be null
+- **Incomplete sitting** (`StatusId: 4`): Similar to started, may be suspended
+- **Closed sitting** (`StatusId: 5`): Similar to completed; `SittingDuration` may remain null even after closure
+- **Postponed sitting** (`StatusId: 6`): Rescheduled; `Absents` pre-populated
 
 **Agenda structure:**
 - Root node always has `type: 'ROOT'`, `objectTypeId: 0`, `status: 0`, `objectId: null`
 - `children` array contains LEAF nodes representing actual agenda items
 - Each LEAF node has `objectTypeId` indicating linked item type (1=Material, 4=Questions, 0=None)
 - Leaf nodes with `objectTypeId: 1` have `objectId` = material UUID; pass to `GetMaterialDetails`
-- Tree may be nested to arbitrary depth
+- Tree may be nested to arbitrary depth; LEAF nodes representing materials may contain nested children for amendments
+- Nested amendment nodes may have `agendaItemType: 8`, `status: 60`, and `objectSubTypeId: null`
 
 **Voting definitions:**
 - Each agenda item can have zero or more voting definitions
@@ -4297,22 +4413,38 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
 - `OverallResult` shows high-level outcome (e.g. 'Усвоен' = passed)
 
 **Document types:**
+- `DocumentTypeId: 19` = Решение за свикување седница (Decision to convene sitting)
 - `DocumentTypeId: 20` = Convocation notice (Известување за свикување)
+- `DocumentTypeId: 40` = Известување за презакажување на седница (Notice of sitting rescheduling)
+- `DocumentTypeId: 42` = Известување за продолжување на седница (Notice of sitting continuation)
+- `DocumentTypeId: 43` = Известување за дополнување на дневен ред (Notice of agenda supplement)
 - `DocumentTypeId: 7` = Full text of material
 - `DocumentTypeId: 46` = Legislative committee report
 - `DocumentTypeId: 52` = Committee report
 - Multiple documents may have the same type
+- Documents array may be truncated with _truncated marker
 
 **Continuations:**
 - Empty array when sitting completes in single session
 - Multiple continuation objects when sitting spans multiple days/sessions
-- Each continuation has its own date, location, status
+- Each continuation has its own date, location, status, and number (which may be 0, 1, or higher, and may be null)
 
 **Absents array:**
 - Lists MPs who did not attend
 - `PoliticalParty` may be null for independents or when affiliation not recorded
-- Large lists may be truncated with `_truncated` object as final item indicating number of additional records omitted
+- May be truncated with `_truncated` object as final item indicating number of additional records omitted
 - Empty array if all expected members attended
+
+**Attendances array:**
+- Populated only after sitting has started or completed
+- May be truncated with `_truncated` marker
+
+**Votings array:**
+- Sitting-level voting records
+- May be truncated with `_truncated` marker
+
+**Truncation behavior:**
+- `Documents`, `Continuations`, `Absents`, `Attendances`, `Votings`, and `Agenda.children` arrays may include a standalone `_truncated` object as an element within the array, indicating the number of additional items omitted and counting toward the array length
 
 **Language support:**
 - `LanguageId: 1` = Macedonian (default)
@@ -4324,7 +4456,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
 **Data quality:**
 - Localized titles may contain leading/trailing whitespace; trim for display
 - HTML in `data` fields should be parsed appropriately for client display
-- Handle `null` and empty array values consistently in client code"
+- Handle `null` and empty array values consistently in client code
 
 
 ---
@@ -4483,8 +4615,38 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
     },
     "Delegations": {
       "type": "array",
-      "items": {},
-      "description": "Delegation memberships. Empty array [] when no data."
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "$ref": "#/$defs/UUID"
+          },
+          "Title": {
+            "type": "string",
+            "description": "Name of delegation in requested language"
+          },
+          "Description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Description or null if not set"
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "When present as standalone object, indicates N additional items not shown"
+          }
+        },
+        "required": [
+          "Id",
+          "Title"
+        ]
+      },
+      "description": "Delegation memberships. May be truncated by API. Empty array [] when no delegations."
     },
     "FriendshipGroups": {
       "type": "array",
@@ -4508,6 +4670,10 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
               }
             ],
             "description": "Description or null if not set"
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "When present as standalone object, indicates N additional items not shown"
           }
         },
         "required": [
@@ -4515,7 +4681,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
           "Title"
         ]
       },
-      "description": "Friendship group memberships. Empty array [] when no groups."
+      "description": "Friendship group memberships. May be truncated by API. Empty array [] when no groups."
     },
     "Amendments": {
       "type": "array",
@@ -4544,7 +4710,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
           },
           "_truncated": {
             "type": "integer",
-            "description": "When present on last item, indicates N additional items not shown"
+            "description": "When present as standalone object, indicates N additional items not shown"
           }
         },
         "required": [
@@ -4556,7 +4722,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
           "StatusTitle"
         ]
       },
-      "description": "Amendment proposals submitted by the MP. May be truncated by API. Empty array [] when no amendments."
+      "description": "Amendment proposals submitted by the MP. May be truncated by API with {\"_truncated\": N} standalone object counting toward array length. Empty array [] when no amendments."
     },
     "Acts": {
       "type": "array",
@@ -4582,6 +4748,10 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
           "StatusTitle": {
             "type": "string",
             "description": "Localized status text in requested language"
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "When present as standalone object, indicates N additional items not shown"
           }
         },
         "required": [
@@ -4593,7 +4763,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
           "StatusTitle"
         ]
       },
-      "description": "Legislative acts/proposals authored or co-sponsored by the MP. Empty array [] when no acts."
+      "description": "Legislative acts/proposals authored or co-sponsored by the MP. May be truncated by API. Empty array [] when no acts."
     },
     "Committees": {
       "type": "array",
@@ -4626,6 +4796,10 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
               ]
             },
             "description": "Roles within the committee. MP can have multiple roles in one committee."
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "When present as standalone object, indicates N additional items not shown"
           }
         },
         "required": [
@@ -4634,7 +4808,7 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
           "Roles"
         ]
       },
-      "description": "Committee memberships with roles. Empty array [] when MP has no committee roles."
+      "description": "Committee memberships with roles. May be truncated by API. Empty array [] when MP has no committee roles."
     },
     "CommitteeMemberships": {
       "type": "array",
@@ -4643,7 +4817,40 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
     },
     "DelegationMemberships": {
       "type": "array",
-      "items": {},
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "$ref": "#/$defs/UUID"
+          },
+          "Title": {
+            "type": "string",
+            "description": "Name of delegation in requested language"
+          },
+          "RoleId": {
+            "type": "integer",
+            "description": "Role ID within delegation"
+          },
+          "RoleTitle": {
+            "type": "string",
+            "description": "Localized role title in requested language"
+          },
+          "FromDate": {
+            "$ref": "#/$defs/AspDate"
+          },
+          "ToDate": {
+            "$ref": "#/$defs/AspDate"
+          }
+        },
+        "required": [
+          "Id",
+          "Title",
+          "RoleId",
+          "RoleTitle",
+          "FromDate",
+          "ToDate"
+        ]
+      },
       "description": "Delegation membership details. Empty array [] when no data."
     },
     "DepartmentMemberships": {
@@ -4653,8 +4860,40 @@ Each member object includes aggregated activity counts (`MaterialsCount`, `Amend
     },
     "FriendshipGroupMemberships": {
       "type": "array",
-      "items": {},
-      "description": "Friendship group membership details. Empty array [] when no data."
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "$ref": "#/$defs/UUID"
+          },
+          "Title": {
+            "type": "string",
+            "description": "Name of friendship group in requested language"
+          },
+          "RoleId": {
+            "$ref": "#/$defs/MPsClubRoleId"
+          },
+          "RoleTitle": {
+            "type": "string",
+            "description": "Localized role title in requested language"
+          },
+          "FromDate": {
+            "$ref": "#/$defs/AspDate"
+          },
+          "ToDate": {
+            "$ref": "#/$defs/AspDate"
+          }
+        },
+        "required": [
+          "Id",
+          "Title",
+          "RoleId",
+          "RoleTitle",
+          "FromDate",
+          "ToDate"
+        ]
+      },
+      "description": "Friendship group membership details with role information. Empty array [] when no data."
     },
     "MediaItems": {
       "type": "array",
@@ -4690,7 +4929,7 @@ Method-based POST to `https://www.sobranie.mk/Routing/MakePostRequest` with lowe
 Returns comprehensive MP profile including biographical data, political affiliations, committee roles, and legislative activity.
 
 **Array behavior:**  
-All relationship arrays (CabinetMembers, Materials, Questions, Delegations, CommitteeMemberships, DelegationMemberships, DepartmentMemberships, FriendshipGroupMemberships, MediaItems) return empty arrays `[]` when no data, never `null`.
+All relationship arrays (CabinetMembers, Materials, Questions, Delegations, FriendshipGroups, CommitteeMemberships, DelegationMemberships, DepartmentMemberships, FriendshipGroupMemberships, MediaItems, Amendments, Acts, Committees) return empty arrays `[]` when no data, never `null`. Arrays may include a truncation marker `{"_truncated": N}` as a standalone object counting toward array length, indicating N additional items omitted.
 
 **Notable field behaviors:**
 - **Biography** — HTML-formatted text with inline `<p>` and `<span>` tags containing biographical details.
@@ -4704,63 +4943,23 @@ All relationship arrays (CabinetMembers, Materials, Questions, Delegations, Comm
 - **RoleTitle** — Localized role title (e.g., "Пратеник/Пратеничка" for MP); corresponds to RoleId enum value.
 
 **Array field details:**
-- **CabinetMembers, Materials, Questions, Delegations, CommitteeMemberships, DelegationMemberships, DepartmentMemberships, FriendshipGroupMemberships, MediaItems** — Documented with minimal item schemas from available samples; full structure may be expanded when more response data available. All return empty `[]` when MP has no entries.
-- **Amendments** — Array may be truncated by API with `{"_truncated": N}` object appended, indicating N additional items exist. Uses MaterialStatusId enum (e.g., 6=Delivered to MPs, 12=Closed). Empty `[]` when no amendments.
-- **Acts** — Array of legislative proposals/laws the MP authored or co-sponsored. Uses same structure as Amendments. Empty `[]` when no acts.
-- **Committees** — Shows all committee memberships. Roles array can have multiple entries per committee when MP holds multiple roles. Roles use CommitteeRoleId enum (6=Chair, 7=Member, 10=Approver, 11=Advisor, 82=Deputy Chair, 83=Deputy Member). Empty `[]` when MP has no committee roles.
-- **FriendshipGroups** — Descriptions can be empty strings or null. Empty `[]` when MP is not part of any friendship groups.
+- **CabinetMembers, Materials, Questions, CommitteeMemberships, DepartmentMemberships, MediaItems** — Documented with minimal item schemas from available samples; full structure may be expanded when more response data available. All return empty `[]` when MP has no entries.
+- **Delegations** — Shows delegation memberships with Id, Title, and optional Description. May be truncated. Empty `[]` when MP is not part of any delegations.
+- **FriendshipGroups** — Shows friendship group memberships with Id, Title, and optional Description. May be truncated. Empty `[]` when MP is not part of any friendship groups.
+- **FriendshipGroupMemberships** — Detailed membership records including RoleId (using MPsClubRoleId enum with values 77=Član/Članка, 78=President, 79=Vice-President, 81=Member), RoleTitle, FromDate, and ToDate. Empty `[]` when no detailed membership data.
+- **DelegationMemberships** — Detailed membership records including RoleId, RoleTitle, FromDate, and ToDate. Empty `[]` when no detailed membership data.
+- **Amendments** — Array may be truncated by API with `{"_truncated": N}` object as standalone entry, indicating N additional items exist. Uses MaterialStatusId enum (e.g., 6=Delivered to MPs, 12=Closed). Empty `[]` when no amendments.
+- **Acts** — Array of legislative proposals/laws the MP authored or co-sponsored. Uses same structure as Amendments. May be truncated. Empty `[]` when no acts.
+- **Committees** — Shows all committee memberships. Roles array can have multiple entries per committee when MP holds multiple roles. Roles use CommitteeRoleId enum (6=Chair, 7=Member, 10=Approver, 11=Advisor, 82=Deputy Chair, 83=Deputy Member). May be truncated. Empty `[]` when MP has no committee roles.
 
 **Date formats:**
 - **ElectedFrom / ElectedTo** — AspDate format (`/Date(timestamp)/`)
 - **DateOfBirth** — DD.MM.YYYY string format (not AspDate)
 - **RegistrationDate** (in Amendments/Acts) — AspDate format
+- **FromDate / ToDate** (in DelegationMemberships, FriendshipGroupMemberships) — AspDate format
 
 **Localization:**  
-Response fields such as RoleTitle, PoliticalPartyTitle, CommitteeTitle, StatusTitle, and Gender are localized based on the requested `languageId`.
+Response fields such as RoleTitle, PoliticalPartyTitle, CommitteeTitle, StatusTitle, Gender, and membership role titles are localized based on the requested `languageId`.
 
 **StructureId behavior:**  
 When `structureId` is null, results may be empty or cross-term; use current structure UUID from GetAllStructuresForFilter for standard MP profile retrieval.
-
-
----
-
-## OperationName
-
-### Request Schema
-```json
-{
-  "type": "object",
-  "description": "Template for per-operation request schema. Replace with actual operation details.",
-  "properties": {
-    "methodName": {
-      "type": "string",
-      "description": "Operation method name (camelCase or PascalCase per operation)"
-    }
-  },
-  "required": ["methodName"]
-}
-```
-
-### Response Schema
-```json
-{
-  "type": "object",
-  "description": "Template for per-operation response schema. Replace with actual operation details.",
-  "properties": {
-    "Items": {
-      "type": ["array", "null"],
-      "description": "Result items array; may be null when TotalItems is 0"
-    },
-    "TotalItems": {
-      "type": "integer",
-      "description": "Total count of items"
-    }
-  }
-}
-```
-
-### Notes
-- This is a template placeholder. Replace with actual operation request/response schemas and operation-specific notes (parameter casing, pagination style, language fallback, data quality quirks).
-- Refer to global.md for common patterns, enums ($defs), and calling conventions.
-- Use $ref to global $defs for all enums and shared types (LanguageId, UUID, AspDate, etc.).
-- Include only operation-specific details and behaviors in this section.

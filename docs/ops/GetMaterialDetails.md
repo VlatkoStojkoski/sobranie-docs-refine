@@ -54,12 +54,15 @@
       "description": "Proposer type in natural language (e.g. \"Пратеник\" = MP, \"Влада на Република Северна Македонија\" = Government)"
     },
     "ResponsibleAuthor": {
-      "type": "string",
-      "description": "Name and title of primary responsible author/proposer. For multi-author materials, represents lead author. May be empty when no responsible author designated. May contain Cyrillic (Macedonian) even if other language requested."
+      "anyOf": [
+        {"type": "string"},
+        {"type": "null"}
+      ],
+      "description": "Name and title of primary responsible author/proposer. For multi-author materials, represents lead author. Null when no responsible author designated (e.g. committee/working body proposer) or for certain material types. May contain Cyrillic (Macedonian) even if other language requested."
     },
     "Institution": {
       "type": "string",
-      "description": "Institution name when material proposed by institutional entity. Empty string when proposer is MPs or not applicable."
+      "description": "Institution name when material proposed by institutional entity (e.g. government). Empty string when proposer is MPs or not applicable."
     },
     "ProposerCommittee": {
       "anyOf": [
@@ -448,13 +451,15 @@
 
 - **Multi-author materials:** Authors array can contain multiple MP co-proposers. ResponsibleAuthor typically contains first/primary author name and title.
 
+- **ResponsibleAuthor nullability:** ResponsibleAuthor field is null when no responsible author is designated, which occurs for certain proposer types such as committee/working body proposals (ProposerTypeId=3 or other institutional proposers) or certain material types without designated responsibility.
+
 - **Committee processing:** Materials assigned to multiple committees with different roles. IsResponsible: true identifies lead committee. IsLegislative: true identifies legislative-legal review committee. Each committee may have associated Documents array.
 
-- **Reading stages:** Materials progress through three reading stages. Each reading has corresponding *ReadingSittings array containing plenary (SittingTypeId: 1, CommitteeId: null) and/or committee (SittingTypeId: 2, with populated CommitteeId/CommitteeTitle) sitting records. Empty arrays indicate material not yet reached that stage. In sitting objects, StatusGroupId 9=first reading, 10=second reading, 11=third reading.
+- **Reading stages:** Materials progress through three reading stages. Each reading has corresponding *ReadingSittings array containing plenary (SittingTypeId: 1, CommitteeId: null) and/or committee (SittingTypeId: 2, with populated CommitteeId/CommitteeTitle) sitting records. Empty arrays indicate material not yet reached that stage. In sitting objects, StatusGroupId 9=first reading, 10=second reading, 11=third reading, 0=no specific reading stage (plenary discussion without stage context).
 
 - **Empty arrays:** Amendment and sitting arrays return empty arrays [] when no data exists, not null.
 
-- **Institutional authors:** When ProposerTypeId is 2 (Government), Authors array contains entries with Id as all-zeros UUID, FirstName containing full official title/name (e.g. minister name), and LastName as empty string. ResponsibleAuthor duplicates this information and may contain Cyrillic text (Macedonian) even when other language requested. Institution field contains ministry/institution name.
+- **Government institutional authors:** When ProposerTypeId is 2 (Government), Authors array contains entries with Id as all-zeros UUID, FirstName containing full official title/name (e.g. minister name), and LastName as empty string. ResponsibleAuthor duplicates this information and may contain Cyrillic text (Macedonian) even when other language requested. Institution field contains ministry/institution name. This pattern applies only to government proposals; other non-MP proposer types may differ.
 
 - **Data quality - whitespace:** TypeTitle, DocumentTypeTitle, and other catalog fields may contain leading/trailing whitespace and control characters (\r, \n). Trim as needed for display.
 

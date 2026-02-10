@@ -30,7 +30,6 @@
   "type": "array",
   "items": {
     "type": "object",
-    "required": ["Id", "Name", "TypeId", "TypeTitle"],
     "properties": {
       "Id": {
         "$ref": "#/$defs/UUID",
@@ -46,8 +45,13 @@
       "TypeTitle": {
         "type": "string",
         "description": "Localized council type name (e.g. 'Постојана' for permanent)"
+      },
+      "_truncated": {
+        "type": "integer",
+        "description": "When present (final item only), indicates number of additional councils omitted due to truncation"
       }
-    }
+    },
+    "required": ["Id", "Name", "TypeId", "TypeTitle"]
   }
 }
 ```
@@ -55,6 +59,7 @@
 ### Notes
 
 - **Response format:** Returns a flat array of councils (not wrapped in TotalItems/Items structure).
+- **Array truncation:** When results exceed available items, the last array element is an object with only `_truncated` field (integer) indicating how many additional councils are omitted.
 - **Council types:** Currently only type 1 (Permanent/Постојана) observed. Other types may exist in different structures or future terms.
 - **Parameter casing:** Uses lowercase `methodName` and `languageId`.
 - **Usage:** Council IDs returned here can be used with `GetCouncilDetails` to retrieve detailed information.

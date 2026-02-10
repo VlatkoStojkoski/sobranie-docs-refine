@@ -152,8 +152,38 @@
     },
     "Delegations": {
       "type": "array",
-      "items": {},
-      "description": "Delegation memberships. Empty array [] when no data."
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "$ref": "#/$defs/UUID"
+          },
+          "Title": {
+            "type": "string",
+            "description": "Name of delegation in requested language"
+          },
+          "Description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Description or null if not set"
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "When present as standalone object, indicates N additional items not shown"
+          }
+        },
+        "required": [
+          "Id",
+          "Title"
+        ]
+      },
+      "description": "Delegation memberships. May be truncated by API. Empty array [] when no delegations."
     },
     "FriendshipGroups": {
       "type": "array",
@@ -177,6 +207,10 @@
               }
             ],
             "description": "Description or null if not set"
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "When present as standalone object, indicates N additional items not shown"
           }
         },
         "required": [
@@ -184,7 +218,7 @@
           "Title"
         ]
       },
-      "description": "Friendship group memberships. Empty array [] when no groups."
+      "description": "Friendship group memberships. May be truncated by API. Empty array [] when no groups."
     },
     "Amendments": {
       "type": "array",
@@ -213,7 +247,7 @@
           },
           "_truncated": {
             "type": "integer",
-            "description": "When present on last item, indicates N additional items not shown"
+            "description": "When present as standalone object, indicates N additional items not shown"
           }
         },
         "required": [
@@ -225,7 +259,7 @@
           "StatusTitle"
         ]
       },
-      "description": "Amendment proposals submitted by the MP. May be truncated by API. Empty array [] when no amendments."
+      "description": "Amendment proposals submitted by the MP. May be truncated by API with {\"_truncated\": N} standalone object counting toward array length. Empty array [] when no amendments."
     },
     "Acts": {
       "type": "array",
@@ -251,6 +285,10 @@
           "StatusTitle": {
             "type": "string",
             "description": "Localized status text in requested language"
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "When present as standalone object, indicates N additional items not shown"
           }
         },
         "required": [
@@ -262,7 +300,7 @@
           "StatusTitle"
         ]
       },
-      "description": "Legislative acts/proposals authored or co-sponsored by the MP. Empty array [] when no acts."
+      "description": "Legislative acts/proposals authored or co-sponsored by the MP. May be truncated by API. Empty array [] when no acts."
     },
     "Committees": {
       "type": "array",
@@ -295,6 +333,10 @@
               ]
             },
             "description": "Roles within the committee. MP can have multiple roles in one committee."
+          },
+          "_truncated": {
+            "type": "integer",
+            "description": "When present as standalone object, indicates N additional items not shown"
           }
         },
         "required": [
@@ -303,7 +345,7 @@
           "Roles"
         ]
       },
-      "description": "Committee memberships with roles. Empty array [] when MP has no committee roles."
+      "description": "Committee memberships with roles. May be truncated by API. Empty array [] when MP has no committee roles."
     },
     "CommitteeMemberships": {
       "type": "array",
@@ -312,7 +354,40 @@
     },
     "DelegationMemberships": {
       "type": "array",
-      "items": {},
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "$ref": "#/$defs/UUID"
+          },
+          "Title": {
+            "type": "string",
+            "description": "Name of delegation in requested language"
+          },
+          "RoleId": {
+            "type": "integer",
+            "description": "Role ID within delegation"
+          },
+          "RoleTitle": {
+            "type": "string",
+            "description": "Localized role title in requested language"
+          },
+          "FromDate": {
+            "$ref": "#/$defs/AspDate"
+          },
+          "ToDate": {
+            "$ref": "#/$defs/AspDate"
+          }
+        },
+        "required": [
+          "Id",
+          "Title",
+          "RoleId",
+          "RoleTitle",
+          "FromDate",
+          "ToDate"
+        ]
+      },
       "description": "Delegation membership details. Empty array [] when no data."
     },
     "DepartmentMemberships": {
@@ -322,8 +397,40 @@
     },
     "FriendshipGroupMemberships": {
       "type": "array",
-      "items": {},
-      "description": "Friendship group membership details. Empty array [] when no data."
+      "items": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "$ref": "#/$defs/UUID"
+          },
+          "Title": {
+            "type": "string",
+            "description": "Name of friendship group in requested language"
+          },
+          "RoleId": {
+            "$ref": "#/$defs/MPsClubRoleId"
+          },
+          "RoleTitle": {
+            "type": "string",
+            "description": "Localized role title in requested language"
+          },
+          "FromDate": {
+            "$ref": "#/$defs/AspDate"
+          },
+          "ToDate": {
+            "$ref": "#/$defs/AspDate"
+          }
+        },
+        "required": [
+          "Id",
+          "Title",
+          "RoleId",
+          "RoleTitle",
+          "FromDate",
+          "ToDate"
+        ]
+      },
+      "description": "Friendship group membership details with role information. Empty array [] when no data."
     },
     "MediaItems": {
       "type": "array",
@@ -359,7 +466,7 @@ Method-based POST to `https://www.sobranie.mk/Routing/MakePostRequest` with lowe
 Returns comprehensive MP profile including biographical data, political affiliations, committee roles, and legislative activity.
 
 **Array behavior:**  
-All relationship arrays (CabinetMembers, Materials, Questions, Delegations, CommitteeMemberships, DelegationMemberships, DepartmentMemberships, FriendshipGroupMemberships, MediaItems) return empty arrays `[]` when no data, never `null`.
+All relationship arrays (CabinetMembers, Materials, Questions, Delegations, FriendshipGroups, CommitteeMemberships, DelegationMemberships, DepartmentMemberships, FriendshipGroupMemberships, MediaItems, Amendments, Acts, Committees) return empty arrays `[]` when no data, never `null`. Arrays may include a truncation marker `{"_truncated": N}` as a standalone object counting toward array length, indicating N additional items omitted.
 
 **Notable field behaviors:**
 - **Biography** — HTML-formatted text with inline `<p>` and `<span>` tags containing biographical details.
@@ -373,19 +480,23 @@ All relationship arrays (CabinetMembers, Materials, Questions, Delegations, Comm
 - **RoleTitle** — Localized role title (e.g., "Пратеник/Пратеничка" for MP); corresponds to RoleId enum value.
 
 **Array field details:**
-- **CabinetMembers, Materials, Questions, Delegations, CommitteeMemberships, DelegationMemberships, DepartmentMemberships, FriendshipGroupMemberships, MediaItems** — Documented with minimal item schemas from available samples; full structure may be expanded when more response data available. All return empty `[]` when MP has no entries.
-- **Amendments** — Array may be truncated by API with `{"_truncated": N}` object appended, indicating N additional items exist. Uses MaterialStatusId enum (e.g., 6=Delivered to MPs, 12=Closed). Empty `[]` when no amendments.
-- **Acts** — Array of legislative proposals/laws the MP authored or co-sponsored. Uses same structure as Amendments. Empty `[]` when no acts.
-- **Committees** — Shows all committee memberships. Roles array can have multiple entries per committee when MP holds multiple roles. Roles use CommitteeRoleId enum (6=Chair, 7=Member, 10=Approver, 11=Advisor, 82=Deputy Chair, 83=Deputy Member). Empty `[]` when MP has no committee roles.
-- **FriendshipGroups** — Descriptions can be empty strings or null. Empty `[]` when MP is not part of any friendship groups.
+- **CabinetMembers, Materials, Questions, CommitteeMemberships, DepartmentMemberships, MediaItems** — Documented with minimal item schemas from available samples; full structure may be expanded when more response data available. All return empty `[]` when MP has no entries.
+- **Delegations** — Shows delegation memberships with Id, Title, and optional Description. May be truncated. Empty `[]` when MP is not part of any delegations.
+- **FriendshipGroups** — Shows friendship group memberships with Id, Title, and optional Description. May be truncated. Empty `[]` when MP is not part of any friendship groups.
+- **FriendshipGroupMemberships** — Detailed membership records including RoleId (using MPsClubRoleId enum with values 77=Član/Članка, 78=President, 79=Vice-President, 81=Member), RoleTitle, FromDate, and ToDate. Empty `[]` when no detailed membership data.
+- **DelegationMemberships** — Detailed membership records including RoleId, RoleTitle, FromDate, and ToDate. Empty `[]` when no detailed membership data.
+- **Amendments** — Array may be truncated by API with `{"_truncated": N}` object as standalone entry, indicating N additional items exist. Uses MaterialStatusId enum (e.g., 6=Delivered to MPs, 12=Closed). Empty `[]` when no amendments.
+- **Acts** — Array of legislative proposals/laws the MP authored or co-sponsored. Uses same structure as Amendments. May be truncated. Empty `[]` when no acts.
+- **Committees** — Shows all committee memberships. Roles array can have multiple entries per committee when MP holds multiple roles. Roles use CommitteeRoleId enum (6=Chair, 7=Member, 10=Approver, 11=Advisor, 82=Deputy Chair, 83=Deputy Member). May be truncated. Empty `[]` when MP has no committee roles.
 
 **Date formats:**
 - **ElectedFrom / ElectedTo** — AspDate format (`/Date(timestamp)/`)
 - **DateOfBirth** — DD.MM.YYYY string format (not AspDate)
 - **RegistrationDate** (in Amendments/Acts) — AspDate format
+- **FromDate / ToDate** (in DelegationMemberships, FriendshipGroupMemberships) — AspDate format
 
 **Localization:**  
-Response fields such as RoleTitle, PoliticalPartyTitle, CommitteeTitle, StatusTitle, and Gender are localized based on the requested `languageId`.
+Response fields such as RoleTitle, PoliticalPartyTitle, CommitteeTitle, StatusTitle, Gender, and membership role titles are localized based on the requested `languageId`.
 
 **StructureId behavior:**  
 When `structureId` is null, results may be empty or cross-term; use current structure UUID from GetAllStructuresForFilter for standard MP profile retrieval.

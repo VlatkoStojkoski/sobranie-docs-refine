@@ -37,48 +37,76 @@
     "CompositionMembers": {
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "UserId": {
-            "$ref": "#/$defs/UUID"
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "UserId": {
+                "$ref": "#/$defs/UUID"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "RoleId": {
+                "$ref": "#/$defs/CommitteeRoleId"
+              },
+              "RoleTitle": {
+                "type": "string",
+                "description": "Localized role name (e.g., 'Претседател/Претседателка', 'Член/Членка')"
+              }
+            },
+            "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
           },
-          "FullName": {
-            "type": "string"
-          },
-          "RoleId": {
-            "$ref": "#/$defs/CommitteeRoleId"
-          },
-          "RoleTitle": {
-            "type": "string",
-            "description": "Localized role name (e.g., 'Претседател/Претседателка', 'Член/Членка')"
+          {
+            "type": "object",
+            "properties": {
+              "_truncated": {
+                "type": "integer",
+                "description": "Truncation marker indicating N additional items omitted"
+              }
+            },
+            "required": ["_truncated"]
           }
-        },
-        "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
+        ]
       },
-      "description": "Official council composition members (MPs with voting roles). Typically includes president (RoleId 6), vice-president (82), and members (7). Ordered by role importance."
+      "description": "Official council composition members (MPs with voting roles). Typically includes president (RoleId 6), vice-president (82), and members (7). Ordered by role importance. May include truncation marker as a standalone object within the array."
     },
     "SecretariatMembers": {
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "UserId": {
-            "$ref": "#/$defs/UUID"
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "UserId": {
+                "$ref": "#/$defs/UUID"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "RoleId": {
+                "$ref": "#/$defs/CommitteeRoleId"
+              },
+              "RoleTitle": {
+                "type": "string",
+                "description": "Localized role name (e.g., 'Одобрувач', 'Советник на комисија')"
+              }
+            },
+            "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
           },
-          "FullName": {
-            "type": "string"
-          },
-          "RoleId": {
-            "$ref": "#/$defs/CommitteeRoleId"
-          },
-          "RoleTitle": {
-            "type": "string",
-            "description": "Localized role name (e.g., 'Одобрувач', 'Советник на комисија')"
+          {
+            "type": "object",
+            "properties": {
+              "_truncated": {
+                "type": "integer",
+                "description": "Truncation marker indicating N additional items omitted"
+              }
+            },
+            "required": ["_truncated"]
           }
-        },
-        "required": ["UserId", "FullName", "RoleId", "RoleTitle"]
+        ]
       },
-      "description": "Administrative and advisory staff supporting the council. RoleId typically 10 (Approver) or 11 (Advisor). Note: Same person (UserId) may appear multiple times with different RoleIds when holding multiple roles. This is expected behavior."
+      "description": "Administrative and advisory staff supporting the council. RoleId typically 10 (Approver) or 11 (Advisor). Note: Same person (UserId) may appear multiple times with different RoleIds when holding multiple roles. This is expected behavior. May include truncation marker as a standalone object within the array."
     },
     "Materials": {
       "type": "array",
@@ -97,7 +125,7 @@
           },
           "TypeTitle": {
             "type": "string",
-            "description": "Meeting type label (e.g., 'Комисска седница' = Committee sitting)"
+            "description": "Meeting type label (e.g., 'Комисска седница' or similar = Committee sitting). May contain spelling variations or typos; see data quality notes."
           },
           "Date": {
             "$ref": "#/$defs/AspDate"
@@ -158,3 +186,5 @@
 - **Meetings ordering**: The Meetings array is ordered by Date in reverse chronological order (most recent first).
 - **HTML content in Description**: Contains rich HTML markup. Parse as HTML when displaying to end users.
 - **Materials**: Returns empty array `[]` when no materials exist (not `null`).
+- **Array truncation**: CompositionMembers and SecretariatMembers may include a truncation marker as a standalone object `{"_truncated": N}` within the array, counting toward array length and indicating N additional items omitted.
+- **Data quality**: TypeTitle in Meetings may contain spelling variations or typos (e.g., 'Комississка' vs 'Комисска'); normalize for display if needed.

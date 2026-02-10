@@ -29,7 +29,7 @@
     "CurrentPage": {
       "type": "integer",
       "minimum": 1,
-      "description": "Appears alongside Page; purpose unclear (possibly legacy/redundant parameter). Recommend setting to same value as Page."
+      "description": "Alternative pagination parameter; may differ from Page. Both parameters accepted by API."
     },
     "SearchText": {
       "type": "string",
@@ -125,48 +125,67 @@
         {
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "Id": {
-                "type": "string",
-                "format": "uuid",
-                "description": "Unique question identifier"
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "Unique question identifier"
+                  },
+                  "Title": {
+                    "type": "string",
+                    "description": "Question text/title in requested language. May be truncated in listing view with '... (N chars)' appended, where N indicates the full title character count. Full text available via GetQuestionDetails."
+                  },
+                  "From": {
+                    "type": "string",
+                    "description": "Name of the MP who submitted the question (questioner)"
+                  },
+                  "To": {
+                    "type": "string",
+                    "description": "Title/position of the recipient (minister or official)"
+                  },
+                  "ToInstitution": {
+                    "type": "string",
+                    "description": "Full name of the institution receiving the question (ministry or government body). May contain placeholder values like '/' in some datasets."
+                  },
+                  "StatusTitle": {
+                    "type": "string",
+                    "description": "Human-readable question status in requested language (e.g. 'Доставено'=Delivered, 'Одговорено'=Answered)"
+                  },
+                  "DateAsked": {
+                    "type": "string",
+                    "pattern": "^/Date\\(\\d+\\)/$",
+                    "description": "Date when question was submitted or scheduled (AspDate format). May contain future dates for scheduled questions."
+                  },
+                  "QuestionTypeTitle": {
+                    "type": "string",
+                    "description": "Type of question in requested language (e.g. 'Писмено прашање'=Written question, 'Усно прашање'=Oral question)"
+                  },
+                  "TotalRows": {
+                    "type": "integer",
+                    "description": "Item-level field observed as 0 in all responses. Purpose unclear (possibly legacy)."
+                  },
+                  "_truncated": {
+                    "type": "integer",
+                    "description": "When present, indicates N additional items omitted from response due to size constraints."
+                  }
+                },
+                "required": ["Id", "Title", "From", "To", "ToInstitution", "StatusTitle", "DateAsked", "QuestionTypeTitle", "TotalRows"]
               },
-              "Title": {
-                "type": "string",
-                "description": "Question text/title in requested language"
-              },
-              "From": {
-                "type": "string",
-                "description": "Name of the MP who submitted the question (questioner)"
-              },
-              "To": {
-                "type": "string",
-                "description": "Title/position of the recipient (minister or official)"
-              },
-              "ToInstitution": {
-                "type": "string",
-                "description": "Full name of the institution receiving the question (ministry or government body). May contain placeholder values like '/' in some datasets."
-              },
-              "StatusTitle": {
-                "type": "string",
-                "description": "Human-readable question status in requested language (e.g. 'Доставено'=Delivered, 'Одговорено'=Answered)"
-              },
-              "DateAsked": {
-                "type": "string",
-                "pattern": "^/Date\\(\\d+\\)/$",
-                "description": "Date when question was submitted (AspDate format)"
-              },
-              "QuestionTypeTitle": {
-                "type": "string",
-                "description": "Type of question in requested language (e.g. 'Писмено прашање'=Written question, 'Усно прашање'=Oral question)"
-              },
-              "TotalRows": {
-                "type": "integer",
-                "description": "Item-level field observed as 0 in all responses. Purpose unclear (possibly legacy)."
+              {
+                "type": "object",
+                "properties": {
+                  "_truncated": {
+                    "type": "integer",
+                    "description": "Standalone truncation marker indicating N additional items omitted"
+                  }
+                },
+                "required": ["_truncated"],
+                "additionalProperties": false
               }
-            },
-            "required": ["Id", "Title", "From", "To", "ToInstitution", "StatusTitle", "DateAsked", "QuestionTypeTitle", "TotalRows"]
+            ]
           }
         },
         {
@@ -185,6 +204,9 @@
 #### Pagination
 Uses standard `Page`/`Rows` pagination pattern (1-based). Response includes `TotalItems` (full result count across all pages) and `Items` (current page subset only). When `TotalItems: 0`, the `Items` field is `null` rather than empty array `[]`.
 
+#### Array Truncation
+When results are truncated due to size constraints, the `Items` array may contain fewer complete items than requested via `Rows`. A truncation marker appears as a standalone minimal object `{"_truncated": N}` within the array, indicating N additional items omitted. This marker counts toward the array length and may not appear at the end of the array (e.g., may appear at position 2 in a 3-element array). The `_truncated` field may also appear as an optional property on the last complete item.
+
 #### LanguageId
 Response content (Title, From, To, StatusTitle, QuestionTypeTitle, ToInstitution) is returned in the requested language. Some fields may contain Cyrillic text or institutional names even for non-Macedonian language requests; see global Language Fallback section.
 
@@ -192,7 +214,7 @@ Response content (Title, From, To, StatusTitle, QuestionTypeTitle, ToInstitution
 Uses PascalCase: `LanguageId`, `StructureId`, `CommitteeId`, `RegistrationNumber`, `StatusId`, `DateFrom`, `DateTo`. Method name uses camelCase: `methodName`. Other filters (SearchText, From, To, Page, Rows, CurrentPage) use mixed case.
 
 #### CurrentPage vs Page
-Both parameters present in request; distinction unclear. Recommend setting both to same value. May be legacy or redundant parameter.
+Both parameters present in request; API accepts them with potentially different values. Both parameters are sent in actual requests; the distinction between them remains unclear (may be legacy or redundant parameter).
 
 #### StructureId Nullable
 Unlike most listing operations that require `StructureId`, this operation accepts `null` for cross-term queries of all questions regardless of parliamentary structure. When set to a specific UUID, filters to questions in that parliamentary term only.
@@ -210,3 +232,4 @@ Unlike most listing operations that require `StructureId`, this operation accept
 - **QuestionTypeTitle:** Observed types include "Писмено прашање" (Written question) and "Усно прашање" (Oral question). No separate type ID exposed.
 - **ToInstitution:** May contain placeholder values (e.g. `/`) or inconsistent formatting ("Министерството" vs "Министерство"). Handle gracefully in client code.
 - **StatusTitle:** Observed values include "Доставено" (Delivered) and "Одговорено" (Answered) in Macedonian; response localizes per LanguageId.
+- **DateAsked:** May contain future timestamps for scheduled or upcoming questions, not only historical questions.

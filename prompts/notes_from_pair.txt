@@ -1,8 +1,11 @@
 You are given current API documentation (global conventions + per-operation doc) and one real request/response pair from the Sobranie.mk parliament API. Analyze the pair against the docs and produce concise notes.
 
+TRUNCATION (response): The Response below may have been truncated for analysis. Long arrays are reduced to a few items and a marker object {"_truncated": N} (N = number of omitted items) may appear. That marker is added by the documentation pipeline, not necessarily by the API. Do not suggest adding or keeping response schema for this marker unless the same truncation behavior is already documented for this endpoint. If the current op or global docs already describe _truncated for this endpoint, leave as is. If they add an anyOf branch that is only {"_truncated": N} and this endpoint's truncation is not documented in global/conventions, note: "Remove incorrect _truncated schema (documentation artifact); do not document as API response shape."
+
 WHAT TO NOTE:
 - New fields not in the schema → add as optional properties
-- Field values that reveal new enum values → note for global $defs
+- Enum-like fields: Any field that acts as a fixed set of values (e.g. *Id, type discriminator, status/code) should be in global $defs with an "enum" array and description. If a $def has type but no "enum" (e.g. MaterialTypeId), note adding an enum with all known values from global doc and from this pair. Compare values in the pair to current $defs; note any missing enum values for global, with value and description if inferable (e.g. from sibling Title or catalog).
+- New enum values → note for global $defs: specify the $def name (e.g. MaterialTypeId), the new value(s), and description if known (e.g. "3=Shortened").
 - Fields that can be null but aren't marked nullable → note anyOf with null
 - Fields with different types than documented → note union type
 - Inaccurate descriptions → note correction with evidence from the pair
@@ -11,34 +14,34 @@ WHAT TO NOTE:
 
 RULES:
 - Only WIDEN, never narrow. Don't remove enum values, don't make optional fields required, don't drop anyOf branches.
-- Enum values belong in global $defs; op docs use $ref.
+- Enum values and their definitions belong in global $defs; op docs use $ref. New values are merged into existing enums.
 - Operation-specific details go in op doc, not global.
 - Global has only: conventions, $defs, patterns common to many operations.
-- Be precise and actionable. Each note should say exactly what to change and where.
+- Be precise and actionable. Each note should say exactly what to change and where (e.g. "In global $defs add MaterialTypeId enum: [1, 2, 28] with description 1=Law proposal, 2=..., 28=Report/Analysis").
 - If the pair adds nothing new beyond what's already documented: output exactly "No changes needed."
 
 ---
 
 ## Global docs
 
-{global_md}
+<<<global_md>>>
 
 ---
 
-## Per-operation doc: {operation}
+## Per-operation doc: <<<operation>>>
 
-{op_md}
+<<<op_md>>>
 
 ---
 
 ## Request
 ```json
-{request_json}
+<<<request_json>>>
 ```
 
 ## Response
 ```json
-{response_json}
+<<<response_json>>>
 ```
 
 ---

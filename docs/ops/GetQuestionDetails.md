@@ -84,9 +84,8 @@
             "description": "Original filename; often null"
           },
           "DocumentTypeId": {
-            "type": "integer",
-            "const": 26,
-            "description": "26=Question document (Прашање)"
+            "$ref": "#/$defs/DocumentTypeId",
+            "description": "Document type identifier. 26=Question document (Прашање), 28=Answer document (Одговор)"
           },
           "DocumentTypeTitle": {
             "type": "string",
@@ -149,6 +148,7 @@
 - **Non-localized fields:** The question `Title` and `From` field may retain their original language regardless of LanguageId.
 - **Empty collections:** Both `Documents` and `Sittings` return empty arrays `[]` when no items are present (not null).
 - **Document access:** Document `Url` fields point to SharePoint resources. `IsExported: true` indicates the document is publicly accessible.
+- **Document types:** `DocumentTypeId` 26 identifies question documents (Прашање); 28 identifies answer documents (Одговор). See global $defs/DocumentTypeId for full enum.
 - **StatusTitle mapping:** Corresponds to QuestionStatusId enum values (17=Delivered, 19=Answered, 20=Secret answer, 21=Written answer). See global for QuestionStatusId definition.
 - **Sitting context:** For plenary sittings, `CommitteeTitle` is null and `SittingTypeId` is 1. For committee sittings, `CommitteeTitle` contains the committee name and `SittingTypeId` is 2.
 - **NumberOfDeliveryLetter:** Often null in observed data; used for tracking official delivery correspondence when present.
